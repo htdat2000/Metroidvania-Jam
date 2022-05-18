@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +12,11 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     public bool isOnGround = false;
     public bool isNextToWall = false;
+
+    private const float ANTI_SLIDE_ON_FLOOR = 0.05f;
+    private const float MAX_FLOOR_SPEED = 20f;
+
+    private bool isFacingRight = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,29 +29,45 @@ public class PlayerController : MonoBehaviour
     {
         HorizontalMove();
         AutoFlip();
-        JumpCheckk();
+        JumpCheck();
+        RollCheck();
         AnimationUpdate();
         AutoFixXVelocity();
     }
 
     void HorizontalMove()
     {
-        movement = Input.GetAxis("Horizontal");
-        transform.position += new Vector3(movement, 0, 0) * Time.deltaTime * moveSpeed;
+        if(Input.GetKey("right"))
+        {
+            isFacingRight = true;
+            rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * moveSpeed, -MAX_FLOOR_SPEED, MAX_FLOOR_SPEED),rb.velocity.y);
+        }
+        else if(Input.GetKey("left"))
+        {
+            isFacingRight = false;
+            rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * moveSpeed * -1, -MAX_FLOOR_SPEED, MAX_FLOOR_SPEED),rb.velocity.y);
+        }
     }
 
     void AutoFlip()
     {
-        if(!Mathf.Approximately(0, movement))
-            transform.rotation = movement > 0 ? Quaternion.identity : Quaternion.Euler(0,180,0);
+        transform.rotation = isFacingRight ? Quaternion.identity : Quaternion.Euler(0,180,0);
     }
 
-    void JumpCheckk()
+    void JumpCheck()
     {
-        if(Input.GetButtonDown("Jump"))// && isOnGround)
-            {
-                rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-            }
+        if(Input.GetKeyDown("x"))// && isOnGround)
+        {
+            rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+        }
+    }
+
+    void RollCheck()
+    {
+        if(Input.GetKeyDown("z"))// && isOnGround)
+        {
+            rb.AddForce(new Vector2(jumpForce, 0), ForceMode2D.Impulse);
+        }
     }
 
     void AnimationUpdate()
@@ -70,6 +92,10 @@ public class PlayerController : MonoBehaviour
 
     void AutoFixXVelocity()
     {
-        rb.velocity = new Vector2(0f,rb.velocity.y);
+        // if(rb.velocity.x > 0.001f)
+        //     rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x - Time.deltaTime * ANTI_SLIDE_ON_FLOOR, 0f, rb.velocity.x),rb.velocity.y);
+        // if(rb.velocity.x < 0.001f)
+        //     rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * ANTI_SLIDE_ON_FLOOR, rb.velocity.x, 0f),rb.velocity.y);
+        rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, ANTI_SLIDE_ON_FLOOR),rb.velocity.y);
     }
 }
