@@ -19,20 +19,31 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        HorizontalMove();
+        AutoFlip();
+        JumpCheckk();
+        AnimationUpdate();
+        AutoFixXVelocity();
+    }
+
+    void HorizontalMove()
+    {
         movement = Input.GetAxis("Horizontal");
         transform.position += new Vector3(movement, 0, 0) * Time.deltaTime * moveSpeed;
+    }
 
+    void AutoFlip()
+    {
         if(!Mathf.Approximately(0, movement))
             transform.rotation = movement > 0 ? Quaternion.identity : Quaternion.Euler(0,180,0);
+    }
 
+    void JumpCheckk()
+    {
         if(Input.GetButtonDown("Jump") && Mathf.Abs(rb.velocity.y) < 0.001f)
-        {
-            rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-        }
-
-        AnimationUpdate();
-
-        rb.velocity = new Vector2(0f,rb.velocity.y);
+            {
+                rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            }
     }
 
     void AnimationUpdate()
@@ -53,5 +64,10 @@ public class PlayerController : MonoBehaviour
         {
             anim.Play("AirUp");
         }
+    }
+
+    void AutoFixXVelocity()
+    {
+        rb.velocity = new Vector2(0f,rb.velocity.y);
     }
 }
