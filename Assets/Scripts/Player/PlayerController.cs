@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     private float movement;
     private Rigidbody2D rb;
     private Animator anim;
+    public bool isOnGround = false;
+    public bool isNextToWall = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     void JumpCheckk()
     {
-        if(Input.GetButtonDown("Jump") && Mathf.Abs(rb.velocity.y) < 0.001f)
+        if(Input.GetButtonDown("Jump"))// && isOnGround)
             {
                 rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
             }
@@ -48,11 +50,11 @@ public class PlayerController : MonoBehaviour
 
     void AnimationUpdate()
     {
-        if(Mathf.Abs(movement) > 0.01f && Mathf.Abs(rb.velocity.y) < 0.001f)
+        if(Mathf.Abs(movement) > 0.01f && isOnGround)
         {
             anim.Play("Move");
         }
-        if(Mathf.Abs(movement) <= 0.01f && Mathf.Abs(rb.velocity.y) < 0.001f)
+        if(Mathf.Abs(movement) <= 0.01f && isOnGround)
         {
             anim.Play("Idle");
         }
