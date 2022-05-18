@@ -14,7 +14,14 @@ public class GroundChecker : MonoBehaviour
     {
         if(col.gameObject.CompareTag("Ground"))
         {
-            parent.isOnGround = true;
+            parent.isOnGround = true;   
+        }
+    }
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.gameObject.CompareTag("Ground") && !parent.isOnGround)
+        {
+            EffectPool.Instance.GetLandingEffectInPool(transform.position);
         }
     }
     void OnTriggerExit2D(Collider2D col)
