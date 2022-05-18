@@ -25,11 +25,6 @@ public class EffectPool : MonoBehaviour
             LandingEffects[i].SetActive(false);
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void GetLandingEffectInPool(Vector3 spawnposition)
     {
         for(int i = 0; i < LandingEffects.Length; i++)
