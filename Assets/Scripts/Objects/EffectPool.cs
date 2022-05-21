@@ -29,7 +29,7 @@ public class EffectPool : MonoBehaviour
     {
         for(int i = 0; i < LandingEffects.Length; i++)
         {
-            if(!LandingEffects[i].active)
+            if(!LandingEffects[i].activeSelf)
             {
                 LandingEffects[i].transform.position = spawnposition;
                 LandingEffects[i].SetActive(true);
