@@ -23,6 +23,12 @@ public class PlayerController : MonoBehaviour
     private const float MAX_FLOOR_SPEED = 20f;
 
     private bool isFacingRight = true;
+
+    private enum State
+    {
+        Normal,
+        Dashing
+    }
     // Start is called before the first frame update
 
     [Header("Player Color Form")]
@@ -88,7 +94,11 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown("z"))// && isOnGround)
         {
-            rb.AddForce(new Vector2(jumpForce, 0), ForceMode2D.Impulse);
+            if(isFacingRight)
+                rb.AddForce(new Vector2(jumpForce, 0), ForceMode2D.Impulse);
+            else
+                rb.AddForce(new Vector2(-jumpForce, 0), ForceMode2D.Impulse);
+            // anim.Play("WDash");
         }
     }
 
