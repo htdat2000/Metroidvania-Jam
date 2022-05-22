@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     private ColorForm currentColorForm = ColorForm.White;
     private enum ColorForm { White, Red, Blue };
 
+    // [Header("Debug")]
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -47,6 +49,7 @@ public class PlayerController : MonoBehaviour
     {
         HorizontalMove();
         AutoFlip();
+        GroundCheck();
         JumpCheck();
         RollCheck();
         AnimationUpdate();
@@ -71,6 +74,22 @@ public class PlayerController : MonoBehaviour
     void AutoFlip()
     {
         transform.rotation = isFacingRight ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
+    }
+
+    void GroundCheck()
+    {
+        // Debug.DrawRay(transform.position, -Vector2.up * 1000, Color.red); 
+        // RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.8f);
+        // if (hit.collider != null)
+        // {
+        //     Debug.DrawRay(transform.position, Vector2.down * hit.distance, Color.white);
+        //     Debug.Log("PlayerController - Groundcheck: Did Hit at: " + hit.transform.position + "distance: " + hit.distance);
+        // }
+        // else
+        // {
+        //    Debug.DrawRay(transform.position, Vector2.down * 0.8f, Color.red); 
+        //    Debug.Log("PlayerController - Groundcheck: Didn't Hit");
+        // }
     }
 
     void JumpCheck()
