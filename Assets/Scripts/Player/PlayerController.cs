@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
     {
         HorizontalMove();
         AutoFlip();
-        GroundCheck();
+        // GroundCheck();
         JumpCheck();
         RollCheck();
         AnimationUpdate();
@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
         transform.rotation = isFacingRight ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
     }
 
-    void GroundCheck()
+    bool GroundCheck()
     {
         // Debug.DrawRay(transform.position, -Vector2.up * 1000, Color.red); 
         // RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.8f);
@@ -90,11 +90,21 @@ public class PlayerController : MonoBehaviour
         //    Debug.DrawRay(transform.position, Vector2.down * 0.8f, Color.red); 
         //    Debug.Log("PlayerController - Groundcheck: Didn't Hit");
         // }
+        RaycastHit2D raycastHit = Physics2D.Raycast(transform.position, Vector2.down, 0.5f);
+        Color rayColor;
+        if(raycastHit.collider != null)
+        {
+            rayColor = Color.green;
+        }
+        else
+            rayColor = Color.red;
+        Debug.DrawRay(transform.position, Vector2.down * 5f);
+        return raycastHit.collider != null;
     }
 
     void JumpCheck()
     {
-        if (Input.GetKeyDown("x"))// && isOnGround)
+        if (Input.GetKeyDown("x") && GroundCheck())
         {
             switch (currentColorForm)
             {
