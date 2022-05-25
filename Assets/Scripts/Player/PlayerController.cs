@@ -5,6 +5,7 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private LayerMask platformLayerMask;
     [Header("Attributes")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
@@ -29,6 +30,8 @@ public class PlayerController : MonoBehaviour
         Normal,
         Dashing
     }
+
+    private State currentState = State.Normal;
     // Start is called before the first frame update
 
     [Header("Player Color Form")]
@@ -49,7 +52,7 @@ public class PlayerController : MonoBehaviour
     {
         HorizontalMove();
         AutoFlip();
-        // GroundCheck();
+        GroundCheck();
         JumpCheck();
         RollCheck();
         AnimationUpdate();
@@ -76,35 +79,17 @@ public class PlayerController : MonoBehaviour
         transform.rotation = isFacingRight ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
     }
 
-    bool GroundCheck()
+    void GroundCheck()
     {
-        // Debug.DrawRay(transform.position, -Vector2.up * 1000, Color.red); 
-        // RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.8f);
-        // if (hit.collider != null)
-        // {
-        //     Debug.DrawRay(transform.position, Vector2.down * hit.distance, Color.white);
-        //     Debug.Log("PlayerController - Groundcheck: Did Hit at: " + hit.transform.position + "distance: " + hit.distance);
-        // }
-        // else
-        // {
-        //    Debug.DrawRay(transform.position, Vector2.down * 0.8f, Color.red); 
-        //    Debug.Log("PlayerController - Groundcheck: Didn't Hit");
-        // }
-        RaycastHit2D raycastHit = Physics2D.Raycast(transform.position, Vector2.down, 0.5f);
+        RaycastHit2D raycastHitR = Physics2D.Raycast(new Vector3(transform.position.x + 0.1f, transform.position.y, transform.position.z), Vector2.down, 0.6f, platformLayerMask);
+        RaycastHit2D raycastHitL = Physics2D.Raycast(new Vector3(transform.position.x - 0.1f, transform.position.y, transform.position.z), Vector2.down, 0.6f, platformLayerMask);
         Color rayColor;
-        if(raycastHit.collider != null)
-        {
-            rayColor = Color.green;
-        }
-        else
-            rayColor = Color.red;
-        Debug.DrawRay(transform.position, Vector2.down * 5f);
-        return raycastHit.collider != null;
+        isOnGround = (raycastHitR.collider != null && raycastHitL.collider != null);
     }
 
     void JumpCheck()
     {
-        if (Input.GetKeyDown("x") && GroundCheck())
+        if (Input.GetKeyDown("x") && isOnGround)
         {
             switch (currentColorForm)
             {
@@ -121,14 +106,20 @@ public class PlayerController : MonoBehaviour
 
     void RollCheck()
     {
-        if (Input.GetKeyDown("z"))// && isOnGround)
+        if (Input.GetKeyDown("z") && currentState == State.Normal && isOnGround)
         {
             if(isFacingRight)
                 rb.AddForce(new Vector2(jumpForce, 0), ForceMode2D.Impulse);
             else
                 rb.AddForce(new Vector2(-jumpForce, 0), ForceMode2D.Impulse);
-            // anim.Play("WDash");
+            anim.Play("WDash");
+            currentState = State.Dashing;
+            Invoke("BackToNormal", 0.5f);
         }
+    }
+    void BackToNormal()
+    {
+        currentState = State.Normal;
     }
 
     void SwitchForm()
@@ -153,21 +144,24 @@ public class PlayerController : MonoBehaviour
 
     void AnimationUpdate()
     {
-        if (Mathf.Abs(movement) > 0.01f && isOnGround)
+        if(currentState == State.Normal)
         {
-            anim.Play("Move");
-        }
-        if (Mathf.Abs(movement) <= 0.01f && isOnGround)
-        {
-            anim.Play("Idle");
-        }
-        if (rb.velocity.y < -0.001f)
-        {
-            anim.Play("AirDown");
-        }
-        if (rb.velocity.y > 0.001f)
-        {
-            anim.Play("AirUp");
+            if (Mathf.Abs(movement) > 0.01f && isOnGround)
+            {
+                anim.Play("Move");
+            }
+            if (Mathf.Abs(movement) <= 0.01f && isOnGround)
+            {
+                anim.Play("Idle");
+            }
+            if (rb.velocity.y < -0.001f && !isOnGround)
+            {
+                anim.Play("AirDown");
+            }
+            if (rb.velocity.y > 0.001f && !isOnGround)
+            {
+                anim.Play("AirUp");
+            }
         }
     }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dummy : MonoBehaviour
+public class Dummy : Enemy
 {
     private bool isFacingRight = true;
     private int moveDir = 1;
