@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [Header("Attributes")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float dashSpeed;
+    private int jumpCount = 0;
     private float movement;
 
     [Header("Component")]
@@ -22,12 +24,15 @@ public class PlayerController : MonoBehaviour
     [Header("Const")]
     private const float ANTI_SLIDE_ON_FLOOR = 0.05f;
     private const float MAX_FLOOR_SPEED = 20f;
+    private const int DASH_TIME = 1;
+
 
     private bool isFacingRight = true;
 
     private enum State
     {
         Normal,
+        Rolling,
         Dashing
     }
 
@@ -35,7 +40,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
 
     [Header("Player Color Form")]
-    private bool[] isColorActive = { true, true, false };
+    private bool[] isColorActive = { true, true, true };
     private ColorForm currentColorForm = ColorForm.White;
     private enum ColorForm { White, Red, Blue };
 
@@ -54,7 +59,7 @@ public class PlayerController : MonoBehaviour
         AutoFlip();
         GroundCheck();
         JumpCheck();
-        RollCheck();
+        RollAndDash();
         AnimationUpdate();
         AutoFixXVelocity();
         SwitchForm();
@@ -85,20 +90,50 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D raycastHitL = Physics2D.Raycast(new Vector3(transform.position.x - 0.1f, transform.position.y, transform.position.z), Vector2.down, 0.6f, platformLayerMask);
         Color rayColor;
         isOnGround = (raycastHitR.collider != null && raycastHitL.collider != null);
+        if(isOnGround)
+        {
+            ResetJumpCount();
+        }
     }
 
     void JumpCheck()
     {
-        if (Input.GetKeyDown("x") && isOnGround)
+        if (Input.GetKeyDown("x"))
+        {
+            switch (currentColorForm)
+            {    
+                case ColorForm.Blue:
+                    if(jumpCount < 2)
+                    {
+                        jumpCount++;
+                        rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);    
+                    }
+                    break;
+                default:
+                    if(jumpCount < 1)
+                    {
+                        jumpCount++;
+                        rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+                    }
+                    break;
+            }
+        }
+    }
+
+    void RollAndDash()
+    {
+        if (Input.GetKeyDown("z") && currentState == State.Normal)
         {
             switch (currentColorForm)
             {
                 case ColorForm.White:
-                    rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+                    if(isOnGround)
+                    {
+                        RollCheck();
+                    }
                     break;
                 case ColorForm.Red:
-                    break;
-                default:
+                    DashCheck();
                     break;
             }
         }
@@ -106,20 +141,38 @@ public class PlayerController : MonoBehaviour
 
     void RollCheck()
     {
-        if (Input.GetKeyDown("z") && currentState == State.Normal && isOnGround)
-        {
-            if(isFacingRight)
-                rb.AddForce(new Vector2(jumpForce, 0), ForceMode2D.Impulse);
-            else
-                rb.AddForce(new Vector2(-jumpForce, 0), ForceMode2D.Impulse);
-            anim.Play("WDash");
-            currentState = State.Dashing;
-            Invoke("BackToNormal", 0.5f);
-        }
+        //if (Input.GetKeyDown("z") && currentState == State.Normal && isOnGround)
+        //{
+        if (isFacingRight)
+            rb.AddForce(new Vector2(jumpForce, 0), ForceMode2D.Impulse);
+        else
+            rb.AddForce(new Vector2(-jumpForce, 0), ForceMode2D.Impulse);
+        anim.Play("WDash");
+        currentState = State.Rolling;
+        Invoke("BackToNormal", 0.5f);
+        //}
     }
+
+    void DashCheck()
+    {
+        if (isFacingRight)
+            rb.velocity = new Vector2(dashSpeed, 0);
+        else
+            rb.velocity = new Vector2(-dashSpeed, 0);
+        //anim.Play("WDash");
+        currentState = State.Dashing;
+        Invoke("BackToNormal", DASH_TIME);
+    }
+
     void BackToNormal()
     {
         currentState = State.Normal;
+        rb.velocity = Vector2.zero;
+    }
+
+    void ResetJumpCount()
+    {
+        jumpCount = 0;
     }
 
     void SwitchForm()
@@ -127,16 +180,22 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             int numOfColor = isColorActive.Length;
-            for (int i = 0; i < numOfColor - 1; i++)
+            if((int)currentColorForm == (numOfColor - 1))
+                {
+                    currentColorForm = (ColorForm)0;
+                    return;
+                }
+            for (int i = 0; i < numOfColor; i++)
             {
-                if (i == (int)currentColorForm)
+                if (i <= (int)currentColorForm)
                 {
                     continue;
                 }
+                
                 if (isColorActive[i])
                 {
                     currentColorForm = (ColorForm)i;
-                    break;
+                    return;
                 }
             }
         }
@@ -144,7 +203,7 @@ public class PlayerController : MonoBehaviour
 
     void AnimationUpdate()
     {
-        if(currentState == State.Normal)
+        if (currentState == State.Normal)
         {
             if (Mathf.Abs(movement) > 0.01f && isOnGround)
             {
