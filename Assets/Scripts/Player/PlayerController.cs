@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
     [SerializeField] private float dashSpeed;
+    [SerializeField] private float slideSpeed;
     private int jumpCount = 0;
     private float movement;
 
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         JumpCheck();
         RollAndDash();
+        SlideCheck();
         AnimationUpdate();
         AutoFixXVelocity();
         SwitchForm();
@@ -102,7 +104,12 @@ public class PlayerController : MonoBehaviour
             switch (currentColorForm)
             {    
                 case ColorForm.Blue:
-                    if(jumpCount < 2)
+                    if(jumpCount < 1 && isOnGround)
+                    {
+                        jumpCount++;
+                        rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);    
+                    }
+                    else if(jumpCount == 1)
                     {
                         jumpCount++;
                         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);    
@@ -161,6 +168,14 @@ public class PlayerController : MonoBehaviour
         //anim.Play("WDash");
         currentState = State.Dashing;
         Invoke("BackToNormal", DASH_TIME);
+    }
+
+    void SlideCheck()
+    {
+        if(isNextToWall && rb.velocity.y <0)
+        {
+            rb.velocity = new Vector2(0, -slideSpeed);
+        }
     }
 
     void BackToNormal()
