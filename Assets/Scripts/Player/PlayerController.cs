@@ -40,9 +40,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
 
     [Header("Player Color Form")]
-    private bool[] isColorActive = { true, true, true };
     private ColorForm currentColorForm = ColorForm.White;
-    private enum ColorForm { White, Red, Blue };
+    private enum ColorForm { White, Red, Blue, Yellow, Violet, Orange, Green};
 
     // [Header("Debug")]
 
@@ -56,7 +55,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HorizontalMove();
-        AutoFlip();
         GroundCheck();
         JumpCheck();
         RollAndDash();
@@ -77,6 +75,7 @@ public class PlayerController : MonoBehaviour
             isFacingRight = false;
             rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * moveSpeed * -1, -MAX_FLOOR_SPEED, MAX_FLOOR_SPEED), rb.velocity.y);
         }
+        AutoFlip();
     }
 
     void AutoFlip()
@@ -110,7 +109,7 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
                 default:
-                    if(jumpCount < 1)
+                    if(jumpCount < 1 && isOnGround)
                     {
                         jumpCount++;
                         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
@@ -179,23 +178,27 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
-            int numOfColor = isColorActive.Length;
-            if((int)currentColorForm == (numOfColor - 1))
+            int numOfColor = PlayerData.isColorActive.Length;
+            if((int)currentColorForm == (numOfColor - 1))   //last color
                 {
-                    currentColorForm = (ColorForm)0;
+                    currentColorForm = ColorForm.White;
                     return;
                 }
             for (int i = 0; i < numOfColor; i++)
             {
-                if (i <= (int)currentColorForm)
+                if (i <= (int)currentColorForm) //skip previous and current color
                 {
                     continue;
                 }
                 
-                if (isColorActive[i])
+                if (PlayerData.isColorActive[i])
                 {
                     currentColorForm = (ColorForm)i;
                     return;
+                }
+                else
+                {
+                    currentColorForm = ColorForm.White;
                 }
             }
         }
