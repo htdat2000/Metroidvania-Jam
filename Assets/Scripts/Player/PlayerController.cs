@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     [Header("Const")]
     private const float ANTI_SLIDE_ON_FLOOR = 0.05f;
     private const float MAX_FLOOR_SPEED = 20f;
-    private const int DASH_TIME = 1;
+    private const float DASH_TIME = 0.15f;
 
 
     private bool isFacingRight = true;
@@ -33,8 +33,10 @@ public class PlayerController : MonoBehaviour
     private enum State
     {
         Normal,
+        Sliding,
         Rolling,
-        Dashing
+        Dashing,
+        Attacking
     }
 
     private State currentState = State.Normal;
@@ -59,6 +61,7 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         JumpCheck();
         RollAndDash();
+        AttackCheck();
         SlideCheck();
         AnimationUpdate();
         AutoFixXVelocity();
@@ -126,6 +129,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void AttackCheck()
+    {
+        if (Input.GetKeyDown("c") && currentState == State.Normal)
+        {
+            switch (currentColorForm)
+            {
+                case ColorForm.White:
+                anim.Play("WAttack");
+                currentState = State.Attacking;
+                Invoke("BackToNormal", 0.5f);
+                break;
+                case ColorForm.Blue:
+                anim.Play("BParry");
+                currentState = State.Attacking;
+                Invoke("BackToNormal", 0.5f);
+                break;
+            }
+        }
+    }
+
     void RollAndDash()
     {
         if (Input.GetKeyDown("z") && currentState == State.Normal)
@@ -165,16 +188,22 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(dashSpeed, 0);
         else
             rb.velocity = new Vector2(-dashSpeed, 0);
-        //anim.Play("WDash");
+        anim.Play("RDash");
         currentState = State.Dashing;
         Invoke("BackToNormal", DASH_TIME);
     }
 
     void SlideCheck()
     {
-        if(isNextToWall && rb.velocity.y <0)
+        if(isNextToWall && rb.velocity.y <0 && !isOnGround)
         {
+            currentState = State.Sliding;
+            anim.Play("Slide");
             rb.velocity = new Vector2(0, -slideSpeed);
+        }
+        else if(currentState == State.Sliding)
+        {
+            currentState = State.Normal;
         }
     }
 
