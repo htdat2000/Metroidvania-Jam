@@ -34,7 +34,8 @@ public class PlayerController : MonoBehaviour
     {
         Normal,
         Rolling,
-        Dashing
+        Dashing,
+        Attacking
     }
 
     private State currentState = State.Normal;
@@ -59,6 +60,7 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         JumpCheck();
         RollAndDash();
+        AttackCheck();
         SlideCheck();
         AnimationUpdate();
         AutoFixXVelocity();
@@ -122,6 +124,21 @@ public class PlayerController : MonoBehaviour
                         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
                     }
                     break;
+            }
+        }
+    }
+
+    void AttackCheck()
+    {
+        if (Input.GetKeyDown("c") && currentState == State.Normal)
+        {
+            switch (currentColorForm)
+            {
+                case ColorForm.White:
+                anim.Play("WAttack");
+                currentState = State.Attacking;
+                Invoke("BackToNormal", 0.5f);
+                break;
             }
         }
     }
