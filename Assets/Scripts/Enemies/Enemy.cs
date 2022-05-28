@@ -19,6 +19,14 @@ public class Enemy : MonoBehaviour
 
     public void SetSpawnPoint(SpawnPoint newSpawnPoint)
     {
+        currentSpawnPoint = newSpawnPoint;
+        transform.position = newSpawnPoint.GetComponent<Transform>().position;
+        gameObject.SetActive(true);
+    }
 
+    public void Despawn()
+    {
+        gameObject.SetActive(false);
+        currentSpawnPoint = null;
     }
 }
