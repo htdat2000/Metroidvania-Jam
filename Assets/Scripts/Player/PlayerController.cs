@@ -131,11 +131,11 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
                 case ColorForm.Blue:
-                    if(jumpCount < 1 && isOnGround)
+                    if((jumpCount < 1) && isOnGround && (currentState != State.Hooking))
                     {
                         Jump();   
                     }
-                    else if(jumpCount == 1)
+                    else if((jumpCount == 1) && (currentState != State.Hooking))
                     {
                         Jump();
                     }
@@ -215,7 +215,6 @@ public class PlayerController : MonoBehaviour
             currentState = State.Hooking;
             hook.gameObject.SetActive(true);
             hook.PushHook(isFacingRight);
-            Invoke("ResetHook", 1);
         }
     }
 
@@ -271,7 +270,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void BackToNormal()
+    public void BackToNormal()
     {
         currentState = State.Normal;
     }
@@ -309,12 +308,6 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-    }
-
-    void ResetHook()
-    {
-        BackToNormal();
-        hook.Deactive();
     }
 
     void AnimationUpdate()

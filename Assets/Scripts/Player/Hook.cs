@@ -6,11 +6,22 @@ public class Hook : MonoBehaviour
 {
     [SerializeField] private Transform parent;
     [SerializeField] private float speed = 5;
+    [SerializeField] private float limitDistance;
+    
+    enum State
+    {
+        Free,
+        Returning,
+        Pulling
+    }
+    private State currentState = State.Free;
+
     private Vector3 dir;
 
     void Update()
     {
         transform.Translate(dir * speed * Time.deltaTime, Space.World);
+        CheckDistance(this.gameObject.transform.position);
     }
 
     public void PushHook(bool _isFacingRight)
@@ -29,6 +40,34 @@ public class Hook : MonoBehaviour
     public void Deactive()
     {
         this.gameObject.SetActive(false);
+        currentState = State.Free;
         this.gameObject.transform.position = parent.transform.position;
+        parent.gameObject.GetComponent<PlayerController>().BackToNormal();
     }
+
+    void CheckDistance(Vector3 currentPos)
+    {
+        float distance = Vector3.Magnitude(currentPos - parent.position);
+        if((distance >= limitDistance) && (currentState == State.Free))
+        {
+            HookReturn();
+        }
+        else if((distance <= 0.1f) && (currentState != State.Free))
+        {
+            Deactive();
+        }
+    }
+
+    void HookReturn()
+    {
+        dir = -dir;
+        currentState = State.Returning;
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        
+    }
+
+
 }
