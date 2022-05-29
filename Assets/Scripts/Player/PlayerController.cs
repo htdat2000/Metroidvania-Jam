@@ -59,7 +59,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Attack();
         HorizontalMove();
         GroundCheck();
         JumpCheck();
@@ -103,7 +102,7 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit2D raycastHitR = Physics2D.Raycast(new Vector3(transform.position.x + 0.1f, transform.position.y, transform.position.z), Vector2.down, 0.6f, platformLayerMask);
         RaycastHit2D raycastHitL = Physics2D.Raycast(new Vector3(transform.position.x - 0.1f, transform.position.y, transform.position.z), Vector2.down, 0.6f, platformLayerMask);
-        Color rayColor;
+        //Color rayColor;
         isOnGround = (raycastHitR.collider != null && raycastHitL.collider != null);
         if(isOnGround)
         {
@@ -153,6 +152,7 @@ public class PlayerController : MonoBehaviour
     {
         jumpCount++; 
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);    
+    }
 
     void AttackCheck()
     {
@@ -161,15 +161,15 @@ public class PlayerController : MonoBehaviour
             switch (currentColorForm)
             {
                 case ColorForm.White:
-                anim.Play("WAttack");
-                currentState = State.Attacking;
-                Invoke("BackToNormal", 0.5f);
-                break;
+                    anim.Play("WAttack");
+                    currentState = State.Attacking;
+                    Invoke("BackToNormal", 0.5f);
+                    break;
                 case ColorForm.Blue:
-                anim.Play("BParry");
-                currentState = State.Attacking;
-                Invoke("BackToNormal", 0.5f);
-                break;
+                    anim.Play("BParry");
+                    currentState = State.Attacking;
+                    Invoke("BackToNormal", 0.5f);
+                    break;
             }
         }
 
