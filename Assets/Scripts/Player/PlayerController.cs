@@ -22,15 +22,12 @@ public class PlayerController : MonoBehaviour
     [Header("Bool Check Environment")]
     public bool isOnGround = false;
     public bool isNextToWall = false;
+    private bool isFacingRight = true;
 
     [Header("Const")]
     private const float ANTI_SLIDE_ON_FLOOR = 0.05f;
     private const float MAX_FLOOR_SPEED = 20f;
     private const float DASH_TIME = 0.15f;
-
-
-
-    private bool isFacingRight = true;
 
     private enum State
     {
@@ -38,7 +35,8 @@ public class PlayerController : MonoBehaviour
         Sliding,
         Rolling,
         Dashing,
-        Attacking
+        Attacking,
+        Hooking
     }
 
     private State currentState = State.Normal;
@@ -48,6 +46,7 @@ public class PlayerController : MonoBehaviour
     private ColorForm currentColorForm = ColorForm.White;
     private enum ColorForm { White, Red, Blue, Yellow, Violet, Orange, Green};
 
+    [SerializeField] private Hook hook;
     // [Header("Debug")]
 
     void Start()
@@ -62,7 +61,7 @@ public class PlayerController : MonoBehaviour
         HorizontalMove();
         GroundCheck();
         JumpCheck();
-        RollAndDash();
+        ZButtonFunction();
         AttackCheck();
         SlideCheck();
         AnimationUpdate();
@@ -80,6 +79,10 @@ public class PlayerController : MonoBehaviour
 
     void HorizontalMove()
     {
+        if (currentState != State.Normal)
+        {
+            return;
+        }
         if (Input.GetKey("right"))
         {
             isFacingRight = true;
@@ -175,8 +178,8 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void RollAndDash()
-    {
+    void ZButtonFunction()
+    {   
         if (Input.GetKeyDown("z") && currentState == State.Normal)
         {
             switch (currentColorForm)
@@ -184,8 +187,11 @@ public class PlayerController : MonoBehaviour
                 case ColorForm.Red:
                     DashCheck(fastDashSpeed);
                     break;
-                case ColorForm.Blue:
+                case ColorForm.Yellow:
                     DashCheck(slowDashSpeed);
+                    break;
+                case ColorForm.Blue:
+                    HookCheck();
                     break;
                 default:
                     if(isOnGround)
@@ -194,6 +200,22 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
             }
+        }
+    }
+
+    void HookCheck()
+    {
+        if(hook.gameObject.activeSelf)
+        {
+            
+            return;
+        }
+        else
+        {
+            currentState = State.Hooking;
+            hook.gameObject.SetActive(true);
+            hook.PushHook(isFacingRight);
+            Invoke("ResetHook", 1);
         }
     }
 
@@ -287,6 +309,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    void ResetHook()
+    {
+        BackToNormal();
+        hook.Deactive();
     }
 
     void AnimationUpdate()
