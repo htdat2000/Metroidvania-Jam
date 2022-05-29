@@ -26,7 +26,8 @@ public class PlayerController : MonoBehaviour
     [Header("Const")]
     private const float ANTI_SLIDE_ON_FLOOR = 0.05f;
     private const float MAX_FLOOR_SPEED = 20f;
-    private const float DASH_TIME = 1f;
+    private const float DASH_TIME = 0.15f;
+
 
 
     private bool isFacingRight = true;
@@ -34,8 +35,10 @@ public class PlayerController : MonoBehaviour
     private enum State
     {
         Normal,
+        Sliding,
         Rolling,
-        Dashing
+        Dashing,
+        Attacking
     }
 
     private State currentState = State.Normal;
@@ -61,6 +64,7 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         JumpCheck();
         RollAndDash();
+        AttackCheck();
         SlideCheck();
         AnimationUpdate();
         AutoFixXVelocity();
@@ -144,10 +148,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     void Jump()
     {
         jumpCount++; 
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);    
+
+    void AttackCheck()
+    {
+        if (Input.GetKeyDown("c") && currentState == State.Normal)
+        {
+            switch (currentColorForm)
+            {
+                case ColorForm.White:
+                anim.Play("WAttack");
+                currentState = State.Attacking;
+                Invoke("BackToNormal", 0.5f);
+                break;
+                case ColorForm.Blue:
+                anim.Play("BParry");
+                currentState = State.Attacking;
+                Invoke("BackToNormal", 0.5f);
+                break;
+            }
+        }
+
     }
 
     void RollAndDash()
@@ -191,21 +216,36 @@ public class PlayerController : MonoBehaviour
         if (isFacingRight)
             rb.velocity = new Vector2(_speed, 0);
         else
+
             rb.velocity = new Vector2(-_speed, 0);
         //anim.Play("WDash");
+
+            
+        anim.Play("RDash");
+
         currentState = State.Dashing;
         Invoke("BackToNormal", DASH_TIME);
     }
 
     void SlideCheck()
     {
+
         if(currentColorForm != ColorForm.Red)
         {
             return;
         }
-        if(isNextToWall && (rb.velocity.y <0))
+        
+
+        if(isNextToWall && rb.velocity.y <0 && !isOnGround)
+
         {
+            currentState = State.Sliding;
+            anim.Play("Slide");
             rb.velocity = new Vector2(0, -slideSpeed);
+        }
+        else if(currentState == State.Sliding)
+        {
+            currentState = State.Normal;
         }
     }
 
