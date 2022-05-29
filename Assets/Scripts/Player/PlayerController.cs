@@ -7,11 +7,11 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private LayerMask platformLayerMask;
     [Header("Attributes")]
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float jumpForce;
-    [SerializeField] private float fastDashSpeed;
-    [SerializeField] private float slowDashSpeed;
-    [SerializeField] private float slideSpeed;
+    [SerializeField] private float moveSpeed = 30;
+    [SerializeField] private float jumpForce = 7;
+    [SerializeField] private float fastDashSpeed = 20;
+    [SerializeField] private float slowDashSpeed = 12;
+    [SerializeField] private float slideSpeed = 1;
     private int jumpCount = 0;
     private float movement;
 

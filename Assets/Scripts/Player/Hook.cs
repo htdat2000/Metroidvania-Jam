@@ -15,8 +15,8 @@ public class Hook : MonoBehaviour
         Pulling
     }
     private State currentState = State.Free;
-
     private Vector3 dir;
+    private GameObject objectHook;
 
     void Update()
     {
@@ -50,23 +50,46 @@ public class Hook : MonoBehaviour
         float distance = Vector3.Magnitude(currentPos - parent.position);
         if((distance >= limitDistance) && (currentState == State.Free))
         {
-            HookReturn();
+            HookReturn(State.Returning);
         }
-        else if((distance <= 0.1f) && (currentState != State.Free))
+        else if((distance <= 0.1f))
         {
+            if(currentState == State.Returning)
+            {
+                Deactive();
+            }
+            else if(currentState == State.Pulling)
+            {
+                Release();
+            }
+        }
+    }
+
+    void HookReturn(State _state)
+    {
+        dir = -dir;
+        currentState = _state;
+    }
+
+    void Release()
+    {
+        if(objectHook != null)
+        {
+            objectHook.transform.SetParent(null);
+            objectHook = null;
             Deactive();
         }
     }
 
-    void HookReturn()
-    {
-        dir = -dir;
-        currentState = State.Returning;
-    }
-
     void OnTriggerEnter2D(Collider2D col)
     {
-        
+        if(col.CompareTag("Hookable") && (currentState == State.Free))
+        {   
+            currentState = State.Pulling;
+            objectHook = col.gameObject;
+            objectHook.transform.SetParent(this.gameObject.transform);
+            HookReturn(State.Pulling);
+        }
     }
 
 
