@@ -7,11 +7,11 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private LayerMask platformLayerMask;
     [Header("Attributes")]
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float jumpForce;
-    [SerializeField] private float fastDashSpeed;
-    [SerializeField] private float slowDashSpeed;
-    [SerializeField] private float slideSpeed;
+    [SerializeField] private float moveSpeed = 30;
+    [SerializeField] private float jumpForce = 7;
+    [SerializeField] private float fastDashSpeed = 20;
+    [SerializeField] private float slowDashSpeed = 12;
+    [SerializeField] private float slideSpeed = 1;
     private int jumpCount = 0;
     private float movement;
 
@@ -22,15 +22,12 @@ public class PlayerController : MonoBehaviour
     [Header("Bool Check Environment")]
     public bool isOnGround = false;
     public bool isNextToWall = false;
+    private bool isFacingRight = true;
 
     [Header("Const")]
     private const float ANTI_SLIDE_ON_FLOOR = 0.05f;
     private const float MAX_FLOOR_SPEED = 20f;
     private const float DASH_TIME = 0.15f;
-
-
-
-    private bool isFacingRight = true;
 
     private enum State
     {
@@ -38,7 +35,8 @@ public class PlayerController : MonoBehaviour
         Sliding,
         Rolling,
         Dashing,
-        Attacking
+        Attacking,
+        Hooking
     }
 
     private State currentState = State.Normal;
@@ -48,6 +46,7 @@ public class PlayerController : MonoBehaviour
     private ColorForm currentColorForm = ColorForm.White;
     private enum ColorForm { White, Red, Blue, Yellow, Violet, Orange, Green};
 
+    [SerializeField] private Hook hook;
     // [Header("Debug")]
 
     void Start()
@@ -59,11 +58,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Attack();
         HorizontalMove();
         GroundCheck();
         JumpCheck();
-        RollAndDash();
+        ZButtonFunction();
         AttackCheck();
         SlideCheck();
         AnimationUpdate();
@@ -81,6 +79,10 @@ public class PlayerController : MonoBehaviour
 
     void HorizontalMove()
     {
+        if (currentState != State.Normal)
+        {
+            return;
+        }
         if (Input.GetKey("right"))
         {
             isFacingRight = true;
@@ -103,7 +105,7 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit2D raycastHitR = Physics2D.Raycast(new Vector3(transform.position.x + 0.1f, transform.position.y, transform.position.z), Vector2.down, 0.6f, platformLayerMask);
         RaycastHit2D raycastHitL = Physics2D.Raycast(new Vector3(transform.position.x - 0.1f, transform.position.y, transform.position.z), Vector2.down, 0.6f, platformLayerMask);
-        Color rayColor;
+        //Color rayColor;
         isOnGround = (raycastHitR.collider != null && raycastHitL.collider != null);
         if(isOnGround)
         {
@@ -129,11 +131,11 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
                 case ColorForm.Blue:
-                    if(jumpCount < 1 && isOnGround)
+                    if((jumpCount < 1) && isOnGround && (currentState != State.Hooking))
                     {
                         Jump();   
                     }
-                    else if(jumpCount == 1)
+                    else if((jumpCount == 1) && (currentState != State.Hooking))
                     {
                         Jump();
                     }
@@ -162,22 +164,22 @@ public class PlayerController : MonoBehaviour
             switch (currentColorForm)
             {
                 case ColorForm.White:
-                anim.Play("WAttack");
-                currentState = State.Attacking;
-                Invoke("BackToNormal", 0.5f);
-                break;
+                    anim.Play("WAttack");
+                    currentState = State.Attacking;
+                    Invoke("BackToNormal", 0.5f);
+                    break;
                 case ColorForm.Blue:
-                anim.Play("BParry");
-                currentState = State.Attacking;
-                Invoke("BackToNormal", 0.5f);
-                break;
+                    anim.Play("BParry");
+                    currentState = State.Attacking;
+                    Invoke("BackToNormal", 0.5f);
+                    break;
             }
         }
 
     }
 
-    void RollAndDash()
-    {
+    void ZButtonFunction()
+    {   
         if (Input.GetKeyDown("z") && currentState == State.Normal)
         {
             switch (currentColorForm)
@@ -185,8 +187,11 @@ public class PlayerController : MonoBehaviour
                 case ColorForm.Red:
                     DashCheck(fastDashSpeed);
                     break;
-                case ColorForm.Blue:
+                case ColorForm.Yellow:
                     DashCheck(slowDashSpeed);
+                    break;
+                case ColorForm.Blue:
+                    HookCheck();
                     break;
                 default:
                     if(isOnGround)
@@ -195,6 +200,21 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
             }
+        }
+    }
+
+    void HookCheck()
+    {
+        if(hook.gameObject.activeSelf)
+        {
+            
+            return;
+        }
+        else
+        {
+            currentState = State.Hooking;
+            hook.gameObject.SetActive(true);
+            hook.PushHook(isFacingRight);
         }
     }
 
@@ -250,7 +270,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void BackToNormal()
+    public void BackToNormal()
     {
         currentState = State.Normal;
     }
