@@ -28,7 +28,7 @@ public class SpawnPoint : MonoBehaviour
             GameObject enemies = GameObject.Find(enemyType);
             for(int i = 0; i < enemies.transform.childCount; i ++)
             {
-                if(enemies.transform.GetChild(i).gameObject.active == false)
+                if(enemies.transform.GetChild(i).gameObject.activeSelf == false)
                 {
                     currentEnemies = enemies.transform.GetChild(i).gameObject;
                     // currentEnemies.transform.position = transform.position;
