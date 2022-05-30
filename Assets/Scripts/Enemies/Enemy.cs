@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageable
 {
     protected SpawnPoint currentSpawnPoint = null;
     // // Start is called before the first frame update
@@ -29,4 +29,10 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
         currentSpawnPoint = null;
     }
+
+    public void TakeDmg()
+    {
+
+    }
+    
 }
