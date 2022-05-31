@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AttackHit : MonoBehaviour
 {
+    [SerializeField] private int dmg;
     private Animator anim;
     void Awake()
     {
@@ -22,7 +23,7 @@ public class AttackHit : MonoBehaviour
         col.TryGetComponent<IDamageable>(out damageableObject);
         if(damageableObject != null)
         {
-            Debug.Log("Take Dmg");
+            damageableObject.TakeDmg(dmg);
         }
     }
 }

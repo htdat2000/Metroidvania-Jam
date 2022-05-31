@@ -168,7 +168,14 @@ public class PlayerController : MonoBehaviour
                 case ColorForm.White:
                     anim.Play("WAttack");
                     currentState = State.Attacking;
-                    Instantiate(AttackHit[0], this.gameObject.transform.position, Quaternion.identity);
+                    if(isFacingRight)
+                    {
+                        Instantiate(AttackHit[0], this.gameObject.transform.position, Quaternion.identity);
+                    }
+                    else
+                    {
+                        Instantiate(AttackHit[0], this.gameObject.transform.position, Quaternion.Euler(0, 180, 0));
+                    }
                     Invoke("BackToNormal", 0.5f);
                     break;
                 case ColorForm.Blue:
