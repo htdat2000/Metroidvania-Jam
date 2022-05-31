@@ -15,8 +15,9 @@ public class Dummy : Enemy
     //Debug
     private float turnReset = 3f;
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody2D>();
     }
 

@@ -46,6 +46,8 @@ public class PlayerController : MonoBehaviour
     private ColorForm currentColorForm = ColorForm.White;
     private enum ColorForm { White, Red, Blue, Yellow, Violet, Orange, Green};
 
+    [Header("Other items")]
+    [SerializeField] private GameObject[] AttackHit;
     [SerializeField] private Hook hook;
     // [Header("Debug")]
 
@@ -166,6 +168,14 @@ public class PlayerController : MonoBehaviour
                 case ColorForm.White:
                     anim.Play("WAttack");
                     currentState = State.Attacking;
+                    if(isFacingRight)
+                    {
+                        Instantiate(AttackHit[0], this.gameObject.transform.position, Quaternion.identity);
+                    }
+                    else
+                    {
+                        Instantiate(AttackHit[0], this.gameObject.transform.position, Quaternion.Euler(0, 180, 0));
+                    }
                     Invoke("BackToNormal", 0.5f);
                     break;
                 case ColorForm.Blue:
@@ -212,6 +222,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            anim.Play("BHook");
             currentState = State.Hooking;
             hook.gameObject.SetActive(true);
             hook.PushHook(isFacingRight);
