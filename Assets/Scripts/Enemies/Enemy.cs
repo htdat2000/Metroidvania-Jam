@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageable
 {
+    [SerializeField] protected int defaultHP;
+    protected int hp;
     protected SpawnPoint currentSpawnPoint = null;
-    // // Start is called before the first frame update
-    // void Start()
-    // {
-        
-    // }
+    
+    protected virtual void Start()
+    {
+        hp = defaultHP;
+    }
 
     // // Update is called once per frame
     // void Update()
@@ -28,5 +30,30 @@ public class Enemy : MonoBehaviour
     {
         gameObject.SetActive(false);
         currentSpawnPoint = null;
+    }
+
+    public void TakeDmg(int _dmg)
+    {
+        GetHitBehaviour(_dmg);
+    }
+    
+    protected virtual void GetHitBehaviour(int _dmg)
+    {
+        DecreaseHP(_dmg);
+    }
+
+    protected virtual void DecreaseHP(int _dmg)
+    {
+        hp -= _dmg;
+        hp = Mathf.Clamp(hp, 0, defaultHP);
+        if(hp <= 0)
+        {
+            Die();
+        }
+    }
+
+    protected virtual void Die()
+    {
+        Despawn();
     }
 }
