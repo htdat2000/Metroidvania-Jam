@@ -5,6 +5,7 @@ using UnityEngine;
 public class AttackHit : MonoBehaviour
 {
     [SerializeField] private int dmg;
+    [SerializeField] private float destroyTime;
     private Animator anim;
     void Awake()
     {
@@ -14,7 +15,7 @@ public class AttackHit : MonoBehaviour
     void Start()
     {
         anim.Play(this.gameObject.name);
-        Destroy(this.gameObject, 0.1f);
+        Destroy(this.gameObject, destroyTime);
     }
 
     void OnTriggerEnter2D(Collider2D col)

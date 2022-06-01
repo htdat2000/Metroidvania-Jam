@@ -24,9 +24,9 @@ public class Dummy : Enemy
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(isMoveable);
         if(isMoveable == false)
         {
-            Invoke("ChangeMoveState", 0.1f);
             return;
         }
         rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * moveSpeed * moveDir, -MAX_FLOOR_SPEED, MAX_FLOOR_SPEED), rb.velocity.y);
@@ -42,7 +42,8 @@ public class Dummy : Enemy
     protected override void GetHitBehaviour(int _dmg)
     {
         base.GetHitBehaviour(_dmg);
-        ChangeMoveState();
+        isMoveable = false;
+        Invoke("ChangeMoveState", 0.1f);
     }
 
     protected void ChangeMoveState()

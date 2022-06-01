@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 5487872298584269597}
   - component: {fileID: 5487872298584269570}
   - component: {fileID: 5487872298584269571}
+  - component: {fileID: 8217850655052064129}
+  - component: {fileID: 6435984388837503532}
   m_Layer: 0
   m_Name: RAttackHit_2
   m_TagString: Untagged
@@ -102,3 +104,33 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8217850655052064129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5487872298584269568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da51e2704d71809459bad8a5ddaaae6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dmg: 3
+  destroyTime: 0.1
+--- !u!70 &6435984388837503532
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5487872298584269568}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 1.2809266, y: -0.37609938}
+  m_Size: {x: 3.1590862, y: 0.63289374}
+  m_Direction: 1
