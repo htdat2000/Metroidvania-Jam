@@ -12,6 +12,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float fastDashSpeed = 20;
     [SerializeField] private float slowDashSpeed = 12;
     [SerializeField] private float slideSpeed = 1;
+
+    [Header("Counting")]
+    private int comboCount = 0;
+    private float comboResetTime = 1;
+    private float comboCountdown = 1;
     private int jumpCount = 0;
     private float movement;
 
@@ -47,7 +52,9 @@ public class PlayerController : MonoBehaviour
     private enum ColorForm { White, Red, Blue, Yellow, Violet, Orange, Green};
 
     [Header("Other items")]
-    [SerializeField] private GameObject[] AttackHit;
+    [SerializeField] private GameObject singleAttackHit;
+    [SerializeField] private GameObject[] comboAttackHits;
+    [SerializeField] private GameObject aoeAttackHit;
     [SerializeField] private Hook hook;
     // [Header("Debug")]
 
@@ -69,13 +76,65 @@ public class PlayerController : MonoBehaviour
         AnimationUpdate();
         AutoFixXVelocity();
         SwitchForm();
+        ResetCombo();
+
     }
-    void Attack()
+    IEnumerator Attack(float waitime, string attackType)
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        yield return new WaitForSeconds(waitime);
+        switch (attackType)
         {
-            Debug.Log("Attack");
-            anim.Play("Attack");
+            case "White":
+                if(isFacingRight)
+                {
+                    Instantiate(singleAttackHit, this.gameObject.transform.position, Quaternion.identity);
+                }
+                else
+                {
+                    Instantiate(singleAttackHit, this.gameObject.transform.position, Quaternion.Euler(0, 180, 0));
+                }
+                break;
+            case "Blue":
+                Instantiate(aoeAttackHit, this.gameObject.transform.position, Quaternion.identity);
+                break;
+            case "Red":
+                switch(comboCount)
+                {
+                    case 0:
+                        comboCount++;
+                        comboCountdown = comboResetTime;
+                        Instantiate(comboAttackHits[0], this.gameObject.transform.position, Quaternion.identity);
+                        break;
+                    case 1:
+                        comboCount++;
+                        comboCountdown = comboResetTime;
+                        Instantiate(comboAttackHits[1], this.gameObject.transform.position, Quaternion.identity);
+                        break;
+                    case 2:
+                        comboCount++;
+                        Instantiate(comboAttackHits[2], this.gameObject.transform.position, Quaternion.identity);
+                        break;
+                    default:
+                        comboCount = 0;
+                        comboCountdown = comboResetTime;
+                        break;
+                }
+                break;
+        }
+    }
+
+    void ResetCombo()
+    {   
+        if(comboCount > 0)
+        {
+            if(comboCountdown > 0)
+            {
+                comboCountdown -= Time.deltaTime;
+            }
+            else
+            {
+                comboCount = 0;
+            }
         }
     }
 
@@ -168,18 +227,18 @@ public class PlayerController : MonoBehaviour
                 case ColorForm.White:
                     anim.Play("WAttack");
                     currentState = State.Attacking;
-                    if(isFacingRight)
-                    {
-                        Instantiate(AttackHit[0], this.gameObject.transform.position, Quaternion.identity);
-                    }
-                    else
-                    {
-                        Instantiate(AttackHit[0], this.gameObject.transform.position, Quaternion.Euler(0, 180, 0));
-                    }
+                    StartCoroutine(Attack(0.1f, "White"));
                     Invoke("BackToNormal", 0.5f);
                     break;
                 case ColorForm.Blue:
                     anim.Play("BParry");
+                    StartCoroutine(Attack(0.3f, "Blue"));
+                    currentState = State.Attacking;
+                    Invoke("BackToNormal", 0.5f);
+                    break;
+                case ColorForm.Red:
+                    anim.Play("WAttack");
+                    StartCoroutine(Attack(0.3f, "Red"));
                     currentState = State.Attacking;
                     Invoke("BackToNormal", 0.5f);
                     break;
