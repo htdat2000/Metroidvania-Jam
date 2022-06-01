@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] protected int defaultHP;
     protected int hp;
+    protected bool isMoveable = true; 
     protected SpawnPoint currentSpawnPoint = null;
     
     protected virtual void Start()
