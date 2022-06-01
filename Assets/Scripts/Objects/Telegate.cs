@@ -39,6 +39,6 @@ public class Telegate : MonoBehaviour
 
     void ShowTelePanel()
     {
-        CustomEvents.OnTelepanelTrigger?.Invoke();
+        CustomEvents.OnTelepanelTrigger?.Invoke(gateID);
     }
 }
