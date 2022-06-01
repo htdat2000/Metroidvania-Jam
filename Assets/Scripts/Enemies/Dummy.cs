@@ -24,7 +24,35 @@ public class Dummy : Enemy
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(isMoveable);
+        if(isMoveable == false)
+        {
+            return;
+        }
         rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * moveSpeed * moveDir, -MAX_FLOOR_SPEED, MAX_FLOOR_SPEED), rb.velocity.y);
+        Turning();
+        CheckFlip();
+    }
+
+    void CheckFlip()
+    {
+        transform.rotation = isFacingRight ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
+    }
+
+    protected override void GetHitBehaviour(int _dmg)
+    {
+        base.GetHitBehaviour(_dmg);
+        isMoveable = false;
+        Invoke("ChangeMoveState", 0.1f);
+    }
+
+    protected void ChangeMoveState()
+    {
+        isMoveable = !isMoveable; 
+    }
+
+    protected void Turning()
+    {
         turnReset -= Time.deltaTime;
         if(turnReset <= 0)
         {
@@ -32,11 +60,5 @@ public class Dummy : Enemy
             moveDir *= -1;
             isFacingRight = !isFacingRight;
         }
-        CheckFlip();
-    }
-
-    void CheckFlip()
-    {
-        transform.rotation = isFacingRight ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
     }
 }
