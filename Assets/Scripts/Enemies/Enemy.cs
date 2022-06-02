@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] protected int defaultHP;
     protected int hp;
+    [SerializeField] protected int dmg;
     protected bool isMoveable = true; 
     protected SpawnPoint currentSpawnPoint = null;
     
@@ -33,7 +34,7 @@ public class Enemy : MonoBehaviour, IDamageable
         currentSpawnPoint = null;
     }
 
-    public void TakeDmg(int _dmg)
+    public void TakeDmg(int _dmg, GameObject attacker)
     {
         GetHitBehaviour(_dmg);
     }

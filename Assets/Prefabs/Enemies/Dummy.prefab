@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultHP: 10
+  dmg: 1
   moveSpeed: 5
 --- !u!95 &1176643198335824009
 Animator:

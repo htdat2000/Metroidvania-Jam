@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IDamageable 
 {
-    void TakeDmg(int _dmg);
+    void TakeDmg(int _dmg, GameObject attacker);
 }
