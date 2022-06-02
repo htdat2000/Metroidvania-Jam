@@ -203,6 +203,17 @@ public class PlayerController : MonoBehaviour
                         Jump();
                     }
                     break;
+                case ColorForm.Yellow:
+                    if(jumpCount < 1 && isOnGround)
+                    {
+                        Jump();
+                    }
+                    else if(!isOnGround && isNextToWall)
+                    {
+                        ResetJumpCount();
+                        Jump();
+                    }
+                    break;
                 case ColorForm.Blue:
                     if((jumpCount < 1) && isOnGround && (currentState != State.Hooking))
                     {
@@ -272,6 +283,10 @@ public class PlayerController : MonoBehaviour
             switch (currentColorForm)
             {  
                 case ColorForm.Red:
+                    if(isOnGround == false) 
+                    {
+                        break;
+                    }
                     DashCheck(fastDashSpeed);
                     break;
                 case ColorForm.Yellow:
