@@ -24,7 +24,6 @@ public class Dummy : Enemy
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(isMoveable);
         if(isMoveable == false)
         {
             return;
@@ -43,7 +42,7 @@ public class Dummy : Enemy
     {
         base.GetHitBehaviour(_dmg);
         isMoveable = false;
-        Invoke("ChangeMoveState", 0.1f);
+        Invoke("ChangeMoveState", 1);
     }
 
     protected void ChangeMoveState()
@@ -59,6 +58,14 @@ public class Dummy : Enemy
             turnReset = 3f;
             moveDir *= -1;
             isFacingRight = !isFacingRight;
+        }
+    }
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if(col.gameObject.CompareTag("Player"))
+        {
+            IDamageable player = col.gameObject.GetComponent<IDamageable>();
+            player.TakeDmg(dmg, this.gameObject);
         }
     }
 }

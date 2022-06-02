@@ -20,11 +20,15 @@ public class AttackHit : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        if(col.CompareTag("Player"))
+        {
+            return;
+        }
         IDamageable damageableObject;
         col.TryGetComponent<IDamageable>(out damageableObject);
         if(damageableObject != null)
         {
-            damageableObject.TakeDmg(dmg);
+            damageableObject.TakeDmg(dmg, null);
         }
     }
 }

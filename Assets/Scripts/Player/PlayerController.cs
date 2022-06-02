@@ -85,14 +85,7 @@ public class PlayerController : MonoBehaviour
         switch (attackType)
         {
             case "White":
-                if(isFacingRight)
-                {
-                    Instantiate(singleAttackHit, this.gameObject.transform.position, Quaternion.identity);
-                }
-                else
-                {
-                    Instantiate(singleAttackHit, this.gameObject.transform.position, Quaternion.Euler(0, 180, 0));
-                }
+                Instantiate(singleAttackHit, this.gameObject.transform.position, this.gameObject.transform.rotation);      
                 break;
             case "Blue":
                 Instantiate(aoeAttackHit, this.gameObject.transform.position, Quaternion.identity);
@@ -103,16 +96,35 @@ public class PlayerController : MonoBehaviour
                     case 0:
                         comboCount++;
                         comboCountdown = comboResetTime;
-                        Instantiate(comboAttackHits[0], this.gameObject.transform.position, Quaternion.identity);
+                        Instantiate(comboAttackHits[0], this.gameObject.transform.position, this.gameObject.transform.rotation);
                         break;
                     case 1:
                         comboCount++;
                         comboCountdown = comboResetTime;
-                        Instantiate(comboAttackHits[1], this.gameObject.transform.position, Quaternion.identity);
+                        Instantiate(comboAttackHits[1], this.gameObject.transform.position, this.gameObject.transform.rotation);
                         break;
                     case 2:
                         comboCount++;
-                        Instantiate(comboAttackHits[2], this.gameObject.transform.position, Quaternion.identity);
+                        Instantiate(comboAttackHits[2], this.gameObject.transform.position, this.gameObject.transform.rotation);
+                        break;
+                    default:
+                        comboCount = 0;
+                        comboCountdown = comboResetTime;
+                        break;
+                }
+                break;
+            case "Yellow":
+                switch(comboCount)
+                {
+                    case 0:
+                        comboCount++;
+                        comboCountdown = comboResetTime;
+                        Instantiate(comboAttackHits[0], this.gameObject.transform.position, this.gameObject.transform.rotation);
+                        break;
+                    case 1:
+                        comboCount++;
+                        comboCountdown = comboResetTime;
+                        Instantiate(comboAttackHits[1], this.gameObject.transform.position, this.gameObject.transform.rotation);
                         break;
                     default:
                         comboCount = 0;
@@ -239,6 +251,12 @@ public class PlayerController : MonoBehaviour
                 case ColorForm.Red:
                     anim.Play("WAttack");
                     StartCoroutine(Attack(0.3f, "Red"));
+                    currentState = State.Attacking;
+                    Invoke("BackToNormal", 0.5f);
+                    break;
+                case ColorForm.Yellow:
+                    anim.Play("WAttack");
+                    StartCoroutine(Attack(0.3f, "Yellow"));
                     currentState = State.Attacking;
                     Invoke("BackToNormal", 0.5f);
                     break;
