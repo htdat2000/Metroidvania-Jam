@@ -6,7 +6,7 @@ public class PlayerData : MonoBehaviour, IDamageable
 {
     [SerializeField] private int defaultHP;
     private int hp;
-    public static bool[] isColorActive = new bool[7] {true, true, true, false, false, false, false};
+    public static bool[] isColorActive = new bool[7] {true, false, false, false, false, false, false};
     //                                                white  red    blue   yel    vio    ora    gre
     enum State
     {
@@ -67,8 +67,9 @@ public class PlayerData : MonoBehaviour, IDamageable
         {
             return;
         }
+
         Vector3 direction = this.gameObject.transform.position - attacker.transform.position;
-        rb.AddForce(new Vector2(direction.normalized.x * 10, 0));    
+        rb.AddForce(new Vector2(direction.normalized.x * 15, 0), ForceMode2D.Impulse);    
     }
 
     void ResetState()
