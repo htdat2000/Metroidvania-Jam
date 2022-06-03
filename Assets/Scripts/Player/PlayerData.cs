@@ -63,7 +63,10 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     public void KnockbackEffect(GameObject attacker)
     {
-        Debug.Log("Knockback");
+        if(attacker == null)
+        {
+            return;
+        }
         Vector3 direction = this.gameObject.transform.position - attacker.transform.position;
         rb.AddForce(new Vector2(direction.normalized.x * 10, 0));    
     }
