@@ -22,15 +22,26 @@ public class Map : MonoBehaviour
     {
         
     }
+    void OnEnable() {
+        Debug.Log("Map: " + PlayerPrefs.GetString("AllGates"));    
+    }
 
     public void CloseMap()
     {
         gameObject.SetActive(false);
     }
-
+    // public void Refresh(int currentPort)
+    // {
+        // string gateData = PlayerPrefs.GetString("AllGates", "0000000000");
+        // CustomEvents.OnMapRefresh?.Invoke(currentPort, gateData);
+    // }
     public void TeleTo(int gateID)
     {
-        WorldManager.Instance.player.transform.position = gate[gateID].transform.position;
-        gameObject.SetActive(false);
+        string gateData = PlayerPrefs.GetString("AllGates", "0000000000");
+        if(gateData[gateID] == '1')
+        {
+            WorldManager.Instance.player.transform.position = gate[gateID].transform.position;
+            gameObject.SetActive(false);
+        }
     }
 }

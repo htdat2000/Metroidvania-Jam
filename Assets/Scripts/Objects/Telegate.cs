@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
 
 public class Telegate : MonoBehaviour
 {
@@ -25,7 +26,17 @@ public class Telegate : MonoBehaviour
     {
         if(col.gameObject.CompareTag("Player"))
         {
+            GameData.LoadGateData();
             isTrigger = true;
+            string gateData = PlayerPrefs.GetString("AllGates", "0000000000");
+            if(gateData[gateID] == '0')
+            {
+                StringBuilder sb = new StringBuilder(gateData);   
+                sb[gateID] = '1'; 
+                gateData = sb.ToString();
+                PlayerPrefs.SetString("AllGates",gateData);
+            }
+            // CustomEvents.OnMapRefresh?.Invoke(gateID, gateData);
         }
     }
 
