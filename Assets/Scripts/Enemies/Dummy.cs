@@ -67,6 +67,7 @@ public class Dummy : Enemy
             IDamageable player = col.gameObject.GetComponent<IDamageable>();
             player.TakeDmg(dmg, this.gameObject);
             CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_DANGER_AMOUNT, GameConst.SHAKE_DANGER_TIME);
+            EffectPool.Instance.GetHitEffectInPool(col.gameObject.transform.position);
         }
     }
 }

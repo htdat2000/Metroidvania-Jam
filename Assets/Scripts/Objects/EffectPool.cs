@@ -8,6 +8,10 @@ public class EffectPool : MonoBehaviour
     [SerializeField] private GameObject LandingEffect;
     [SerializeField] private int LandingEffectAmount;
     private GameObject[] LandingEffects;
+    
+    [SerializeField] private GameObject HitEffect;
+    [SerializeField] private int HitEffectAmount;
+    private GameObject[] HitEffects;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +19,7 @@ public class EffectPool : MonoBehaviour
             Debug.LogWarning("EffectPool: There are 2 instance of EffectPool");
         Instance = this;
         CreateLandingEffects();
+        CreateHitEffects();
     }
     void CreateLandingEffects()
     {
@@ -33,6 +38,27 @@ public class EffectPool : MonoBehaviour
             {
                 LandingEffects[i].transform.position = spawnposition;
                 LandingEffects[i].SetActive(true);
+                return;
+            }
+        }
+    }
+    void CreateHitEffects()
+    {
+        HitEffects = new GameObject[HitEffectAmount];
+        for(int i = 0; i < HitEffectAmount; i++)
+        {
+            HitEffects[i] =  Instantiate(HitEffect, Vector3.zero, Quaternion.identity, this.transform);
+            HitEffects[i].SetActive(false);
+        }
+    }
+    public void GetHitEffectInPool(Vector3 spawnposition)
+    {
+        for(int i = 0; i < HitEffects.Length; i++)
+        {
+            if(!HitEffects[i].activeSelf)
+            {
+                HitEffects[i].transform.position = spawnposition;
+                HitEffects[i].SetActive(true);
                 return;
             }
         }
