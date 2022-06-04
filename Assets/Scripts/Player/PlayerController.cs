@@ -56,10 +56,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject[] comboAttackHits;
     [SerializeField] private GameObject aoeAttackHit;
     [SerializeField] private Hook hook;
+    private TrailRenderer trail;
     // [Header("Debug")]
 
     void Start()
     {
+        trail = GetComponent<TrailRenderer>();
+        trail.widthMultiplier = 0f;
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();    
     }
@@ -340,15 +343,16 @@ public class PlayerController : MonoBehaviour
         if (isFacingRight)
             rb.velocity = new Vector2(_speed, 0);
         else
-
             rb.velocity = new Vector2(-_speed, 0);
-        //anim.Play("WDash");
 
-            
+        trail.widthMultiplier = 0.3f;
         anim.Play("RDash");
-
         currentState = State.Dashing;
         Invoke("BackToNormal", DASH_TIME);
+    }
+    void DisableTrail()
+    {
+        trail.widthMultiplier = 0f;
     }
 
     void SlideCheck()
@@ -376,6 +380,7 @@ public class PlayerController : MonoBehaviour
     public void BackToNormal()
     {
         currentState = State.Normal;
+        DisableTrail();
     }
 
     void ResetJumpCount()
