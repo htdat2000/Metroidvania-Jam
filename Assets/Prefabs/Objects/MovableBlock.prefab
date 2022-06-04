@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1500889305921927074}
   - component: {fileID: 1500889305921927133}
   - component: {fileID: 1717800279294823382}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MovableBlock
   m_TagString: Hookable
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1766669035187613545}
   - component: {fileID: 1306211118867942687}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Point Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
