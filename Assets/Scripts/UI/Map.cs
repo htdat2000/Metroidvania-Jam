@@ -22,19 +22,13 @@ public class Map : MonoBehaviour
     {
         
     }
-    void OnEnable() {
-        Debug.Log("Map: " + PlayerPrefs.GetString("AllGates"));    
+    void OnEnable() { 
     }
 
     public void CloseMap()
     {
         gameObject.SetActive(false);
     }
-    // public void Refresh(int currentPort)
-    // {
-        // string gateData = PlayerPrefs.GetString("AllGates", "0000000000");
-        // CustomEvents.OnMapRefresh?.Invoke(currentPort, gateData);
-    // }
     public void TeleTo(int gateID)
     {
         string gateData = PlayerPrefs.GetString("AllGates", "0000000000");

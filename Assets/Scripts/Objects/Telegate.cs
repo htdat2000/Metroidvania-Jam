@@ -36,7 +36,6 @@ public class Telegate : MonoBehaviour
                 gateData = sb.ToString();
                 PlayerPrefs.SetString("AllGates",gateData);
             }
-            // CustomEvents.OnMapRefresh?.Invoke(gateID, gateData);
         }
     }
 

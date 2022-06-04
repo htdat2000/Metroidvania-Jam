@@ -17,7 +17,6 @@ public class WorldManager : MonoBehaviour
     {
         CustomEvents.OnTelepanelTrigger -= OpenMap;
     }
-    // Start is called before the first frame update
     void Start()
     {
         Init();
@@ -27,6 +26,5 @@ public class WorldManager : MonoBehaviour
         map.SetActive(true);
         string gateData = PlayerPrefs.GetString("AllGates", "0000000000");
         CustomEvents.OnMapRefresh?.Invoke(currentPort, gateData);
-        // map.GetComponent<Map>().Refresh(currentPort);
     }
 }
