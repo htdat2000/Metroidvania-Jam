@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dmg: 3
-  destroyTime: 0.16
+  destroyTime: 0.31
 --- !u!58 &7449077158534421493
 CircleCollider2D:
   m_ObjectHideFlags: 0

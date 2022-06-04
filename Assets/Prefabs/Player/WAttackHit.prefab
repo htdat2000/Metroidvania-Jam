@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dmg: 5
-  destroyTime: 0.1
+  destroyTime: 0.42
 --- !u!70 &8832824052833941218
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
