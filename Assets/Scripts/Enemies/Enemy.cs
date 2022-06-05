@@ -30,7 +30,9 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void Despawn()
     {
+        hp = defaultHP;
         gameObject.SetActive(false);
+        currentSpawnPoint.BackEnemyToPool();
         currentSpawnPoint = null;
     }
 

@@ -8,6 +8,7 @@ public class SpawnPoint : MonoBehaviour
     [SerializeField] private float disSpawnDistance;
     [SerializeField] private string enemyType;
     private GameObject currentEnemies = null;
+    private bool spawnTrigger = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +24,7 @@ public class SpawnPoint : MonoBehaviour
         //     currentEnemies = Instantiate(enemyType,transform.position,Quaternion.identity);
         //     currentEnemies.GetComponent<Enemy>().SetSpawnPoint(this);
         // }
-        if(Vector3.Distance(WorldManager.Instance.player.transform.position, transform.position) < spawnDistance && currentEnemies == null)
+        if(Vector3.Distance(WorldManager.Instance.player.transform.position, transform.position) < spawnDistance && currentEnemies == null && spawnTrigger == false)
         {
             GameObject enemies = GameObject.Find(enemyType);
             for(int i = 0; i < enemies.transform.childCount; i ++)
@@ -33,6 +34,7 @@ public class SpawnPoint : MonoBehaviour
                     currentEnemies = enemies.transform.GetChild(i).gameObject;
                     // currentEnemies.transform.position = transform.position;
                     currentEnemies.GetComponent<Enemy>().SetSpawnPoint(this);
+                    spawnTrigger = true;
                     return;
                 }
             }
@@ -40,7 +42,14 @@ public class SpawnPoint : MonoBehaviour
         if(Vector3.Distance(WorldManager.Instance.player.transform.position, transform.position) > disSpawnDistance && currentEnemies != null)
         {
             currentEnemies.GetComponent<Enemy>().Despawn();
-            currentEnemies = null;
         }
+        if(Vector3.Distance(WorldManager.Instance.player.transform.position, transform.position) > disSpawnDistance && currentEnemies == null && spawnTrigger == true)
+        {
+            spawnTrigger = false;
+        }
+    }
+    public void BackEnemyToPool()
+    {
+        currentEnemies = null;
     }
 }
