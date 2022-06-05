@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     private int comboCount = 0;
     private float comboResetTime = 1;
     private float comboCountdown = 1;
+
+    private float jumpResetTime = 0.2f;
+    private float jumpCountdown = 0;
     private int jumpCount = 0;
     private float movement;
 
@@ -43,7 +46,8 @@ public class PlayerController : MonoBehaviour
         Rolling,
         Dashing,
         Attacking,
-        Hooking
+        Hooking,
+        Dead
     }
 
     private State currentState = State.Normal;
@@ -60,6 +64,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Hook hook;
     private TrailRenderer trail;
     // [Header("Debug")]
+    
+    void Awake()
+    {
+        CustomEvents.OnPlayerDied += PlayerDieBehaviour;
+    }
 
     void Start()
     {
@@ -72,6 +81,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(currentState == State.Dead)
+        {
+            return;
+        }
         HorizontalMove();
         GroundCheck();
         JumpCheck();
@@ -81,9 +94,14 @@ public class PlayerController : MonoBehaviour
         AnimationUpdate();
         AutoFixXVelocity();
         SwitchForm();
-        ResetCombo();
-
+        Countdown();
     }
+
+    void OnDestroy()
+    {
+        CustomEvents.OnPlayerDied -= PlayerDieBehaviour;
+    }
+
     IEnumerator Attack(float waitime, string attackType)
     {
         yield return new WaitForSeconds(waitime);
@@ -140,7 +158,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void ResetCombo()
+    void ComboCountdown()
     {   
         if(comboCount > 0)
         {
@@ -242,9 +260,27 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void Countdown()
+    {
+        ComboCountdown();
+        JumpCountdown();
+    }
+
+    void JumpCountdown()
+    {
+        if(jumpCountdown > 0)
+        {
+            jumpCountdown -= Time.deltaTime;
+        }
+    }
 
     void Jump()
     {
+        if(jumpCountdown > 0)
+        {
+            return;
+        }
+        jumpCountdown = jumpResetTime;
         jumpCount++; 
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);    
         EffectPool.Instance.GetJumpEffectInPool(transform.position + DISTANCE_CENTER_TO_FEET);
@@ -454,5 +490,12 @@ public class PlayerController : MonoBehaviour
         // if(rb.velocity.x < 0.001f)
         //     rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * ANTI_SLIDE_ON_FLOOR, rb.velocity.x, 0f),rb.velocity.y);
         rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, ANTI_SLIDE_ON_FLOOR), rb.velocity.y);
+    }
+
+    void PlayerDieBehaviour()
+    {
+        currentState = State.Dead;
+        anim.Play("Dead");
+        Invoke("BackToNormal", 5);
     }
 }
