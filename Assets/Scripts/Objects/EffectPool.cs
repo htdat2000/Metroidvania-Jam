@@ -12,6 +12,10 @@ public class EffectPool : MonoBehaviour
     [SerializeField] private GameObject HitEffect;
     [SerializeField] private int HitEffectAmount;
     private GameObject[] HitEffects;
+
+    [SerializeField] private GameObject JumpEffect;
+    [SerializeField] private int JumpEffectAmount;
+    private GameObject[] JumpEffects;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +24,7 @@ public class EffectPool : MonoBehaviour
         Instance = this;
         CreateLandingEffects();
         CreateHitEffects();
+        CreateJumpEffects();
     }
     void CreateLandingEffects()
     {
@@ -59,6 +64,27 @@ public class EffectPool : MonoBehaviour
             {
                 HitEffects[i].transform.position = spawnposition;
                 HitEffects[i].SetActive(true);
+                return;
+            }
+        }
+    }
+    void CreateJumpEffects()
+    {
+        JumpEffects = new GameObject[JumpEffectAmount];
+        for(int i = 0; i < JumpEffectAmount; i++)
+        {
+            JumpEffects[i] =  Instantiate(JumpEffect, Vector3.zero, Quaternion.identity, this.transform);
+            JumpEffects[i].SetActive(false);
+        }
+    }
+    public void GetJumpEffectInPool(Vector3 spawnposition)
+    {
+        for(int i = 0; i < JumpEffects.Length; i++)
+        {
+            if(!JumpEffects[i].activeSelf)
+            {
+                JumpEffects[i].transform.position = spawnposition;
+                JumpEffects[i].SetActive(true);
                 return;
             }
         }

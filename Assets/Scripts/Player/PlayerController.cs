@@ -25,11 +25,13 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
 
     [Header("Bool Check Environment")]
+    public bool isLastFrameOnGround = false;
     public bool isOnGround = false;
     public bool isNextToWall = false;
     private bool isFacingRight = true;
 
     [Header("Const")]
+    private Vector3 DISTANCE_CENTER_TO_FEET = new Vector3(0f,-0.25f,0f);
     private const float ANTI_SLIDE_ON_FLOOR = 0.05f;
     private const float MAX_FLOOR_SPEED = 20f;
     private const float DASH_TIME = 0.15f;
@@ -179,6 +181,7 @@ public class PlayerController : MonoBehaviour
 
     void GroundCheck()
     {
+        isLastFrameOnGround = isOnGround;
         RaycastHit2D raycastHitR = Physics2D.Raycast(new Vector3(transform.position.x + 0.1f, transform.position.y, transform.position.z), Vector2.down, 0.6f, platformLayerMask);
         RaycastHit2D raycastHitL = Physics2D.Raycast(new Vector3(transform.position.x - 0.1f, transform.position.y, transform.position.z), Vector2.down, 0.6f, platformLayerMask);
         //Color rayColor;
@@ -186,6 +189,8 @@ public class PlayerController : MonoBehaviour
         if(isOnGround)
         {
             ResetJumpCount();
+            if(isLastFrameOnGround)
+                EffectPool.Instance.GetLandingEffectInPool(transform.position + DISTANCE_CENTER_TO_FEET);
         }
     }
 
@@ -242,6 +247,7 @@ public class PlayerController : MonoBehaviour
     {
         jumpCount++; 
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);    
+        EffectPool.Instance.GetJumpEffectInPool(transform.position + DISTANCE_CENTER_TO_FEET);
     }
 
     void AttackCheck()
