@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    [SerializeField] GameObject[] gate;
+    [SerializeField] public GameObject[] gate;
     void Init()
     {
     }
@@ -35,7 +35,7 @@ public class Map : MonoBehaviour
         if(gateData[gateID] == '1')
         {
             WorldManager.Instance.player.transform.position = gate[gateID].transform.position;
-            gameObject.SetActive(false);
+            CloseMap();
         }
     }
 }
