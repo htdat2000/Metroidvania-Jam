@@ -58,7 +58,7 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     void Die()
     {
-        Debug.Log("Player died");
+        CustomEvents.OnPlayerDied?.Invoke();
     }
 
     public void KnockbackEffect(GameObject attacker)
