@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
     [Header("Const")]
     private Vector3 DISTANCE_CENTER_TO_FEET = new Vector3(0f,-0.25f,0f);
     private const float ANTI_SLIDE_ON_FLOOR = 0.05f;
-    private const float MAX_FLOOR_SPEED = 20f;
+    private const float MAX_FLOOR_SPEED = 5f;
     private const float DASH_TIME = 0.15f;
 
     private enum State
