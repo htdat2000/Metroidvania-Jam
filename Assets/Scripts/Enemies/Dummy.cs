@@ -14,6 +14,7 @@ public class Dummy : Enemy
     private const float MAX_FLOOR_SPEED = 2f;
 
     [SerializeField] private float TURN_RESET_TIME = 2f;
+    [SerializeField] private float CHECK_DISTANCE = 0.6f;
     private float lastTurn;
     // Start is called before the first frame update
     protected override void Start()
@@ -33,19 +34,26 @@ public class Dummy : Enemy
         {
             return;
         }
-        rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * moveSpeed * moveDir, -MAX_FLOOR_SPEED, MAX_FLOOR_SPEED), rb.velocity.y);
-        // Turning();
+        Move();
         WallCheck();
         CheckFlip();
     }
+    void Move()
+    {
+        rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * moveSpeed * moveDir, -MAX_FLOOR_SPEED, MAX_FLOOR_SPEED), rb.velocity.y);
+    }
     void WallCheck()
     {
-        // isLastFrameOnGround = isOnGround;
         if(lastTurn + TURN_RESET_TIME < Time.time)
         {
             int facingValue = isFacingRight?1:-1;
-            RaycastHit2D raycastHitB = Physics2D.Raycast(new Vector3(transform.position.x + 0.2f * facingValue, transform.position.y, transform.position.z), Vector2.down, 0.6f, platformLayerMask);
-            RaycastHit2D raycastHitH = Physics2D.Raycast(new Vector3(transform.position.x, transform.position.y, transform.position.z), Vector2.right * facingValue, 0.6f, platformLayerMask);
+            float pivotCheckDistanceX = 0.2f;
+            RaycastHit2D raycastHitB = Physics2D.Raycast(
+                new Vector3(transform.position.x + pivotCheckDistanceX * facingValue, transform.position.y, transform.position.z), 
+                Vector2.down, CHECK_DISTANCE, platformLayerMask);
+            RaycastHit2D raycastHitH = Physics2D.Raycast(
+                new Vector3(transform.position.x, transform.position.y, transform.position.z), 
+                Vector2.right * facingValue, CHECK_DISTANCE, platformLayerMask);
             bool checkResult = (raycastHitB.collider == null || raycastHitH.collider != null); //false => flip
             if(checkResult)
             {
@@ -71,17 +79,6 @@ public class Dummy : Enemy
     protected void ChangeMoveState()
     {
         isMoveable = !isMoveable; 
-    }
-
-    protected void Turning()
-    {
-        // turnReset -= Time.deltaTime;
-        // if(turnReset <= 0)
-        // {
-        //     turnReset = 3f;
-        //     moveDir *= -1;
-        //     isFacingRight = !isFacingRight;
-        // }
     }
     void OnCollisionEnter2D(Collision2D col)
     {

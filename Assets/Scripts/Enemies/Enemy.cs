@@ -15,12 +15,6 @@ public class Enemy : MonoBehaviour, IDamageable
         hp = defaultHP;
     }
 
-    // // Update is called once per frame
-    // void Update()
-    // {
-        
-    // }
-
     public virtual void SetSpawnPoint(SpawnPoint newSpawnPoint)
     {
         currentSpawnPoint = newSpawnPoint;
