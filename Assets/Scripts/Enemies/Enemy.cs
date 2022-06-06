@@ -21,11 +21,12 @@ public class Enemy : MonoBehaviour, IDamageable
         
     // }
 
-    public void SetSpawnPoint(SpawnPoint newSpawnPoint)
+    public virtual void SetSpawnPoint(SpawnPoint newSpawnPoint)
     {
         currentSpawnPoint = newSpawnPoint;
         transform.position = newSpawnPoint.GetComponent<Transform>().position;
         gameObject.SetActive(true);
+        isMoveable = true;
     }
 
     public void Despawn()

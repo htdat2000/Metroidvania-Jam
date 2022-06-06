@@ -136,7 +136,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultHP: 10
   dmg: 1
+  platformLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
   moveSpeed: 5
+  TURN_RESET_TIME: 2
 --- !u!95 &1176643198335824009
 Animator:
   serializedVersion: 3
