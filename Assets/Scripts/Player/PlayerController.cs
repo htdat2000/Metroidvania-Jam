@@ -207,7 +207,7 @@ public class PlayerController : MonoBehaviour
         if(isOnGround)
         {
             ResetJumpCount();
-            if(isLastFrameOnGround)
+            if(!isLastFrameOnGround)
                 EffectPool.Instance.GetLandingEffectInPool(transform.position + DISTANCE_CENTER_TO_FEET);
         }
     }
