@@ -4,14 +4,22 @@ using UnityEngine;
 
 public class Traps : MonoBehaviour
 {
-    [SerializeField] protected int dmg;
-    
-    protected virtual void OnTriggerStay2D(Collider2D col)
+    [SerializeField] protected int defaultDmg;
+    protected int dmg;
+
+    protected virtual void Start()
     {
-        if(col.CompareTag("Player"))
+        dmg = defaultDmg;
+    }
+
+    protected virtual void OnCollisionStay2D(Collision2D col)
+    {
+        IDamageable target;
+        col.gameObject.TryGetComponent<IDamageable>(out target);
+        if(target == null)
         {
-            IDamageable player = col.GetComponent<IDamageable>();
-            player.TakeDmg(dmg, null);
+            return;
         }
+        target.TakeDmg(dmg, null);
     }
 }

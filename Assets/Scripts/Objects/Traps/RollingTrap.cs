@@ -7,11 +7,24 @@ public class RollingTrap : Traps
     [SerializeField] private int dir;
     [SerializeField] private float speed;
     private Rigidbody2D rb;
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         rb = GetComponent<Rigidbody2D>();
         Move();
     }
+
+    void Update()
+    {
+        if(rb.velocity.x == 0 && rb.velocity.y == 0)
+        {
+            dmg = 0;
+        }
+        else
+        {
+            dmg = defaultDmg;
+        }
+    } 
 
     void Move()
     {
