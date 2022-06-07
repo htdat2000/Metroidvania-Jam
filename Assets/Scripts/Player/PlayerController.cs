@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     private float comboResetTime = 1;
     private float comboCountdown = 1;
 
-    private float jumpResetTime = 0.2f;
+    private float jumpResetTime = 0.5f;
     private float jumpCountdown = 0;
     private int jumpCount = 0;
     private float movement;
@@ -496,6 +496,6 @@ public class PlayerController : MonoBehaviour
     {
         currentState = State.Dead;
         anim.Play("Dead");
-        Invoke("BackToNormal", 5);
+        Invoke("BackToNormal", 2);
     }
 }

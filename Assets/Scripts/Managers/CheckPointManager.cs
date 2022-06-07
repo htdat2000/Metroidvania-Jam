@@ -32,6 +32,11 @@ public class CheckPointManager : MonoBehaviour
     }
 
     void RevivePlayer()
+    {   
+        Invoke("MovePlayerPosition", 1);
+    }
+
+    void MovePlayerPosition()
     {
         player.transform.position = map.gate[gateID].transform.position;
     }
