@@ -18,6 +18,7 @@ public class RollingTrap : Traps
     {
         if(rb.velocity.x == 0 && rb.velocity.y == 0)
         {
+            rb.bodyType = RigidbodyType2D.Static;
             dmg = 0;
         }
         else
