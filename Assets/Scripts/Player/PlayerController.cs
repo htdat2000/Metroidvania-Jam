@@ -81,6 +81,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Countdown();
+        AutoFixXVelocity();
         if(currentState == State.Dead)
         {
             return;
@@ -92,9 +94,8 @@ public class PlayerController : MonoBehaviour
         AttackCheck();
         SlideCheck();
         AnimationUpdate();
-        AutoFixXVelocity();
         SwitchForm();
-        Countdown();
+        
     }
 
     void OnDestroy()
@@ -409,13 +410,13 @@ public class PlayerController : MonoBehaviour
         if(isNextToWall && rb.velocity.y <0 && !isOnGround)
 
         {
-            currentState = State.Sliding;
+            //currentState = State.Sliding;
             anim.Play("Slide");
             rb.velocity = new Vector2(0, -slideSpeed);
         }
         else if(currentState == State.Sliding)
         {
-            currentState = State.Normal;
+            //currentState = State.Normal;
         }
     }
 
