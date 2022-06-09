@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -474066374379167988}
   m_Layer: 0
   m_Name: Black
-  m_TagString: Untagged
+  m_TagString: Enemies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,9 +99,9 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.040248156, y: -0.27676073}
-  m_Size: {x: 0.84691507, y: 0.45381838}
-  m_Direction: 1
+  m_Offset: {x: -0.03817177, y: 0.3544309}
+  m_Size: {x: 0.79883194, y: 1.4981627}
+  m_Direction: 0
 --- !u!50 &1176643198335824011
 Rigidbody2D:
   serializedVersion: 4
@@ -162,3 +162,7 @@ MonoBehaviour:
   moveSpeed: 5
   TURN_RESET_TIME: 2
   CHECK_DISTANCE: 0.6
+  attackRate: 1
+  attackPrefab: {fileID: 4486400034012647460, guid: 1e96d9c78c9cae74888bc4a9f596d809,
+    type: 3}
+  attackRange: 2

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1176643198335824009}
   m_Layer: 0
   m_Name: Dummy
-  m_TagString: Untagged
+  m_TagString: Enemies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -141,6 +141,7 @@ MonoBehaviour:
     m_Bits: 256
   moveSpeed: 5
   TURN_RESET_TIME: 2
+  CHECK_DISTANCE: 0.6
 --- !u!95 &1176643198335824009
 Animator:
   serializedVersion: 3

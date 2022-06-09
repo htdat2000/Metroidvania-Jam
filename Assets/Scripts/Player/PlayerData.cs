@@ -61,6 +61,7 @@ public class PlayerData : MonoBehaviour, IDamageable
     void Die()
     {
         CustomEvents.OnPlayerDied?.Invoke();
+        hp = defaultHP;
     }
 
     public void KnockbackEffect(GameObject attacker)

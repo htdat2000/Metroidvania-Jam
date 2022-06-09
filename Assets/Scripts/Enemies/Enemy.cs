@@ -9,10 +9,12 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] protected int dmg;
     protected bool isMoveable = true; 
     protected SpawnPoint currentSpawnPoint = null;
+    protected Animator anim;
     
     protected virtual void Start()
     {
         hp = defaultHP;
+        anim = GetComponent<Animator>();
     }
 
     public virtual void SetSpawnPoint(SpawnPoint newSpawnPoint)

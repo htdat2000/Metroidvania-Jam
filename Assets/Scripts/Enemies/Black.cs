@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Black : NormalEnemy
 {
+    [SerializeField] float attackRate = 1;
+    float attackCountdown;
+    [SerializeField] GameObject attackPrefab;
     [SerializeField] float attackRange = 2;
     GameObject player;
 
@@ -11,19 +14,21 @@ public class Black : NormalEnemy
     {
         base.Start();
         player = GameObject.FindGameObjectWithTag("Player");
+        anim.Play("Idle");
     }
 
     protected override void Update()
     {
         base.Update();
-        if(DistanceBetweenPlayer())
+        AttackCountdown();
+        if (DistanceBetweenPlayer())
         {
             Attack();
         }
     }
     bool DistanceBetweenPlayer()
     {
-        if((this.gameObject.transform.position - player.transform.position).magnitude <= attackRange )
+        if ((this.gameObject.transform.position - player.transform.position).magnitude <= attackRange)
         {
             return true;
         }
@@ -33,8 +38,22 @@ public class Black : NormalEnemy
         }
     }
 
-    void Attack()
+    public void Attack()
     {
-        Debug.Log("attack player");
+        if (attackCountdown <= 0)
+        {
+            attackCountdown = attackRate;
+            isMoveable = false;
+            Instantiate(attackPrefab, this.gameObject.transform.position, Quaternion.identity);
+            Invoke("ChangeMoveState", 1);
+        }
+    }
+
+    protected void AttackCountdown()
+    {
+        if (attackCountdown > 0)
+        {
+            attackCountdown -= Time.deltaTime;
+        }
     }
 }
