@@ -10,11 +10,61 @@ public class Enemy : MonoBehaviour, IDamageable
     protected bool isMoveable = true; 
     protected SpawnPoint currentSpawnPoint = null;
     protected Animator anim;
+
+    [SerializeField] float attackRate = 1;
+    float attackCountdown;
+    [SerializeField] GameObject attackPrefab;
+    [SerializeField] float attackRange = 2;
+    GameObject player;
+    
     
     protected virtual void Start()
     {
         hp = defaultHP;
         anim = GetComponent<Animator>();
+        player = GameObject.FindGameObjectWithTag("Player");
+    }
+
+    protected virtual void Update()
+    {
+        AttackCountdown();
+        if (DistanceBetweenPlayer())
+        {
+            isMoveable = false;
+            Attack();
+        }
+        else
+        {
+            isMoveable = true;
+        }
+    }
+    bool DistanceBetweenPlayer()
+    {
+        if ((this.gameObject.transform.position - player.transform.position).magnitude <= attackRange)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void Attack()
+    {
+        if (attackCountdown <= 0)
+        {
+            attackCountdown = attackRate;
+            Instantiate(attackPrefab, this.gameObject.transform.position, Quaternion.identity);   
+        }
+    }
+
+    protected void AttackCountdown()
+    {
+        if (attackCountdown > 0)
+        {
+            attackCountdown -= Time.deltaTime;
+        }
     }
 
     public virtual void SetSpawnPoint(SpawnPoint newSpawnPoint)

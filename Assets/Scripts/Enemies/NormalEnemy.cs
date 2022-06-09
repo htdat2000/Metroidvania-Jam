@@ -28,8 +28,9 @@ public class NormalEnemy : Enemy
         base.SetSpawnPoint(newSpawnPoint);
     }
 
-    protected virtual void Update()
+    protected override void Update()
     {
+        base.Update();
         if(isMoveable == false)
         {
             return;
