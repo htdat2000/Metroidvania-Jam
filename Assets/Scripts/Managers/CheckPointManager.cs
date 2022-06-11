@@ -15,14 +15,14 @@ public class CheckPointManager : MonoBehaviour
 
     void OnDestroy()
     {
-        CustomEvents.OnTelepanelTrigger -= SetCheckPoint;
+        CustomEvents.OnCheckpointSet -= SetCheckPoint;
         CustomEvents.OnPlayerDied -= RevivePlayer;
     }
 
     void Init()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        CustomEvents.OnTelepanelTrigger += SetCheckPoint;
+        CustomEvents.OnCheckpointSet += SetCheckPoint;
         CustomEvents.OnPlayerDied += RevivePlayer;
     }
 

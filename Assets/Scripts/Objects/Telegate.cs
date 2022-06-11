@@ -35,13 +35,13 @@ public class Telegate : MonoBehaviour
         {
             GameData.LoadGateData();
             isTrigger = true;
-           
         }
     }
     void UnlockGate()
     {
         if(lastSave + SAVE_COOLDOWN < Time.time)
         {
+            CustomEvents.OnTelepanelTrigger?.Invoke(gateID);
             EffectPool.Instance.GetSaveEffectInPool(transform.position);
             lastSave = Time.time;
             string gateData = PlayerPrefs.GetString("AllGates", "0000000000");

@@ -486,10 +486,6 @@ public class PlayerController : MonoBehaviour
 
     void AutoFixXVelocity()
     {
-        // if(rb.velocity.x > 0.001f)
-        //     rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x - Time.deltaTime * ANTI_SLIDE_ON_FLOOR, 0f, rb.velocity.x),rb.velocity.y);
-        // if(rb.velocity.x < 0.001f)
-        //     rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * ANTI_SLIDE_ON_FLOOR, rb.velocity.x, 0f),rb.velocity.y);
         rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, ANTI_SLIDE_ON_FLOOR), rb.velocity.y);
     }
 
