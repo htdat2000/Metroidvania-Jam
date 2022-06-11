@@ -56,6 +56,9 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             anim.SetBool("isAttack", true);
             attackCountdown = attackRate; 
+            attackCountdown = attackRate;
+            if(attackPrefab)
+                Instantiate(attackPrefab, this.gameObject.transform.position, Quaternion.identity);   
         }
     }
 
@@ -86,6 +89,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public void TakeDmg(int _dmg, GameObject attacker)
     {
         GetHitBehaviour(_dmg);
+        // Debug.Log("[Enemy] take dmg");
     }
     
     protected virtual void GetHitBehaviour(int _dmg)
