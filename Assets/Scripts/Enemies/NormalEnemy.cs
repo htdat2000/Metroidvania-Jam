@@ -16,6 +16,7 @@ public class NormalEnemy : Enemy
     [SerializeField] protected float TURN_RESET_TIME = 2f;
     [SerializeField] protected float CHECK_DISTANCE = 0.6f;
     protected float lastTurn;
+    [SerializeField] protected float pivotCheckDistanceX = 0.2f;
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -48,7 +49,6 @@ public class NormalEnemy : Enemy
         if(lastTurn + TURN_RESET_TIME < Time.time)
         {
             int facingValue = isFacingRight?1:-1;
-            float pivotCheckDistanceX = 0.2f;
             RaycastHit2D raycastHitB = Physics2D.Raycast(
                 new Vector3(transform.position.x + pivotCheckDistanceX * facingValue, transform.position.y, transform.position.z), 
                 Vector2.down, CHECK_DISTANCE, platformLayerMask);
@@ -67,7 +67,7 @@ public class NormalEnemy : Enemy
 
     protected void CheckFlip()
     {
-        transform.rotation = isFacingRight ? Quaternion.Euler(0, 180, 0) :  Quaternion.identity;
+        transform.rotation = isFacingRight ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
     }
 
     protected override void GetHitBehaviour(int _dmg)

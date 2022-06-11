@@ -410,7 +410,7 @@ public class PlayerController : MonoBehaviour
         if(isNextToWall && rb.velocity.y <0 && !isOnGround)
 
         {
-            //currentState = State.Sliding;
+            currentState = State.Sliding;
             anim.Play("Slide");
             rb.velocity = new Vector2(0, -slideSpeed);
         }
@@ -433,6 +433,7 @@ public class PlayerController : MonoBehaviour
 
     void SwitchForm()
     {
+        currentState = State.Normal;
         if (Input.GetKeyDown(KeyCode.T))
         {
             int numOfColor = PlayerData.isColorActive.Length;
