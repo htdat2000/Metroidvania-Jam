@@ -5,7 +5,7 @@ using UnityEngine;
 public class NormalEnemy : Enemy
 {
     [SerializeField] protected LayerMask platformLayerMask;
-    protected bool isFacingRight = false;
+    protected bool isFacingRight = true;
     protected int moveDir = 1;
     [SerializeField] protected float moveSpeed;
     protected Rigidbody2D rb;
