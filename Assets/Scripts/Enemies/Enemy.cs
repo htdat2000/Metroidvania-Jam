@@ -16,6 +16,13 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] GameObject attackPrefab;
     [SerializeField] float attackRange = 2;
     GameObject player;
+
+    protected enum State
+    {
+        Normal,
+        Attacking
+    }
+    protected State enemyState = State.Normal;
     
     
     protected virtual void Start()
@@ -52,8 +59,9 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void AttackAction()
     {
-        if (attackCountdown <= 0)
+        if ((attackCountdown <= 0) && (enemyState == State.Normal))
         {
+            enemyState = State.Attacking;
             anim.SetTrigger("Attack");
             attackCountdown = attackRate;   
         }
@@ -111,6 +119,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void CreateAttackPrefab()
     {
+        enemyState = State.Normal;
         if(attackPrefab)
         {
             Instantiate(attackPrefab, this.gameObject.transform.position, Quaternion.identity);
