@@ -54,12 +54,8 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         if (attackCountdown <= 0)
         {
-            // anim.SetBool("isAttack", true);
             anim.SetTrigger("Attack");
-            attackCountdown = attackRate; 
-            attackCountdown = attackRate;
-            if(attackPrefab)
-                Instantiate(attackPrefab, this.gameObject.transform.position, Quaternion.identity);   
+            attackCountdown = attackRate;   
         }
     }
 
@@ -115,7 +111,6 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void CreateAttackPrefab()
     {
-        anim.SetBool("isAttack", false);
         if(attackPrefab)
         {
             Instantiate(attackPrefab, this.gameObject.transform.position, Quaternion.identity);
