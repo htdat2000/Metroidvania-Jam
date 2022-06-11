@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour, IDamageable
         if (DistanceBetweenPlayer())
         {
             isMoveable = false;
-            Attack();
+            AttackAction();
         }
         else
         {
@@ -50,12 +50,12 @@ public class Enemy : MonoBehaviour, IDamageable
         }
     }
 
-    public void Attack()
+    public void AttackAction()
     {
         if (attackCountdown <= 0)
         {
-            attackCountdown = attackRate;
-            Instantiate(attackPrefab, this.gameObject.transform.position, Quaternion.identity);   
+            anim.SetBool("isAttack", true);
+            attackCountdown = attackRate; 
         }
     }
 
@@ -106,5 +106,11 @@ public class Enemy : MonoBehaviour, IDamageable
     protected virtual void Die()
     {
         Despawn();
+    }
+
+    public void CreateAttackPrefab()
+    {
+        anim.SetBool("isAttack", false);
+        Instantiate(attackPrefab, this.gameObject.transform.position, Quaternion.identity);   
     }
 }

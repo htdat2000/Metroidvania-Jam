@@ -137,13 +137,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultHP: 15
   dmg: 2
-  attackRate: 0.2
+  attackRate: 0.5
   attackPrefab: {fileID: 4486400034012647460, guid: 090b38bef55d1824fba3b23336c5b313,
     type: 3}
   attackRange: 2
   platformLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   moveSpeed: 5
   TURN_RESET_TIME: 2
   CHECK_DISTANCE: 0.6
