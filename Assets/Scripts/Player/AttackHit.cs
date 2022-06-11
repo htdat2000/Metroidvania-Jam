@@ -19,6 +19,7 @@ public class AttackHit : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        // Debug.Log("[AttackHit] col: " + col.gameObject.name);
         if(col.CompareTag("Player"))
         {
             return;
