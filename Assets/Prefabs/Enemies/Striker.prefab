@@ -28,13 +28,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1176643198335824007}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 47.01, y: -7.76, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1176643198335824005
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -137,10 +137,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultHP: 15
   dmg: 2
-  attackRate: 0.5
+  attackRate: 1
   attackPrefab: {fileID: 4486400034012647460, guid: 090b38bef55d1824fba3b23336c5b313,
     type: 3}
-  attackRange: 2
+  attackRange: 1.5
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 256

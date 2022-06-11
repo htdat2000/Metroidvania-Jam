@@ -122,7 +122,7 @@ public class Enemy : MonoBehaviour, IDamageable
         enemyState = State.Normal;
         if(attackPrefab)
         {
-            Instantiate(attackPrefab, this.gameObject.transform.position, Quaternion.identity);
+            Instantiate(attackPrefab, this.gameObject.transform.position, this.gameObject.transform.rotation);
         }
     }
 }
