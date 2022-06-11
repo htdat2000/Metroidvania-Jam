@@ -7,10 +7,13 @@ public class Telegate : MonoBehaviour
 {
     public int gateID;
     private bool isTrigger = false;
+
+    private float lastSave = 0f;
+    private const float SAVE_COOLDOWN = 3.5f;
     // Start is called before the first frame update
     void Start()
     {
-        
+        lastSave = Time.time;
     }
 
     // Update is called once per frame
@@ -22,7 +25,7 @@ public class Telegate : MonoBehaviour
         }
         if (Input.GetKeyDown("down") && isTrigger)
         {
-            ShowTelePanel();
+            UnlockGate();
         }
     }
 
@@ -37,13 +40,18 @@ public class Telegate : MonoBehaviour
     }
     void UnlockGate()
     {
-        string gateData = PlayerPrefs.GetString("AllGates", "0000000000");
-        if(gateData[gateID] == '0')
+        if(lastSave + SAVE_COOLDOWN < Time.time)
         {
-            StringBuilder sb = new StringBuilder(gateData);   
-            sb[gateID] = '1'; 
-            gateData = sb.ToString();
-            PlayerPrefs.SetString("AllGates",gateData);
+            EffectPool.Instance.GetSaveEffectInPool(transform.position);
+            lastSave = Time.time;
+            string gateData = PlayerPrefs.GetString("AllGates", "0000000000");
+            if(gateData[gateID] == '0')
+            {
+                StringBuilder sb = new StringBuilder(gateData);   
+                sb[gateID] = '1'; 
+                gateData = sb.ToString();
+                PlayerPrefs.SetString("AllGates",gateData);
+            }
         }
     }
 
