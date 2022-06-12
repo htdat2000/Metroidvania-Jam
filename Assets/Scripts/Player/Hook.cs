@@ -52,7 +52,7 @@ public class Hook : MonoBehaviour
         {
             HookReturn(State.Returning);
         }
-        else if((distance <= 0.5f))
+        else if((distance <= 0.1f))
         {
             if(currentState == State.Returning)
             {
@@ -91,6 +91,4 @@ public class Hook : MonoBehaviour
             HookReturn(State.Pulling);
         }
     }
-
-
 }

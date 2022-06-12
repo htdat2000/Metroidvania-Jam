@@ -18,9 +18,13 @@ public class PlayerController : MonoBehaviour
     private float comboResetTime = 1;
     private float comboCountdown = 1;
 
-    private float jumpResetTime = 0.5f;
+    private float jumpResetTime = 0.25f;
     private float jumpCountdown = 0;
     private int jumpCount = 0;
+
+    private float attackResetTime = 0.25f;
+    private float attackCountdown = 0;
+
     private float movement;
 
     [Header("Component")]
@@ -82,7 +86,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Countdown();
-        AutoFixXVelocity();
         if(currentState == State.Dead || currentState == State.Hooking)
         {
             return;
@@ -92,10 +95,10 @@ public class PlayerController : MonoBehaviour
         JumpCheck();
         ZButtonFunction();
         AttackCheck();
-        SlideCheck();
-        AnimationUpdate();
+        SlideCheck(); 
         SwitchForm();
-        
+        AutoFixXVelocity();
+        AnimationUpdate();
     }
 
     void OnDestroy()
@@ -265,6 +268,15 @@ public class PlayerController : MonoBehaviour
     {
         ComboCountdown();
         JumpCountdown();
+        AttackCountdown();
+    }
+
+    void AttackCountdown()
+    {
+        if(attackCountdown > 0)
+        {
+            attackCountdown -= Time.deltaTime;
+        }
     }
 
     void JumpCountdown()
@@ -289,8 +301,13 @@ public class PlayerController : MonoBehaviour
 
     void AttackCheck()
     {
+        if(attackCountdown > 0)
+        {
+            return;
+        }
         if (Input.GetKeyDown("c") && currentState == State.Normal)
         {
+            attackCountdown = attackResetTime;
             switch (currentColorForm)
             {
                 case ColorForm.White:
@@ -353,7 +370,7 @@ public class PlayerController : MonoBehaviour
 
     void HookCheck()
     {
-        if(hook.gameObject.activeSelf)
+        if(hook.gameObject.activeSelf == true)
         {   
             return;
         }
