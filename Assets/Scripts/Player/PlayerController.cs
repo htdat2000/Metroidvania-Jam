@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
     {
         Countdown();
         AutoFixXVelocity();
-        if(currentState == State.Dead)
+        if(currentState == State.Dead || currentState == State.Hooking)
         {
             return;
         }
@@ -354,8 +354,7 @@ public class PlayerController : MonoBehaviour
     void HookCheck()
     {
         if(hook.gameObject.activeSelf)
-        {
-            
+        {   
             return;
         }
         else

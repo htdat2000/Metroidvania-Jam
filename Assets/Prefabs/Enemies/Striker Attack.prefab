@@ -39,7 +39,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 921657283350282828}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -134,7 +134,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_Sprite: {fileID: 1955404379874435094, guid: 2b5ccccaa2ded3649bbf0d7245f68c7f,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -186,12 +186,12 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4486400034012647460}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.807042, y: 1.1299797}
-  m_Size: {x: 0.69587713, y: 0.69587713}
+  m_Offset: {x: -1.807042, y: 1.1372029}
+  m_Size: {x: 0.7103234, y: 0.7103234}
   m_Direction: 1

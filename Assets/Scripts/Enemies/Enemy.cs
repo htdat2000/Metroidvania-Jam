@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] float attackRate = 1;
     float attackCountdown;
     [SerializeField] GameObject attackPrefab;
+    [SerializeField] GameObject attackSpawnPos;
     [SerializeField] float attackRange = 2;
     GameObject player;
 
@@ -39,10 +40,6 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             isMoveable = false;
             AttackAction();
-        }
-        else
-        {
-            isMoveable = true;
         }
     }
     bool DistanceBetweenPlayer()
@@ -124,7 +121,11 @@ public class Enemy : MonoBehaviour, IDamageable
         enemyState = State.Normal;
         if(attackPrefab)
         {
-            Instantiate(attackPrefab, this.gameObject.transform.position, this.gameObject.transform.rotation);
+            Instantiate(attackPrefab, attackSpawnPos.transform.position, attackSpawnPos.transform.rotation);
         }
+    }
+    public void SetIsMoveable()
+    {
+        isMoveable = true;
     }
 }

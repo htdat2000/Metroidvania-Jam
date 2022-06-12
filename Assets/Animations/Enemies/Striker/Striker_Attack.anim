@@ -37,13 +37,13 @@ AnimationClip:
     - time: 0.5
       value: {fileID: 6362871120784023592, guid: 65bbef905620cf44e9c8ab8be0f710f4,
         type: 3}
-    - time: 0.5833333
+    - time: 0.55
       value: {fileID: 590074418202060895, guid: 65bbef905620cf44e9c8ab8be0f710f4,
         type: 3}
-    - time: 0.6666667
+    - time: 0.6
       value: {fileID: -747737031403992117, guid: 65bbef905620cf44e9c8ab8be0f710f4,
         type: 3}
-    - time: 0.71666664
+    - time: 0.6333333
       value: {fileID: -747737031403992117, guid: 65bbef905620cf44e9c8ab8be0f710f4,
         type: 3}
     attribute: m_Sprite
@@ -79,7 +79,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.7333333
+    m_StopTime: 0.65
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -101,6 +101,13 @@ AnimationClip:
   m_Events:
   - time: 0.33333334
     functionName: CreateAttackPrefab
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.6166667
+    functionName: SetIsMoveable
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
