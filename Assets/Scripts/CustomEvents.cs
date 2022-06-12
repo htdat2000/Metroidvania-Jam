@@ -10,5 +10,7 @@ public class CustomEvents : MonoBehaviour
     static public Action<int> OnCheckpointSet; //from gate index
     static public Action<int, string> OnMapRefresh; //currentid / data
     static public Action<float, float> OnScreenShakeDanger; //shake amount / shake time
+    static public Action<int> OnHPChange; //final value
+    static public Action<int> OnMaxHPChange; //final value 
     static public Action OnPlayerDied; 
 }

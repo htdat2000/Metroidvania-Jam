@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerData : MonoBehaviour, IDamageable
 {
-    [SerializeField] private int defaultHP;
+    public static PlayerData Instance;
+    public int defaultHP; // if change, should invoke OnMaxHPChange event
     private int hp;
     public static bool[] isColorActive = new bool[7] {true, true, true, true, false, false, false};
     //                                                white  red    blue   yel    vio    ora    gre
@@ -20,6 +21,7 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     void Start() 
     {
+        Instance = this;
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         CustomEvents.OnPlayerUnlock += UnlockSkill;
@@ -59,12 +61,14 @@ public class PlayerData : MonoBehaviour, IDamageable
         {
             Die();
         }
+        else CustomEvents.OnHPChange?.Invoke(hp);
     }
 
     void Die()
     {
         CustomEvents.OnPlayerDied?.Invoke();
         hp = defaultHP;
+        CustomEvents.OnHPChange?.Invoke(hp);
     }
 
     public void KnockbackEffect(GameObject attacker)
