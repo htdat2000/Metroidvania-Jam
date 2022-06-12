@@ -137,12 +137,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultHP: 10
   dmg: 1
+  attackRate: 1
+  attackPrefab: {fileID: 0}
+  attackRange: 2
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 256
   moveSpeed: 5
   TURN_RESET_TIME: 2
   CHECK_DISTANCE: 0.6
+  pivotCheckDistanceX: 0.3
 --- !u!95 &1176643198335824009
 Animator:
   serializedVersion: 3

@@ -6,7 +6,7 @@ public class NormalEnemy : Enemy
 {
     [SerializeField] protected LayerMask platformLayerMask;
     protected bool isFacingRight = false;
-    protected int moveDir = 1;
+    protected int moveDir = -1;
     [SerializeField] protected float moveSpeed;
     protected Rigidbody2D rb;
 
@@ -67,7 +67,7 @@ public class NormalEnemy : Enemy
 
     protected void CheckFlip()
     {
-        transform.rotation = isFacingRight ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
+        transform.rotation = isFacingRight ?Quaternion.Euler(0, 180, 0) : Quaternion.identity;
     }
 
     protected override void GetHitBehaviour(int _dmg)
