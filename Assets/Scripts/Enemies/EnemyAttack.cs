@@ -17,8 +17,6 @@ public class EnemyAttack : MonoBehaviour
         if(damageableObject != null)
         {
             damageableObject.TakeDmg(dmg, null);
-            CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
-            EffectPool.Instance.GetHitEffectInPool(col.gameObject.transform.position);
         }
     }
 

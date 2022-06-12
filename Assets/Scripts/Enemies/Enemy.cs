@@ -94,6 +94,8 @@ public class Enemy : MonoBehaviour, IDamageable
     public void TakeDmg(int _dmg, GameObject attacker)
     {
         GetHitBehaviour(_dmg);
+        CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
+        EffectPool.Instance.GetHitEffectInPool(transform.position);
         // Debug.Log("[Enemy] take dmg");
     }
     
