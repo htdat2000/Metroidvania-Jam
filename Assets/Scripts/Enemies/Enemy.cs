@@ -41,6 +41,10 @@ public class Enemy : MonoBehaviour, IDamageable
             isMoveable = false;
             AttackAction();
         }
+        else
+        {
+            isMoveable = true;
+        }
     }
     bool DistanceBetweenPlayer()
     {
@@ -54,7 +58,7 @@ public class Enemy : MonoBehaviour, IDamageable
         }
     }
 
-    public void AttackAction()
+    public virtual void AttackAction()
     {
         if ((attackCountdown <= 0) && (enemyState == State.Normal))
         {

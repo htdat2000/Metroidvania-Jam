@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Dummy : NormalEnemy
 {
+    public override void AttackAction()
+    {
+        return;
+    }
+    
     protected virtual void OnCollisionEnter2D(Collision2D col)
     {
         if(col.gameObject.CompareTag("Player"))
