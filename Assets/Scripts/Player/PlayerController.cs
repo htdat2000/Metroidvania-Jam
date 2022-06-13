@@ -375,7 +375,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         else
-        {
+        {   
             anim.Play("BHook");
             currentState = State.Hooking;
             hook.gameObject.SetActive(true);
@@ -449,9 +449,9 @@ public class PlayerController : MonoBehaviour
 
     void SwitchForm()
     {
-        currentState = State.Normal;
         if (Input.GetKeyDown(KeyCode.T))
         {
+            currentState = State.Normal;
             int numOfColor = PlayerData.isColorActive.Length;
             if((int)currentColorForm == (numOfColor - 1))   //last color
                 {

@@ -138,7 +138,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 2073348982565288307}
-    m_Position: {x: 220, y: -10, z: 0}
+    m_Position: {x: 160, y: -80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3000969149931159440}
     m_Position: {x: 260, y: 130, z: 0}
@@ -173,8 +173,8 @@ AnimatorStateMachine:
     m_State: {fileID: 5920800924785078444}
     m_Position: {x: 580, y: 170, z: 0}
   - serializedVersion: 1
-    m_State: {fileID: 1910071106118910919}
-    m_Position: {x: -1943.6615, y: 495.0628, z: 0}
+    m_State: {fileID: 1736738275356112342}
+    m_Position: {x: 710, y: 240, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -260,14 +260,14 @@ AnimatorController:
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
---- !u!1102 &1910071106118910919
+--- !u!1102 &1736738275356112342
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle 0
+  m_Name: BHook 0
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -280,7 +280,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: bac8509e0c3f6834195a253e23902275, type: 2}
+  m_Motion: {fileID: 7400000, guid: 4b3da08a6b4d8cc41a638816978aed63, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
