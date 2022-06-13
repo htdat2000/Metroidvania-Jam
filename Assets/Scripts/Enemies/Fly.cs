@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dummy : NormalEnemy
+public class Fly : NormalEnemy
 {
     public override void AttackAction()
     {
