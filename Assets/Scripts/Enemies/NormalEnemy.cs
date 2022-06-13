@@ -42,6 +42,7 @@ public class NormalEnemy : Enemy
     }
     protected void Move()
     {
+        Debug.Log("Mực đẹp trai có gì sai");
         rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * moveSpeed * moveDir, -MAX_FLOOR_SPEED, MAX_FLOOR_SPEED), rb.velocity.y);
     }
     protected void WallCheck()
