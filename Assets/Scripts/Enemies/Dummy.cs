@@ -9,7 +9,7 @@ public class Dummy : NormalEnemy
         return;
     }
     
-    protected virtual void OnCollisionEnter2D(Collision2D col)
+    /*protected virtual void OnCollisionEnter2D(Collision2D col)
     {
         if(col.gameObject.CompareTag("Player"))
         {
@@ -18,5 +18,5 @@ public class Dummy : NormalEnemy
             CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_DANGER_AMOUNT, GameConst.SHAKE_DANGER_TIME);
             EffectPool.Instance.GetHitEffectInPool(col.gameObject.transform.position);
         }
-    }
+    }*/
 }

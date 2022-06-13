@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour
 
     void HorizontalMove()
     {
-        if (currentState != State.Normal)
+        if (currentState != State.Normal && (currentState != State.Sliding))  
         {
             return;
         }
@@ -432,7 +432,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(currentState == State.Sliding)
         {
-            //currentState = State.Normal;
+            currentState = State.Normal;
         }
     }
 
