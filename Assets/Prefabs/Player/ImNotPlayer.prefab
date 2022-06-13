@@ -684,7 +684,7 @@ GameObject:
   - component: {fileID: 5827726462641316417}
   - component: {fileID: 5827726462641316416}
   - component: {fileID: 4324453094463354542}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ImNotPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -921,11 +921,11 @@ TrailRenderer:
       - serializedVersion: 3
         time: 1
         value: 0
-        inSlope: 0
-        outSlope: 0
+        inSlope: -0.097997904
+        outSlope: -0.097997904
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.27956986
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2

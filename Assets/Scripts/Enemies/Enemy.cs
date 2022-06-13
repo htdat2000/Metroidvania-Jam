@@ -11,12 +11,11 @@ public class Enemy : MonoBehaviour, IDamageable
     protected SpawnPoint currentSpawnPoint = null;
     protected Animator anim;
 
-    [SerializeField] float attackRate = 1;
-    float attackCountdown;
-    [SerializeField] GameObject attackPrefab;
-    [SerializeField] GameObject attackSpawnPos;
+    [SerializeField] protected float attackRate = 1;
+    protected float attackCountdown;
+    [SerializeField] protected GameObject attackPrefab;
+    [SerializeField] protected GameObject attackSpawnPos;
     [SerializeField] public float attackRange = 2;
-    GameObject player;
 
     protected enum State
     {
@@ -30,7 +29,6 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         hp = defaultHP;
         anim = GetComponent<Animator>();
-        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     protected virtual void Update()

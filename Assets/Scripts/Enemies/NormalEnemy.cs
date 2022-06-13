@@ -32,13 +32,13 @@ public class NormalEnemy : Enemy
     protected override void Update()
     {
         base.Update();
+        WallCheck();
+        CheckFlip();
         if(isMoveable == false)
         {
             return;
         }
         Move();
-        WallCheck();
-        CheckFlip();
     }
     protected void Move()
     {
@@ -58,11 +58,15 @@ public class NormalEnemy : Enemy
             bool checkResult = (raycastHitB.collider == null || raycastHitH.collider != null); //false => flip
             if(checkResult)
             {
-                moveDir *= -1;
-                isFacingRight = !isFacingRight;
-                lastTurn = Time.time;
+                Flip();
             }
         }
+    }
+    protected void Flip()
+    {
+        moveDir *= -1;
+        isFacingRight = !isFacingRight;
+        lastTurn = Time.time;
     }
 
     protected void CheckFlip()
@@ -80,5 +84,22 @@ public class NormalEnemy : Enemy
     protected void ChangeMoveState()
     {
         isMoveable = !isMoveable; 
+    }
+
+    public override void AttackAction()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(this.gameObject.transform.position, new Vector2(moveDir, 0), attackRange, LayerMask.GetMask("Player"));
+        if(hit.collider == null)
+        {
+            if(attackCountdown > 0)
+            {
+                return;
+            }
+            else
+            {
+                Flip();
+            }
+        }
+        base.AttackAction();
     }
 }

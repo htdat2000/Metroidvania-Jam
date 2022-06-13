@@ -134,7 +134,7 @@ MonoBehaviour:
     m_Bits: 256
   moveSpeed: 5
   TURN_RESET_TIME: 2
-  CHECK_DISTANCE: 0.45
+  CHECK_DISTANCE: 0.5
   pivotCheckDistanceX: 0.7
 --- !u!95 &8823269436523142133
 Animator:
