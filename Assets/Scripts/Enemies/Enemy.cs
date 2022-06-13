@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] protected int defaultHP;
     protected int hp;
     [SerializeField] protected int dmg;
-    protected bool isMoveable = true; 
+    public bool isMoveable = true; 
     protected SpawnPoint currentSpawnPoint = null;
     protected Animator anim;
 
@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour, IDamageable
     float attackCountdown;
     [SerializeField] GameObject attackPrefab;
     [SerializeField] GameObject attackSpawnPos;
-    [SerializeField] float attackRange = 2;
+    [SerializeField] public float attackRange = 2;
     GameObject player;
 
     protected enum State
@@ -36,26 +36,6 @@ public class Enemy : MonoBehaviour, IDamageable
     protected virtual void Update()
     {
         AttackCountdown();
-        if (DistanceBetweenPlayer())
-        {
-            isMoveable = false;
-            AttackAction();
-        }
-        else
-        {
-            isMoveable = true;
-        }
-    }
-    bool DistanceBetweenPlayer()
-    {
-        if ((this.gameObject.transform.position - player.transform.position).magnitude <= attackRange)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     public virtual void AttackAction()
@@ -127,9 +107,5 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             Instantiate(attackPrefab, attackSpawnPos.transform.position, attackSpawnPos.transform.rotation);
         }
-    }
-    public void SetIsMoveable()
-    {
-        isMoveable = true;
     }
 }
