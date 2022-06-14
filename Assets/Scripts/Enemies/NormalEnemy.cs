@@ -40,7 +40,7 @@ public class NormalEnemy : Enemy
         }
         Move();
     }
-    protected void Move()
+    protected virtual void Move()
     {
         Debug.Log("Mực đẹp trai có gì sai");
         rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * moveSpeed * moveDir, -MAX_FLOOR_SPEED, MAX_FLOOR_SPEED), rb.velocity.y);
@@ -70,7 +70,7 @@ public class NormalEnemy : Enemy
         lastTurn = Time.time;
     }
 
-    protected void CheckFlip()
+    protected virtual void CheckFlip()
     {
         transform.rotation = isFacingRight ?Quaternion.Euler(0, 180, 0) : Quaternion.identity;
     }

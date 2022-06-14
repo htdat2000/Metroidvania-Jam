@@ -24,7 +24,7 @@ public class PlayerFinding : MonoBehaviour
     {
         if(col.CompareTag("Player"))
         {
-            enemy.isMoveable = false;
+            enemy.FacePlayer();
         }
     }
 
@@ -32,7 +32,7 @@ public class PlayerFinding : MonoBehaviour
     {
         if(col.CompareTag("Player"))
         {
-            enemy.isMoveable = true;
+            enemy.LostPlayer();
         }
     }
 }
