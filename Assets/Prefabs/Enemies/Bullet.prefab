@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 115002299792401346}
   - component: {fileID: 115002299792401347}
   - component: {fileID: 115002299792401344}
+  - component: {fileID: 3677757403407366255}
+  - component: {fileID: 6495356325790360022}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -102,3 +104,32 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!70 &3677757403407366255
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115002299792401345}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.01210505, y: -0.0048407605}
+  m_Size: {x: 0.7724469, y: 0.27375555}
+  m_Direction: 1
+--- !u!114 &6495356325790360022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115002299792401345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7daa632874cb35b41a44b4e6bed8425d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dmg: 2

@@ -9,30 +9,36 @@ public class Cat : NormalEnemy
 
     protected override void Update()
     {
-        TargetChecking();
-        CheckFlip();
-    }
-
-    protected void TargetChecking()
-    {
+        AttackCountdown();
         if(target == null)
         {
             return;
         }
-        else
-        {
-            ShootRayCast();
-        }
+        ShootRayCast();
+        CheckFlip();
     }
 
     protected void ShootRayCast()
     {
         Vector2 dir = (WorldManager.Instance.player.transform.position - this.gameObject.transform.position).normalized;
-        RaycastHit2D hit = Physics2D.Raycast(rayCastOrigin.position, dir, attackRange);
-        if(hit.collider.CompareTag("Player"))
+        RaycastHit2D hit = Physics2D.Raycast(rayCastOrigin.position, dir, attackRange, LayerMask.GetMask("Ground"));
+        if(hit.collider == null)
         {
             AttackAction();
         }
+    }
+
+    protected override void CheckFlip()
+    {
+        if((target.transform.position - this.gameObject.transform.position).normalized.x > 0)
+        {
+            isFacingRight = true;
+        }
+        else
+        {
+            isFacingRight = false;
+        }
+        base.CheckFlip();
     }
 
     public override void FacePlayer()

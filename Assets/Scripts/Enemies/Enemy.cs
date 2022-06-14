@@ -41,8 +41,7 @@ public class Enemy : MonoBehaviour, IDamageable
         if ((attackCountdown <= 0) && (enemyState == State.Normal))
         {
             enemyState = State.Attacking;
-            anim.SetTrigger("Attack");
-            attackCountdown = attackRate;   
+            anim.SetTrigger("Attack");   
         }
     }
 
@@ -101,6 +100,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public void CreateAttackPrefab()
     {
         enemyState = State.Normal;
+        attackCountdown = attackRate;
         if(attackPrefab)
         {
             Instantiate(attackPrefab, attackSpawnPos.transform.position, attackSpawnPos.transform.rotation);
