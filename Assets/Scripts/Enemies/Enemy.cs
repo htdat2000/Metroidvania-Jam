@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour, IDamageable
     protected enum State
     {
         Normal,
+        Walking,
         Attacking
     }
     protected State enemyState = State.Normal;

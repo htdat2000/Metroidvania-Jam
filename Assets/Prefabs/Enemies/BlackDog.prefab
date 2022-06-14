@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 6711395756687566448}
   - component: {fileID: 6093922223633050195}
   - component: {fileID: 8409744978336189632}
+  - component: {fileID: 1277339292}
+  - component: {fileID: 547748659222162344}
+  - component: {fileID: 1277339297}
   m_Layer: 0
   m_Name: BlackDog
   m_TagString: Untagged
@@ -102,3 +105,68 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!70 &1277339292
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2465114675748560141}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.013664865, y: -0.81782186}
+  m_Size: {x: 3.447877, y: 2.274648}
+  m_Direction: 1
+--- !u!50 &547748659222162344
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2465114675748560141}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!114 &1277339297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2465114675748560141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14bcb0c145abf78438817e2bb4e2d897, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultHP: 20
+  dmg: 3
+  isMoveable: 1
+  attackRate: 10
+  attackPrefab: {fileID: 0}
+  attackSpawnPos: {fileID: 0}
+  attackRange: 2
+  platformLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  moveSpeed: 3
+  TURN_RESET_TIME: 2
+  CHECK_DISTANCE: 2
+  pivotCheckDistanceX: 0.2
+  randomMoveRate: 3
+  moveRateNoise: 1
