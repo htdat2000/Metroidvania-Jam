@@ -24,17 +24,6 @@ public class Fly : NormalEnemy
         //rb.velocity = dirMove * Time.deltaTime * moveSpeed;
     }
 
-    protected virtual void OnCollisionEnter2D(Collision2D col)
-    {
-        if(col.gameObject.CompareTag("Player"))
-        {
-            IDamageable player = col.gameObject.GetComponent<IDamageable>();
-            player.TakeDmg(dmg, this.gameObject);
-            CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_DANGER_AMOUNT, GameConst.SHAKE_DANGER_TIME);
-            EffectPool.Instance.GetHitEffectInPool(col.gameObject.transform.position);
-        }
-    }
-
     protected void TargetChecking()
     {
         if(target == null)
@@ -77,12 +66,12 @@ public class Fly : NormalEnemy
 
     protected void ReturnSpawnPoint()
     {
-        dirMove = (-this.gameObject.transform.position + currentSpawnPoint.gameObject.transform.position).normalized;
+        dirMove = (currentSpawnPoint.gameObject.transform.position - this.gameObject.transform.position).normalized;
     }
 
     protected void ChasePlayer()
     {
-        dirMove = (-this.gameObject.transform.position + WorldManager.Instance.player.transform.position).normalized;
+        dirMove = (WorldManager.Instance.player.transform.position - this.gameObject.transform.position).normalized;
     }
 
     public override void FacePlayer()
