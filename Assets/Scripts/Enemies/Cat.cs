@@ -24,12 +24,7 @@ public class Cat : NormalEnemy
         RaycastHit2D hit = Physics2D.Raycast(rayCastOrigin.position, dir, attackRange, LayerMask.GetMask("Ground"));
         if(hit.collider == null)
         {
-            Debug.LogError("Hit player");
             AttackAction();
-        }
-        else
-        {
-            Debug.LogError("Hit other");
         }
     }
 
