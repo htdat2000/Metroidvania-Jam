@@ -106,4 +106,14 @@ public class Enemy : MonoBehaviour, IDamageable
             Instantiate(attackPrefab, attackSpawnPos.transform.position, attackSpawnPos.transform.rotation);
         }
     }
+
+    public virtual void FacePlayer()
+    {
+        isMoveable = false;
+    }
+
+    public virtual void LostPlayer()
+    {
+        isMoveable = true;
+    }
 }
