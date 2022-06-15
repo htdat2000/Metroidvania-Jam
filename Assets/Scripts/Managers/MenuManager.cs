@@ -21,6 +21,11 @@ public class MenuManager : MonoBehaviour
     {
         StartCoroutine(LoadYourAsyncScene());
     }
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
 
     IEnumerator LoadYourAsyncScene()
     {
