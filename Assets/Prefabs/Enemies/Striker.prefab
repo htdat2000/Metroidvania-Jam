@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1176643198335824011}
   - component: {fileID: 7510697760446028327}
   - component: {fileID: 8823269436523142133}
-  - component: {fileID: -8012693805512047718}
+  - component: {fileID: 3669368673666424828}
   m_Layer: 0
   m_Name: Striker
   m_TagString: Enemies
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e566e59fd9df2954cb6eaa6dacbc6516, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultHP: 15
+  defaultHP: 5
   dmg: 2
   isMoveable: 1
   attackRate: 1
@@ -134,7 +134,7 @@ MonoBehaviour:
     m_Bits: 256
   moveSpeed: 5
   TURN_RESET_TIME: 2
-  CHECK_DISTANCE: 0.5
+  CHECK_DISTANCE: 0.45
   pivotCheckDistanceX: 0.7
 --- !u!95 &8823269436523142133
 Animator:
@@ -155,8 +155,8 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!61 &-8012693805512047718
-BoxCollider2D:
+--- !u!58 &3669368673666424828
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -168,19 +168,9 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.012742996, y: 0.032513857}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3, y: 3}
-    newSize: {x: 3, y: 3}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 0.61141586, y: 0.98153734}
-  m_EdgeRadius: 0
+  m_Radius: 0.5
 --- !u!1 &2905132597981155584
 GameObject:
   m_ObjectHideFlags: 0
