@@ -209,9 +209,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultHP: 5
-  dmg: 0
+  dmg: 1
   isMoveable: 1
-  attackRate: 1
+  attackRate: 3
   attackPrefab: {fileID: 115002299792401345, guid: e69c83c2ede356a4bb04744d53ec15ab,
     type: 3}
   attackSpawnPos: {fileID: 4031819826573074433}
