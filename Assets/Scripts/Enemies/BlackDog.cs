@@ -24,7 +24,7 @@ public class BlackDog : NormalEnemy
         // AttackAction();
         base.Update();
     }
-    protected virtual void Move()
+    protected override void Move()
     {
         rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * moveSpeed * moveDir, -MAX_FLOOR_SPEED, MAX_FLOOR_SPEED), rb.velocity.y);
     }
@@ -52,11 +52,11 @@ public class BlackDog : NormalEnemy
     {
         return finalRandomMoveRate + UnityEngine.Random.Range(-1f * moveRateNoise, moveRateNoise);
     }
-    public virtual void AttackAction()
+    public override void AttackAction()
     {
         base.AttackAction();
     }
-    protected virtual void OnCollisionEnter2D(Collision2D col)
+    protected override void OnCollisionEnter2D(Collision2D col)
     {
         if(col.gameObject.CompareTag("Player") && enemyState != State.Attacking)
         {

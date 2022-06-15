@@ -58,8 +58,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
 
     [Header("Player Color Form")]
-    private ColorForm currentColorForm = ColorForm.White;
-    private enum ColorForm { White, Red, Blue, Yellow, Violet, Orange, Green};
+    public ColorForm currentColorForm = ColorForm.White;
+    public enum ColorForm { White, Red, Blue, Yellow, Violet, Orange, Green};
 
     [Header("Other items")]
     [SerializeField] private GameObject singleAttackHit;
