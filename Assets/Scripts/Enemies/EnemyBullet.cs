@@ -5,15 +5,19 @@ using UnityEngine;
 public class EnemyBullet : EnemyAttack
 {
     protected Vector2 dir;
-    protected float speed = 3;
+    [SerializeField] protected float speed = 3;
 
-    protected void Start()
+    protected override void Start()
     {
         SetDir();
     }
 
-    protected void Update()
+    protected override void Update()
     {
+        base.Update();
+        lifeTime -= Time.deltaTime;
+        if(lifeTime < 0)
+            Destroy(this.gameObject);
         Move();
     }
 
@@ -30,6 +34,6 @@ public class EnemyBullet : EnemyAttack
     protected override void OnTriggerEnter2D(Collider2D col)
     {
         base.OnTriggerEnter2D(col);
-        Destroy(this.gameObject);
+        // Destroy(this.gameObject);
     }
 }

@@ -18,6 +18,8 @@ public class PlayerData : MonoBehaviour, IDamageable
     State playerState = State.Normal;
     Rigidbody2D rb;
     Animator anim;
+    float lastHit;
+    float hitCooldown = 0.5f;
 
     void Start() 
     {
@@ -32,6 +34,11 @@ public class PlayerData : MonoBehaviour, IDamageable
     {
         CustomEvents.OnPlayerUnlock -= UnlockSkill;
     }
+    void Update()
+    {
+        if(lastHit > 0)
+            lastHit -= Time.deltaTime;
+    }
     void UnlockSkill(int index)
     {
         isColorActive[index] = true;
@@ -40,16 +47,20 @@ public class PlayerData : MonoBehaviour, IDamageable
 
     public void TakeDmg(int _dmg, GameObject attacker)
     {
-        if(playerState != State.Normal)
+        if(lastHit <= 0)
         {
-            return;
-        }
-        playerState = State.Attacked;
-        KnockbackEffect(attacker);
-        DecreaseHp(_dmg);
+            lastHit = hitCooldown;
+            if(playerState != State.Normal)
+            {
+                return;
+            }
+            playerState = State.Attacked;
+            KnockbackEffect(attacker);
+            DecreaseHp(_dmg);
 
-        CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
-        EffectPool.Instance.GetHitEffectInPool(transform.position);
+            CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
+            EffectPool.Instance.GetHitEffectInPool(transform.position);
+        }
     }
 
     void DecreaseHp(int _dmg)

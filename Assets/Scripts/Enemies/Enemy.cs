@@ -21,7 +21,8 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         Normal,
         Walking,
-        Attacking
+        Attacking,
+        SpecialMove1
     }
     protected State enemyState = State.Normal;
     
@@ -41,8 +42,9 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         if ((attackCountdown <= 0) && (enemyState == State.Normal))
         {
+            // attackCountdown = attackRate;
             enemyState = State.Attacking;
-            anim.SetTrigger("Attack");   
+            anim.SetTrigger("Attack");
         }
     }
 
@@ -70,7 +72,7 @@ public class Enemy : MonoBehaviour, IDamageable
         currentSpawnPoint = null;
     }
 
-    public void TakeDmg(int _dmg, GameObject attacker)
+    public virtual void TakeDmg(int _dmg, GameObject attacker)
     {
         GetHitBehaviour(_dmg);
         CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
