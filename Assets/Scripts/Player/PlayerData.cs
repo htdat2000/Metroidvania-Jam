@@ -86,4 +86,10 @@ public class PlayerData : MonoBehaviour, IDamageable
     {
         playerState = State.Normal;
     }
+
+    public void AddHp(int value)
+    {
+        hp += value;
+        hp = Mathf.Clamp(hp, 0, defaultHP);
+    }
 }
