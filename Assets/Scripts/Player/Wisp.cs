@@ -1,17 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class Wisp : MonoBehaviour
 {
-    SpriteRenderer spriteRenderer;
+    // SpriteRenderer spriteRenderer;
 
     [SerializeField] Color[] colors = new Color[4];
+    [SerializeField] Color[] lightColors = new Color[4];
     PlayerController playerController;
+    // public Color[] forms;
+    [SerializeField] private SpriteRenderer soul;
+    [SerializeField] private Light2D light;
 
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();     
+        // soul = GetComponent<SpriteRenderer>();     
         playerController = GetComponent<PlayerController>();  
     }
 
@@ -25,16 +30,20 @@ public class Wisp : MonoBehaviour
         switch (playerController.currentColorForm)
         {
             case PlayerController.ColorForm.White:
-                spriteRenderer.color = colors[0];
+                soul.color = colors[0];
+                light.color = lightColors[0];
                 break;
             case PlayerController.ColorForm.Red:
-                spriteRenderer.color = colors[1];
+                soul.color = colors[1];
+                light.color = lightColors[1];
                 break;
             case PlayerController.ColorForm.Blue:
-                spriteRenderer.color = colors[2];
+                soul.color = colors[2];
+                light.color = lightColors[2];
                 break;
             case PlayerController.ColorForm.Yellow:
-                spriteRenderer.color = colors[3];
+                soul.color = colors[3];
+                light.color = lightColors[3];
                 break;  
         }
     }
