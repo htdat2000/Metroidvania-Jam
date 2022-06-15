@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Countdown();
+        AutoFixXVelocity();
         if(currentState == State.Dead || currentState == State.Hooking)
         {
             return;
@@ -97,7 +98,6 @@ public class PlayerController : MonoBehaviour
         AttackCheck();
         SlideCheck(); 
         SwitchForm();
-        AutoFixXVelocity();
         AnimationUpdate();
     }
 

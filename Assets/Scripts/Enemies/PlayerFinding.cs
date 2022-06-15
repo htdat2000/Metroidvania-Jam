@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerFinding : MonoBehaviour
 {
+    bool hasTarget = false;
     Enemy enemy;
 
     void Start()
@@ -14,7 +15,7 @@ public class PlayerFinding : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D col)
     {
-        if(col.CompareTag("Player"))
+        if(col.CompareTag("Player") && hasTarget == true)
         {
             enemy.AttackAction();
         }
@@ -24,6 +25,7 @@ public class PlayerFinding : MonoBehaviour
     {
         if(col.CompareTag("Player"))
         {
+            hasTarget = true;
             enemy.FacePlayer();
         }
     }
@@ -32,6 +34,7 @@ public class PlayerFinding : MonoBehaviour
     {
         if(col.CompareTag("Player"))
         {
+            hasTarget = false;
             enemy.LostPlayer();
         }
     }
