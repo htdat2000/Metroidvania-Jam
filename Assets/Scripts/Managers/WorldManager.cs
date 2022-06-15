@@ -13,6 +13,12 @@ public class WorldManager : MonoBehaviour
         Instance = this;
         player = GameObject.FindGameObjectsWithTag("Player")[0];
     }
+    void Update() {
+        if (Input.GetKey("escape"))
+        {
+            Application.Quit();
+        }
+    }
     void OnDestroy() 
     {
         CustomEvents.OnTelepanelTrigger -= OpenMap;
