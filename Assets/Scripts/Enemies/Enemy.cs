@@ -41,6 +41,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         if ((attackCountdown <= 0) && (enemyState == State.Normal))
         {
+            Debug.Log("Attack");
             enemyState = State.Attacking;
             anim.SetTrigger("Attack");   
         }
