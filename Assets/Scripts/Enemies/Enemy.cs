@@ -101,7 +101,7 @@ public class Enemy : MonoBehaviour, IDamageable
         Despawn();
     }
 
-    public void CreateAttackPrefab()
+    public virtual void CreateAttackPrefab()
     {
         enemyState = State.Normal;
         attackCountdown = attackRate;

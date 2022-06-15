@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BlackDog : NormalEnemy
 {
@@ -8,6 +9,7 @@ public class BlackDog : NormalEnemy
     [SerializeField] private float moveRateNoise;
     [SerializeField] private GameObject thunderBullet;
     [SerializeField] private Transform shotPoint;
+    [SerializeField] private GameObject text;
     private float finalRandomMoveRate;
     private float lastMove;
     private float defaultPosY = -7f;
@@ -17,7 +19,7 @@ public class BlackDog : NormalEnemy
     {
         base.Start();
         finalRandomMoveRate = FinalMoveRateCal();
-        isMoveable = false;
+        // isMoveable = false;
         lastMove = Time.time;
     }
 
@@ -84,9 +86,10 @@ public class BlackDog : NormalEnemy
         if ((attackCountdown <= 0) && ((enemyState == State.Normal) || (enemyState == State.Walking)))
         {
             attackCountdown = attackRate;
-            enemyState = State.Attacking;
             if(hp >= defaultHP/2)
             {
+                enemyState = State.Attacking;
+                isMoveable = false;
                 anim.SetTrigger("Attack");
                 // isMoveable = false;
                 // anim.SetTrigger("Combo");
@@ -98,10 +101,13 @@ public class BlackDog : NormalEnemy
                 int attackStyle = UnityEngine.Random.Range(0,2);
                 if(attackStyle == 0)
                 {
+                    enemyState = State.Attacking;
+                    isMoveable = false;
                     anim.SetTrigger("Attack");
                 }
                 else
                 {
+                    enemyState =  State.SpecialMove1;
                     isMoveable = false;
                     anim.SetTrigger("Combo");
                     Invoke("Appear", 5f);
@@ -159,7 +165,7 @@ public class BlackDog : NormalEnemy
     }
     void OnTriggerStay2D(Collider2D col)
     {
-        if(col.gameObject.CompareTag("Player") && enemyState != State.Attacking)
+        if(col.gameObject.CompareTag("Player") && enemyState != State.SpecialMove1)
         {
             IDamageable player = col.gameObject.GetComponent<IDamageable>();
             player.TakeDmg(dmg, this.gameObject);
@@ -175,5 +181,34 @@ public class BlackDog : NormalEnemy
         if(!isFacingRight && playerPos.x > transform.position.x)
             Flip();
         // Debug.Log("[Enemy] take dmg");
+    }
+    public override void CreateAttackPrefab()
+    {
+        // enemyState = State.Normal;
+        // attackCountdown = attackRate;
+        if(attackPrefab)
+        {
+            Instantiate(attackPrefab, attackSpawnPos.transform.position, attackSpawnPos.transform.rotation);
+        }
+    }
+    protected override void Die()
+    {
+        // StartCoroutine(LoadYourAsyncScene());
+        Despawn();
+        ShowText();
+    }
+    // IEnumerator LoadYourAsyncScene()
+    // {
+    //     yield return new WaitForSeconds(10f);
+    //     AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(0);
+    //     while (!asyncLoad.isDone)
+    //     {
+    //         yield return null;
+    //     }
+    // }
+
+    void ShowText()
+    {
+        text.SetActive(true);
     }
 }

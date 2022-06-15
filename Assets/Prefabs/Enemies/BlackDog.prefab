@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1277339297}
   m_Layer: 0
   m_Name: BlackDog
-  m_TagString: Untagged
+  m_TagString: Enemies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -155,12 +155,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14bcb0c145abf78438817e2bb4e2d897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultHP: 500
+  defaultHP: 200
   dmg: 3
   isMoveable: 1
   attackRate: 10
-  attackPrefab: {fileID: 0}
-  attackSpawnPos: {fileID: 0}
+  attackPrefab: {fileID: 3495922078101175336, guid: 8d21ce1fc6c50524f9d3a4574a0f55f6,
+    type: 3}
+  attackSpawnPos: {fileID: 2465114675748560141}
   attackRange: 3
   platformLayerMask:
     serializedVersion: 2
@@ -174,6 +175,7 @@ MonoBehaviour:
   thunderBullet: {fileID: 6054017861252484393, guid: acd6cc1fd1d281f4294b9913ea5d57d5,
     type: 3}
   shotPoint: {fileID: 5347505532558014452}
+  text: {fileID: 0}
 --- !u!1 &7916220856388483013
 GameObject:
   m_ObjectHideFlags: 0

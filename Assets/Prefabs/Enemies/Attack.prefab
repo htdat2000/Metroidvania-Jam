@@ -93,4 +93,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dmg: 3
-  lifeTime: 0.1
+  lifeTime: 0.2

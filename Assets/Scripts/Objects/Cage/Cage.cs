@@ -12,7 +12,7 @@ public class Cage : MonoBehaviour
         noti = GetComponentInChildren<NotiObject>().gameObject;
     }
     void Update() {
-        if(Input.GetKey("c"))
+        if(Input.GetKeyDown("c") && canInteract)
         {
             Debug.Log("Cage: Pick up");
             soul.SetActive(false);
