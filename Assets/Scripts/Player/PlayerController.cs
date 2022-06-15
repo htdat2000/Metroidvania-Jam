@@ -99,6 +99,7 @@ public class PlayerController : MonoBehaviour
         SlideCheck(); 
         SwitchForm();
         AnimationUpdate();
+        VerYCheck();
     }
 
     void OnDestroy()
@@ -230,7 +231,7 @@ public class PlayerController : MonoBehaviour
                     else if(!isOnGround && isNextToWall)
                     {
                         ResetJumpCount();
-                        Jump();
+                        WallJump();
                     }
                     break;
                 case ColorForm.Yellow:
@@ -241,7 +242,7 @@ public class PlayerController : MonoBehaviour
                     else if(!isOnGround && isNextToWall)
                     {
                         ResetJumpCount();
-                        Jump();
+                        WallJump();
                     }
                     break;
                 case ColorForm.Blue:
@@ -295,7 +296,29 @@ public class PlayerController : MonoBehaviour
         }
         jumpCountdown = jumpResetTime;
         jumpCount++; 
+        if(currentColorForm == ColorForm.Yellow)
+            rb.gravityScale = 1f;
+        else
+            rb.gravityScale = 1.5f;
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);    
+        EffectPool.Instance.GetJumpEffectInPool(transform.position + DISTANCE_CENTER_TO_FEET);
+    }
+    void WallJump()
+    {
+        int dir = 1;
+        float backForce = jumpForce/2;
+        dir = isFacingRight?-1:1;
+        if(jumpCountdown > 0)
+        {
+            return;
+        }
+        jumpCountdown = jumpResetTime;
+        jumpCount++; 
+        if(currentColorForm == ColorForm.Yellow)
+            rb.gravityScale = 1f;
+        else
+            rb.gravityScale = 1.5f;
+        rb.AddForce(new Vector2(dir * backForce, jumpForce), ForceMode2D.Impulse);    
         EffectPool.Instance.GetJumpEffectInPool(transform.position + DISTANCE_CENTER_TO_FEET);
     }
 
@@ -504,6 +527,10 @@ public class PlayerController : MonoBehaviour
     void AutoFixXVelocity()
     {
         rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, ANTI_SLIDE_ON_FLOOR), rb.velocity.y);
+    }
+    void VerYCheck()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -MAX_FLOOR_SPEED*1.5f, MAX_FLOOR_SPEED*1.5f));
     }
 
     void PlayerDieBehaviour()
