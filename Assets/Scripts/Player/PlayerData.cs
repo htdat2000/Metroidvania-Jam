@@ -7,7 +7,7 @@ public class PlayerData : MonoBehaviour, IDamageable
     public static PlayerData Instance;
     public int defaultHP; // if change, should invoke OnMaxHPChange event
     private int hp;
-    public static bool[] isColorActive = new bool[7] {true, true, true, true, false, false, false};
+    public static bool[] isColorActive = new bool[7] {true, false, false, false, false, false, false};
     //                                                white  red    blue   yel    vio    ora    gre
     enum State
     {
@@ -96,5 +96,12 @@ public class PlayerData : MonoBehaviour, IDamageable
     void ResetState()
     {
         playerState = State.Normal;
+    }
+
+    public void AddHp(int value)
+    {
+        hp += value;
+        hp = Mathf.Clamp(hp, 0, defaultHP);
+        CustomEvents.OnHPChange?.Invoke(hp);
     }
 }
