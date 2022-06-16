@@ -15,9 +15,6 @@ public class EnemyBullet : EnemyAttack
     protected override void Update()
     {
         base.Update();
-        lifeTime -= Time.deltaTime;
-        if(lifeTime < 0)
-            Destroy(this.gameObject);
         Move();
     }
 

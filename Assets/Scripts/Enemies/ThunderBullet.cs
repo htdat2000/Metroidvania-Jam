@@ -9,19 +9,6 @@ public class ThunderBullet : EnemyBullet
 
     }
 
-    protected void Update()
-    {
-        lifeTime -= Time.deltaTime;
-        if(lifeTime < 0)
-            Destroy(this.gameObject);
-        Move();
-    }
-
-    protected void Move()
-    {
-        transform.Translate(dir * speed * Time.deltaTime, Space.World);
-    }
-
     public void SetDir(Vector3 targetPos)
     {
         // transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan((targetPos.x - transform.position.x)/(targetPos.y - transform.position.y)));
