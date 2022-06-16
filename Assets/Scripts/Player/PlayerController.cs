@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     [Header("Component")]
     private Rigidbody2D rb;
     private Animator anim;
+    private Wisp wisp;
 
     [Header("Bool Check Environment")]
     public bool isLastFrameOnGround = false;
@@ -80,6 +81,7 @@ public class PlayerController : MonoBehaviour
         trail.widthMultiplier = 0f;
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();    
+        wisp = GetComponentInChildren<Wisp>();
     }
 
     // Update is called once per frame
@@ -498,6 +500,7 @@ public class PlayerController : MonoBehaviour
                     currentColorForm = ColorForm.White;
                 }
             }
+            wisp.ChangeWispColor();
         }
     }
 
