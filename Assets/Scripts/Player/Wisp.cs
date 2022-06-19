@@ -9,33 +9,28 @@ public class Wisp : MonoBehaviour
 
     [SerializeField] Color[] colors = new Color[4];
     [SerializeField] Color[] lightColors = new Color[4];
-    PlayerController playerController;
+    [SerializeField] PlayerController playerController;
     // public Color[] forms;
     [SerializeField] private SpriteRenderer soul;
     [SerializeField] private Light2D light2D;
 
-    void Start()
-    {     
-        playerController = GetComponent<PlayerController>();  
-    }
-
-    public void ChangeWispColor()
+    public void ChangeWispColor(int colorIndex)
     {
-        switch (playerController.currentColorForm)
+        switch (colorIndex)
         {
-            case PlayerController.ColorForm.White:
+            case 0:
                 soul.color = colors[0];
                 light2D.color = lightColors[0];
                 break;
-            case PlayerController.ColorForm.Red:
+            case 1:
                 soul.color = colors[1];
                 light2D.color = lightColors[1];
                 break;
-            case PlayerController.ColorForm.Blue:
+            case 2:
                 soul.color = colors[2];
                 light2D.color = lightColors[2];
                 break;
-            case PlayerController.ColorForm.Yellow:
+            case 3:
                 soul.color = colors[3];
                 light2D.color = lightColors[3];
                 break;  
