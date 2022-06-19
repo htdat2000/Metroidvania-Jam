@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     [Header("Component")]
     private Rigidbody2D rb;
     private Animator anim;
-    private Wisp wisp;
+    [SerializeField] private Wisp wisp;
 
     [Header("Bool Check Environment")]
     public bool isLastFrameOnGround = false;
@@ -59,8 +59,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
 
     [Header("Player Color Form")]
-    public ColorForm currentColorForm = ColorForm.White;
-    public enum ColorForm { White, Red, Blue, Yellow, Violet, Orange, Green};
+    ColorForm currentColorForm = ColorForm.White;
+    enum ColorForm { White, Red, Blue, Yellow, Violet, Orange, Green};
 
     [Header("Other items")]
     [SerializeField] private GameObject singleAttackHit;
@@ -81,7 +81,6 @@ public class PlayerController : MonoBehaviour
         trail.widthMultiplier = 0f;
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();    
-        wisp = GetComponentInChildren<Wisp>();
     }
 
     // Update is called once per frame
@@ -109,18 +108,19 @@ public class PlayerController : MonoBehaviour
         CustomEvents.OnPlayerDied -= PlayerDieBehaviour;
     }
 
-    IEnumerator Attack(float waitime, string attackType)
+    public void Attack()
     {
-        yield return new WaitForSeconds(waitime);
-        switch (attackType)
+        attackCountdown = attackResetTime;
+        BackToNormal();
+        switch (currentColorForm)
         {
-            case "White":
+            case ColorForm.White:
                 Instantiate(singleAttackHit, this.gameObject.transform.position, this.gameObject.transform.rotation);      
                 break;
-            case "Blue":
+            case ColorForm.Blue:
                 Instantiate(aoeAttackHit, this.gameObject.transform.position, Quaternion.identity);
                 break;
-            case "Red":
+            case ColorForm.Red:
                 switch(comboCount)
                 {
                     case 0:
@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
                         break;
                 }
                 break;
-            case "Yellow":
+            case ColorForm.Yellow:
                 switch(comboCount)
                 {
                     case 0:
@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour
             {
                 comboCountdown -= Time.deltaTime;
             }
-            else
+            else 
             {
                 comboCount = 0;
             }
@@ -332,36 +332,18 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown("c") && currentState == State.Normal)
         {
-            attackCountdown = attackResetTime;
             switch (currentColorForm)
             {
-                case ColorForm.White:
-                    anim.Play("WAttack");
-                    currentState = State.Attacking;
-                    StartCoroutine(Attack(0.1f, "White"));
-                    Invoke("BackToNormal", 0.5f);
-                    break;
                 case ColorForm.Blue:
                     anim.Play("BParry");
-                    StartCoroutine(Attack(0.3f, "Blue"));
                     currentState = State.Attacking;
-                    Invoke("BackToNormal", 0.5f);
                     break;
-                case ColorForm.Red:
+                default:
                     anim.Play("WAttack");
-                    StartCoroutine(Attack(0.3f, "Red"));
                     currentState = State.Attacking;
-                    Invoke("BackToNormal", 0.5f);
-                    break;
-                case ColorForm.Yellow:
-                    anim.Play("WAttack");
-                    StartCoroutine(Attack(0.3f, "Yellow"));
-                    currentState = State.Attacking;
-                    Invoke("BackToNormal", 0.5f);
                     break;
             }
         }
-
     }
 
     void ZButtonFunction()
@@ -481,6 +463,7 @@ public class PlayerController : MonoBehaviour
             if((int)currentColorForm == (numOfColor - 1))   //last color
                 {
                     currentColorForm = ColorForm.White;
+                    wisp.ChangeWispColor((int)currentColorForm);
                     return;
                 }
             for (int i = 0; i < numOfColor; i++)
@@ -493,14 +476,16 @@ public class PlayerController : MonoBehaviour
                 if (PlayerData.isColorActive[i])
                 {
                     currentColorForm = (ColorForm)i;
+                    wisp.ChangeWispColor((int)currentColorForm);
                     return;
                 }
                 else
                 {
                     currentColorForm = ColorForm.White;
+                    wisp.ChangeWispColor((int)currentColorForm);
                 }
             }
-            wisp.ChangeWispColor();
+            
         }
     }
 

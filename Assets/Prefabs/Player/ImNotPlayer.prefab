@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 104568373}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -83,6 +83,7 @@ GameObject:
   - component: {fileID: 3952374671655732650}
   - component: {fileID: 8147502475169311964}
   - component: {fileID: 867491426126614821}
+  - component: {fileID: 6345426492730741592}
   m_Layer: 0
   m_Name: Soul
   m_TagString: Untagged
@@ -175,6 +176,31 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6345426492730741592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5710470715467572901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ad383783e9593488ef9562e6397dec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0.18396229, b: 0.18396229, a: 1}
+  - {r: 0.1273585, g: 0.86677223, b: 1, a: 1}
+  - {r: 0.9522364, g: 1, b: 0.1462264, a: 0.972549}
+  lightColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0.18431373, b: 0.18431373, a: 1}
+  - {r: 0.1254902, g: 0.86666673, b: 1, a: 1}
+  - {r: 0.95294124, g: 1, b: 0.14509805, a: 1}
+  playerController: {fileID: 5827726462641316417}
+  soul: {fileID: 8147502475169311964}
+  light2D: {fileID: 104568375}
 --- !u!1 &5827726461397547509
 GameObject:
   m_ObjectHideFlags: 0
@@ -859,7 +885,6 @@ GameObject:
   - component: {fileID: 5827726462641316417}
   - component: {fileID: 5827726462641316416}
   - component: {fileID: 4324453094463354542}
-  - component: {fileID: 2111275076}
   m_Layer: 9
   m_Name: ImNotPlayer
   m_TagString: Player
@@ -1013,6 +1038,7 @@ MonoBehaviour:
   fastDashSpeed: 20
   slowDashSpeed: 12
   slideSpeed: 1
+  wisp: {fileID: 6345426492730741592}
   isLastFrameOnGround: 0
   isOnGround: 0
   isNextToWall: 0
@@ -1145,30 +1171,6 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &2111275076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5827726462641316423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13ad383783e9593488ef9562e6397dec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  colors:
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 1, g: 0.18396229, b: 0.18396229, a: 1}
-  - {r: 0.1273585, g: 0.86677223, b: 1, a: 1}
-  - {r: 0.9522364, g: 1, b: 0.1462264, a: 0.972549}
-  lightColors:
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 1, g: 0.18431373, b: 0.18431373, a: 1}
-  - {r: 0.1254902, g: 0.86666673, b: 1, a: 1}
-  - {r: 0.95294124, g: 1, b: 0.14509805, a: 1}
-  soul: {fileID: 8147502475169311964}
-  light: {fileID: 104568375}
 --- !u!1001 &5253403014597935277
 PrefabInstance:
   m_ObjectHideFlags: 0
