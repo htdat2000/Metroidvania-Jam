@@ -14,6 +14,10 @@ public class Fly : NormalEnemy
 
     protected override void Update()
     {
+        if(enemyState != State.Normal)
+        {
+            return;
+        }
         Move();
         TargetChecking();
         CheckFlip();

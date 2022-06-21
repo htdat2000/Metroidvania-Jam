@@ -8,7 +8,6 @@ public class NormalEnemy : Enemy
     protected bool isFacingRight = false;
     protected int moveDir = -1;
     [SerializeField] protected float moveSpeed;
-    protected Rigidbody2D rb;
 
     protected const float ANTI_SLIDE_ON_FLOOR = 0.05f;
     protected const float MAX_FLOOR_SPEED = 2f;
@@ -18,11 +17,6 @@ public class NormalEnemy : Enemy
     protected float lastTurn;
     [SerializeField] protected float pivotCheckDistanceX = 0.2f;
     // Start is called before the first frame update
-    protected override void Start()
-    {
-        base.Start();
-        rb = GetComponent<Rigidbody2D>();
-    }
 
     public override void SetSpawnPoint(SpawnPoint newSpawnPoint)
     {

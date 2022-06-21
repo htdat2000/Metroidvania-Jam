@@ -17,7 +17,7 @@ public class AttackHit : MonoBehaviour
         col.TryGetComponent<IDamageable>(out damageableObject);
         if(damageableObject != null)
         {
-            damageableObject.TakeDmg(dmg, null);
+            damageableObject.TakeDmg(dmg, this.gameObject);
         }
     }
 
