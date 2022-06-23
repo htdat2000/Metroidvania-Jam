@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Fly : NormalEnemy
 {
+    
     protected GameObject target;
     protected Vector2 dirMove;
 
@@ -14,6 +15,10 @@ public class Fly : NormalEnemy
 
     protected override void Update()
     {
+        if(enemyState != State.Normal)
+        {
+            return;
+        }
         Move();
         TargetChecking();
         CheckFlip();
@@ -40,15 +45,20 @@ public class Fly : NormalEnemy
         }
         else
         {
-            if((this.gameObject.transform.position - currentSpawnPoint.gameObject.transform.position).magnitude > attackRange)
+            if((this.gameObject.transform.position - currentSpawnPoint.gameObject.transform.position).magnitude >= attackRange)
             {
-                ReturnSpawnPoint();
+                TeleToSpawnPoint();
             }
             else
             {
                 ChasePlayer();
             }
         }
+    }
+    
+    protected void TeleToSpawnPoint()
+    {
+        this.gameObject.transform.position = currentSpawnPoint.gameObject.transform.position;
     }
 
     protected override void CheckFlip()

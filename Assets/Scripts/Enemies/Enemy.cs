@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public bool isMoveable = true; 
     protected SpawnPoint currentSpawnPoint = null;
     protected Animator anim;
+    protected Rigidbody2D rb;
 
     [SerializeField] protected float attackRate = 1;
     protected float attackCountdown;
@@ -22,7 +23,8 @@ public class Enemy : MonoBehaviour, IDamageable
         Normal,
         Walking,
         Attacking,
-        SpecialMove1
+        SpecialMove1,
+        Hurting
     }
     protected State enemyState = State.Normal;
     
@@ -31,11 +33,16 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         hp = defaultHP;
         anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     protected virtual void Update()
     {
         AttackCountdown();
+        if(enemyState != State.Normal)
+        {
+            return;
+        }
     }
 
     public virtual void AttackAction()
@@ -75,10 +82,15 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public virtual void TakeDmg(int _dmg, GameObject attacker)
     {
-        GetHitBehaviour(_dmg);
-        CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
-        EffectPool.Instance.GetHitEffectInPool(transform.position);
-        // Debug.Log("[Enemy] take dmg");
+        if(enemyState != State.Hurting)
+        {
+            Invoke("BackToNormal", 0.1f);
+            enemyState = State.Hurting;
+            GetHitBehaviour(_dmg);
+            CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
+            EffectPool.Instance.GetHitEffectInPool(transform.position);
+            // Debug.Log("[Enemy] take dmg");
+        }
     }
     
     protected virtual void GetHitBehaviour(int _dmg)
@@ -119,6 +131,11 @@ public class Enemy : MonoBehaviour, IDamageable
     public virtual void LostPlayer()
     {
         isMoveable = true;
+    }
+
+    protected void BackToNormal()
+    {
+        enemyState = State.Normal;
     }
 
     protected virtual void OnCollisionEnter2D(Collision2D col)
