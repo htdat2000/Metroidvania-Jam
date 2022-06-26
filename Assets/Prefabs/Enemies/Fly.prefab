@@ -126,7 +126,7 @@ MonoBehaviour:
   attackRate: 1
   attackPrefab: {fileID: 0}
   attackSpawnPos: {fileID: 0}
-  attackRange: 10
+  attackRange: 5
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 256

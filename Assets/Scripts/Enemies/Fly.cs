@@ -33,32 +33,19 @@ public class Fly : NormalEnemy
     {
         if(target == null)
         {
-            if((this.gameObject.transform.position - currentSpawnPoint.gameObject.transform.position).magnitude > 0.2f)
-            {
-                ReturnSpawnPoint();
-            }
-            else
-            {
-                dirMove = Vector2.zero;
-                return;
-            }
+            ReturnSpawnPoint();
         }
         else
         {
-            if((this.gameObject.transform.position - currentSpawnPoint.gameObject.transform.position).magnitude >= attackRange)
+            if((target.gameObject.transform.position - currentSpawnPoint.gameObject.transform.position).magnitude > attackRange)
             {
-                TeleToSpawnPoint();
+                ReturnSpawnPoint();
             }
             else
             {
                 ChasePlayer();
             }
         }
-    }
-    
-    protected void TeleToSpawnPoint()
-    {
-        this.gameObject.transform.position = currentSpawnPoint.gameObject.transform.position;
     }
 
     protected override void CheckFlip()
@@ -76,7 +63,15 @@ public class Fly : NormalEnemy
 
     protected void ReturnSpawnPoint()
     {
-        dirMove = (currentSpawnPoint.gameObject.transform.position - this.gameObject.transform.position).normalized;
+        if((this.gameObject.transform.position - currentSpawnPoint.gameObject.transform.position).magnitude > 0.3f)
+        {
+            dirMove = (currentSpawnPoint.gameObject.transform.position - this.gameObject.transform.position).normalized;
+        }
+        else
+        {
+            dirMove = Vector2.zero;
+            return;
+        }
     }
 
     protected void ChasePlayer()
