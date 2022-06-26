@@ -50,7 +50,6 @@ public class Enemy : MonoBehaviour, IDamageable
         if ((attackCountdown <= 0) && (enemyState == State.Normal))
         {
             // attackCountdown = attackRate;
-            Debug.Log("Attack");
             enemyState = State.Attacking;
             anim.SetTrigger("Attack");
         }
@@ -84,7 +83,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         if(enemyState != State.Hurting)
         {
-            Invoke("BackToNormal", 0.1f);
+            Invoke("BackToNormal", 0.5f);
             enemyState = State.Hurting;
             GetHitBehaviour(_dmg);
             CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
@@ -115,6 +114,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public virtual void CreateAttackPrefab()
     {
+        anim.ResetTrigger("Attack");
         enemyState = State.Normal;
         attackCountdown = attackRate;
         if(attackPrefab)

@@ -124,7 +124,7 @@ MonoBehaviour:
   defaultHP: 5
   dmg: 2
   isMoveable: 1
-  attackRate: 3
+  attackRate: 2
   attackPrefab: {fileID: 4486400034012647460, guid: 090b38bef55d1824fba3b23336c5b313,
     type: 3}
   attackSpawnPos: {fileID: 2905132597981155584}

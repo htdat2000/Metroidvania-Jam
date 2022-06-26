@@ -91,9 +91,16 @@ public class NormalEnemy : Enemy
             }
             else
             {
-                Flip();
+                RaycastHit2D hitBack = Physics2D.Raycast(this.gameObject.transform.position, new Vector2(-moveDir, 0), attackRange, LayerMask.GetMask("Player"));
+                if(hitBack.collider != null)
+                {
+                    Flip();
+                }      
             }
         }
-        base.AttackAction();
+        else
+        {
+            base.AttackAction();
+        }
     }
 }
