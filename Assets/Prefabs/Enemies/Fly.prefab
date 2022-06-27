@@ -126,14 +126,8 @@ MonoBehaviour:
   attackRate: 1
   attackPrefab: {fileID: 0}
   attackSpawnPos: {fileID: 0}
-  attackRange: 5
-  platformLayerMask:
-    serializedVersion: 2
-    m_Bits: 256
+  attackRange: 7
   moveSpeed: 2
-  TURN_RESET_TIME: 2
-  CHECK_DISTANCE: 0.6
-  pivotCheckDistanceX: 0.2
 --- !u!58 &7423120476071973279
 CircleCollider2D:
   m_ObjectHideFlags: 0

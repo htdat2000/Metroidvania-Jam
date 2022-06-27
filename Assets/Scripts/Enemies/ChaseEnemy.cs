@@ -2,19 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseEnemy : NormalEnemy
+public class ChaseEnemy : Enemy
 {
+    [SerializeField] protected float moveSpeed;
+    protected bool isFacingRight = false;
     protected GameObject target;
     protected Vector2 dirMove;
 
-    public override void AttackAction()
+    protected override void Update()
     {
-        return;
-    }
-
-    protected override void Move()
-    {
+        if(enemyState != State.Normal)
+        {
+            return;
+        }
+        Move();
         TargetChecking();
+        CheckFlip();
+    }
+    protected virtual void Move()
+    {
         transform.Translate(dirMove * moveSpeed * Time.deltaTime, Space.World);
         //rb.velocity = dirMove * Time.deltaTime * moveSpeed;
     }
@@ -23,19 +29,11 @@ public class ChaseEnemy : NormalEnemy
     {
         if(target == null)
         {
-            if((this.gameObject.transform.position - currentSpawnPoint.gameObject.transform.position).magnitude > 0.2f)
-            {
-                ReturnSpawnPoint();
-            }
-            else
-            {
-                dirMove = Vector2.zero;
-                return;
-            }
+            ReturnSpawnPoint();
         }
         else
         {
-            if((this.gameObject.transform.position - currentSpawnPoint.gameObject.transform.position).magnitude > attackRange)
+            if((target.gameObject.transform.position - currentSpawnPoint.gameObject.transform.position).magnitude > attackRange)
             {
                 ReturnSpawnPoint();
             }
@@ -46,7 +44,7 @@ public class ChaseEnemy : NormalEnemy
         }
     }
 
-    protected override void CheckFlip()
+    protected virtual void CheckFlip()
     {
         if(dirMove.x > 0)
         {
@@ -56,12 +54,20 @@ public class ChaseEnemy : NormalEnemy
         {
             isFacingRight = false;
         }
-        base.CheckFlip();
+        transform.rotation = isFacingRight ?Quaternion.Euler(0, 180, 0) : Quaternion.identity;
     }
 
     protected void ReturnSpawnPoint()
     {
-        dirMove = (currentSpawnPoint.gameObject.transform.position - this.gameObject.transform.position).normalized;
+        if((this.gameObject.transform.position - currentSpawnPoint.gameObject.transform.position).magnitude > 0.3f)
+        {
+            dirMove = (currentSpawnPoint.gameObject.transform.position - this.gameObject.transform.position).normalized;
+        }
+        else
+        {
+            dirMove = Vector2.zero;
+            return;
+        }
     }
 
     protected void ChasePlayer()

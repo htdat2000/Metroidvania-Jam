@@ -28,10 +28,6 @@ public class NormalEnemy : Enemy
         base.Update();
         WallCheck();
         CheckFlip();
-        if(isMoveable == false)
-        {
-            return;
-        }
         Move();
     }
     protected virtual void Move()
@@ -66,18 +62,6 @@ public class NormalEnemy : Enemy
     protected virtual void CheckFlip()
     {
         transform.rotation = isFacingRight ?Quaternion.Euler(0, 180, 0) : Quaternion.identity;
-    }
-
-    protected override void GetHitBehaviour(int _dmg)
-    {
-        base.GetHitBehaviour(_dmg);
-        isMoveable = false;
-        Invoke("ChangeMoveState", 1);
-    }
-
-    protected void ChangeMoveState()
-    {
-        isMoveable = !isMoveable; 
     }
 
     public override void AttackAction()

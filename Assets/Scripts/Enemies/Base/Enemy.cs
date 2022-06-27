@@ -27,6 +27,8 @@ public class Enemy : MonoBehaviour, IDamageable
         Hurting
     }
     protected State enemyState = State.Normal;
+
+    protected const float HURT_TIME = 0.5f;
     
     
     protected virtual void Start()
@@ -83,7 +85,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         if(enemyState != State.Hurting)
         {
-            Invoke("BackToNormal", 0.5f);
+            Invoke("BackToNormal", HURT_TIME);
             enemyState = State.Hurting;
             GetHitBehaviour(_dmg);
             CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
@@ -133,7 +135,7 @@ public class Enemy : MonoBehaviour, IDamageable
         isMoveable = true;
     }
 
-    protected void BackToNormal()
+    protected virtual void BackToNormal()
     {
         enemyState = State.Normal;
     }
