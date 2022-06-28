@@ -115,10 +115,10 @@ public class PlayerController : MonoBehaviour
         switch (currentColorForm)
         {
             case ColorForm.White:
-                Instantiate(singleAttackHit, this.gameObject.transform.position, this.gameObject.transform.rotation);      
+                Instantiate(singleAttackHit, this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);      
                 break;
             case ColorForm.Blue:
-                Instantiate(aoeAttackHit, this.gameObject.transform.position, Quaternion.identity);
+                Instantiate(aoeAttackHit, this.gameObject.transform.position, Quaternion.identity, this.gameObject.transform);
                 break;
             case ColorForm.Red:
                 switch(comboCount)
@@ -126,16 +126,16 @@ public class PlayerController : MonoBehaviour
                     case 0:
                         comboCount++;
                         comboCountdown = comboResetTime;
-                        Instantiate(comboAttackHits[0], this.gameObject.transform.position, this.gameObject.transform.rotation);
+                        Instantiate(comboAttackHits[0], this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);
                         break;
                     case 1:
                         comboCount++;
                         comboCountdown = comboResetTime;
-                        Instantiate(comboAttackHits[1], this.gameObject.transform.position, this.gameObject.transform.rotation);
+                        Instantiate(comboAttackHits[1], this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);
                         break;
                     case 2:
                         comboCount++;
-                        Instantiate(comboAttackHits[2], this.gameObject.transform.position, this.gameObject.transform.rotation);
+                        Instantiate(comboAttackHits[2], this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);
                         break;
                     default:
                         comboCount = 0;
@@ -149,12 +149,12 @@ public class PlayerController : MonoBehaviour
                     case 0:
                         comboCount++;
                         comboCountdown = comboResetTime;
-                        Instantiate(comboAttackHits[0], this.gameObject.transform.position, this.gameObject.transform.rotation);
+                        Instantiate(comboAttackHits[0], this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);
                         break;
                     case 1:
                         comboCount++;
                         comboCountdown = comboResetTime;
-                        Instantiate(comboAttackHits[1], this.gameObject.transform.position, this.gameObject.transform.rotation);
+                        Instantiate(comboAttackHits[1], this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);
                         break;
                     default:
                         comboCount = 0;
@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviour
 
     void HorizontalMove()
     {
-        if (currentState != State.Normal && (currentState != State.Sliding))  
+        if ((currentState != State.Normal) && (currentState != State.Sliding) && (currentState != State.Attacking))  
         {
             return;
         }
