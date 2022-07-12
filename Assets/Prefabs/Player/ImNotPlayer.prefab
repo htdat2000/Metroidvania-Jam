@@ -1034,7 +1034,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   moveSpeed: 30
-  jumpForce: 7
+  jumpForce: 10
   fastDashSpeed: 20
   slowDashSpeed: 12
   slideSpeed: 1
@@ -1042,7 +1042,6 @@ MonoBehaviour:
   isLastFrameOnGround: 0
   isOnGround: 0
   isNextToWall: 0
-  currentColorForm: 0
   singleAttackHit: {fileID: 718622347272714370, guid: 0048f3945b958264ea3548b12ba50a17,
     type: 3}
   comboAttackHits:
