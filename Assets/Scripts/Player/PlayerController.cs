@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void Update() 
     {
         Countdown();
         AutoFixXVelocity();
@@ -102,7 +102,6 @@ public class PlayerController : MonoBehaviour
         AnimationUpdate();
         VerYCheck();
     }
-
     void OnDestroy()
     {
         CustomEvents.OnPlayerDied -= PlayerDieBehaviour;
