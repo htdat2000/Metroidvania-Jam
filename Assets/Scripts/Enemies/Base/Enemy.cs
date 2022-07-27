@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour, IDamageable
     }
     protected State enemyState = State.Normal;
 
-    protected const float HURT_TIME = 0.5f;
+    protected const float HURT_TIME = 1f;
     
     
     protected virtual void Start()
@@ -43,6 +43,7 @@ public class Enemy : MonoBehaviour, IDamageable
         AttackCountdown();
         if(enemyState != State.Normal)
         {
+            rb.velocity = Vector2.zero;
             return;
         }
     }
@@ -90,7 +91,7 @@ public class Enemy : MonoBehaviour, IDamageable
             GetHitBehaviour(_dmg);
             CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
             EffectPool.Instance.GetHitEffectInPool(transform.position);
-            // Debug.Log("[Enemy] take dmg");
+            //Debug.Log("[Enemy] take dmg");
         }
     }
     
