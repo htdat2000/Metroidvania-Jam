@@ -8,11 +8,11 @@ public class LoadingPoint : MonoBehaviour
 {   
     enum MapName{
         Null,
-        BossDogArea1,
-        BossDogArea2,
-        BossDogArea3,
-        BossDogArea4,
-        BossDogArea5,
+        DogArea1,
+        DogArea2,
+        DogArea3,
+        DogArea4,
+        DogArea5,
     }
     [SerializeField] MapName loadMap;
     [SerializeField] MapName unloadMap;
