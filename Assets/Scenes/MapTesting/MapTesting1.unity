@@ -156,8 +156,8 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 1478445918}
-  m_Follow: {fileID: 1478445918}
+  m_LookAt: {fileID: 1112074138}
+  m_Follow: {fileID: 1112074138}
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 5
@@ -181,12 +181,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 367821525}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 54.4, y: 2.1, z: -10}
+  m_LocalPosition: {x: 5.66, y: 19, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2013060108}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1002013026
 GameObject:
@@ -267,7 +267,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1002013026}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 54.4, y: 2.1, z: -10}
+  m_LocalPosition: {x: 5.66, y: 19, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -338,7 +338,7 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!1001 &1060647899
+--- !u!1001 &1112074137
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -348,17 +348,17 @@ PrefabInstance:
     - target: {fileID: 5827726462641316421, guid: ffd495ab597275e4c944645b25d9fbf4,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5827726462641316421, guid: ffd495ab597275e4c944645b25d9fbf4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 54.4
+      value: 5.66
       objectReference: {fileID: 0}
     - target: {fileID: 5827726462641316421, guid: ffd495ab597275e4c944645b25d9fbf4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.1
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 5827726462641316421, guid: ffd495ab597275e4c944645b25d9fbf4,
         type: 3}
@@ -407,11 +407,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ffd495ab597275e4c944645b25d9fbf4, type: 3}
---- !u!4 &1478445918 stripped
+--- !u!4 &1112074138 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5827726462641316421, guid: ffd495ab597275e4c944645b25d9fbf4,
     type: 3}
-  m_PrefabInstance: {fileID: 1060647899}
+  m_PrefabInstance: {fileID: 1112074137}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1706832537
 PrefabInstance:
