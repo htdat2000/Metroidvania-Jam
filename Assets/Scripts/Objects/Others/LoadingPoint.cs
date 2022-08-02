@@ -8,6 +8,7 @@ public class LoadingPoint : MonoBehaviour
 {   
     enum MapName{
         Null,
+        TestScene,
         DogArea1,
         DogArea2,
         DogArea3,
@@ -16,16 +17,23 @@ public class LoadingPoint : MonoBehaviour
     }
     [SerializeField] MapName loadMap;
     [SerializeField] MapName unloadMap;
+    [SerializeField] Vector3 posToGo;
+    bool isLoaded = false;
 
     protected void OnTriggerEnter2D(Collider2D col)
     {
-        if(loadMap.ToString() != "Null")
-        {
-            SceneManager.LoadSceneAsync(loadMap.ToString(), LoadSceneMode.Additive);
+        if(loadMap.ToString() != "Null" && (isLoaded == false) && col.CompareTag("Player"))
+        {  
+            isLoaded = true;
+            col.gameObject.transform.position = posToGo;
+            StartCoroutine("LoadTargetScene");
         }
-        else
-        {
-            SceneManager.UnloadSceneAsync(unloadMap.ToString());
-        }
+    }
+
+    IEnumerator LoadTargetScene()
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(loadMap.ToString(), LoadSceneMode.Additive);
+        SceneManager.UnloadSceneAsync(unloadMap.ToString());
+        yield return null;
     }
 }
