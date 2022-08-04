@@ -32,7 +32,8 @@ public class MenuManager : MonoBehaviour
 
     IEnumerator LoadYourAsyncScene()
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadSceneAsync("PlayerScene");
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("TestScene", LoadSceneMode.Additive);
         while (!asyncLoad.isDone)
         {
             yield return null;

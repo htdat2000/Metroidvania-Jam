@@ -1034,7 +1034,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   moveSpeed: 30
-  jumpForce: 25
+  jumpForce: 8.5
+  rollForce: 12
   fastDashSpeed: 20
   slowDashSpeed: 12
   slideSpeed: 1

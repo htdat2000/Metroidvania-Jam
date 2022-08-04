@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask platformLayerMask;
     [Header("Attributes")]
     [SerializeField] private float moveSpeed = 30;
-    [SerializeField] private float jumpForce = 7;
+    [SerializeField] private float jumpForce = 8.5f;
+    [SerializeField] private float rollForce = 12;
     [SerializeField] private float fastDashSpeed = 20;
     [SerializeField] private float slowDashSpeed = 12;
     [SerializeField] private float slideSpeed = 1;
@@ -18,7 +19,7 @@ public class PlayerController : MonoBehaviour
     private float comboResetTime = 1;
     private float comboCountdown = 1;
 
-    private float jumpResetTime = 0.25f;
+    private float jumpResetTime = 0.1f;
     private float jumpCountdown = 0;
     private int jumpCount = 0;
 
@@ -41,7 +42,8 @@ public class PlayerController : MonoBehaviour
     [Header("Const")]
     private Vector3 DISTANCE_CENTER_TO_FEET = new Vector3(0f,-0.25f,0f);
     private const float ANTI_SLIDE_ON_FLOOR = 0.05f;
-    private const float MAX_FLOOR_SPEED = 5f;
+    private const float MAX_FLOOR_SPEED = 4f;
+    private const float MAX_JUMP_HIGH = 7;
     private const float DASH_TIME = 0.15f;
 
     private enum State
@@ -394,9 +396,9 @@ public class PlayerController : MonoBehaviour
         //if (Input.GetKeyDown("z") && currentState == State.Normal && isOnGround)
         //{
         if (isFacingRight)
-            rb.AddForce(new Vector2(jumpForce, 0), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(rollForce, 0), ForceMode2D.Impulse);
         else
-            rb.AddForce(new Vector2(-jumpForce, 0), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(-rollForce, 0), ForceMode2D.Impulse);
         anim.Play("WDash");
         currentState = State.Rolling;
         Invoke("BackToNormal", 0.5f);
@@ -517,7 +519,7 @@ public class PlayerController : MonoBehaviour
     }
     void VerYCheck()
     {
-        rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -MAX_FLOOR_SPEED*1.5f, MAX_FLOOR_SPEED*1.5f));
+        rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -MAX_JUMP_HIGH*1.5f, MAX_JUMP_HIGH*1.5f));
     }
 
     void PlayerDieBehaviour()

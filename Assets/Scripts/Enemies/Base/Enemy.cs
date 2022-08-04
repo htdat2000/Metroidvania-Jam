@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour, IDamageable
     }
     protected State enemyState = State.Normal;
 
-    protected const float HURT_TIME = 1f;
+    protected const float HURT_TIME = 0.5f;
     
     
     protected virtual void Start()
