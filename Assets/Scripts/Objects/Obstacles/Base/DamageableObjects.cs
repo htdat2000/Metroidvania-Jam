@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageableObjects : MonoBehaviour, ISpawnObject, IDamageable
+public class DamageableObjects : SpawnableObjects, IDamageable
 {
     [SerializeField] protected int defaultHP;
     protected int hp;
-    protected SpawnPoint currentSpawnPoint = null;
     protected const float HURT_TIME = 0.5f;
 
     private enum State
@@ -16,19 +15,11 @@ public class DamageableObjects : MonoBehaviour, ISpawnObject, IDamageable
     }
 
     private State objectState = State.Normal;
-    public virtual void SetSpawnPoint(SpawnPoint newSpawnPoint)
-    {
-        currentSpawnPoint = newSpawnPoint;
-        gameObject.SetActive(true);
-        transform.position = newSpawnPoint.GetComponent<Transform>().position;
-    }
 
-    public virtual void Despawn()
+    public override void Despawn()
     {
+        base.Despawn();
         hp = defaultHP;
-        currentSpawnPoint.BackEnemyToPool();
-        currentSpawnPoint = null;
-        gameObject.SetActive(false);
     }
 
     public virtual void TakeDmg(int _dmg, GameObject attacker)
