@@ -4,18 +4,27 @@ using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
+    private enum ObjectSpawnType
+    {
+        Null,
+        Striker,
+        Black,
+        Fly,
+        Dummy,
+        Cat,
+        BlackDog,
+        BreakableBlock
+    }
+
+    [SerializeField] private ObjectSpawnType typeName = ObjectSpawnType.Null;
     [SerializeField] private float spawnDistance;
     [SerializeField] private float disSpawnDistance;
     [SerializeField] private string enemyType;
+    [SerializeField] private bool isRespawnable = true; //if FALSE the object won't be respawned after being despawn, the objects also will not be despawned after being spawned
     private GameObject currentEnemies = null;
     private bool spawnTrigger = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    private bool hasBeenTriggerOnce = false;
+    
     void Update()
     {
         //Debug.Log("SpawnPoint said: distance with player is: " + Vector3.Distance(WorldManager.Instance.player.transform.position, transform.position));
@@ -24,7 +33,29 @@ public class SpawnPoint : MonoBehaviour
         //     currentEnemies = Instantiate(enemyType,transform.position,Quaternion.identity);
         //     currentEnemies.GetComponent<Enemy>().SetSpawnPoint(this);
         // }
-        if(Vector3.Distance(WorldManager.Instance.player.transform.position, transform.position) < spawnDistance && currentEnemies == null && spawnTrigger == false)
+        if(spawnTrigger == false)
+        {
+            if(isRespawnable != true && hasBeenTriggerOnce == true)
+            {
+                return;
+            }
+            else
+            {
+                CheckToSpawn();
+            }
+        }
+        else
+        {
+            if(isRespawnable)
+            {
+                CheckToDespawn();
+            }
+        }
+    }
+
+    void CheckToSpawn()
+    {
+        if(Vector3.Distance(WorldManager.Instance.player.transform.position, transform.position) < spawnDistance && currentEnemies == null)
         {
             GameObject enemies = GameObject.Find(enemyType);
             for(int i = 0; i < enemies.transform.childCount; i ++)
@@ -33,21 +64,27 @@ public class SpawnPoint : MonoBehaviour
                 {
                     currentEnemies = enemies.transform.GetChild(i).gameObject;
                     // currentEnemies.transform.position = transform.position;
-                    currentEnemies.GetComponent<Enemy>().SetSpawnPoint(this);
+                    currentEnemies.GetComponent<ISpawnObject>().SetSpawnPoint(this);
                     spawnTrigger = true;
+                    hasBeenTriggerOnce = true;
                     return;
                 }
             }
         }
+    }
+
+    void CheckToDespawn()
+    {
         if(Vector3.Distance(WorldManager.Instance.player.transform.position, transform.position) > disSpawnDistance && currentEnemies != null)
         {
-            currentEnemies.GetComponent<Enemy>().Despawn();
+            currentEnemies.GetComponent<ISpawnObject>().Despawn();
         }
         if(Vector3.Distance(WorldManager.Instance.player.transform.position, transform.position) > disSpawnDistance && currentEnemies == null && spawnTrigger == true)
         {
             spawnTrigger = false;
         }
     }
+
     public void BackEnemyToPool()
     {
         currentEnemies = null;

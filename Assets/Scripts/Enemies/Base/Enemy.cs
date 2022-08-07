@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageable
-{
-    [SerializeField] protected int defaultHP;
-    protected int hp;
+public class Enemy : DamageableObjects, IDamageable, ISpawnObject
+{ 
     [SerializeField] protected int dmg;
     public bool isMoveable = true; 
-    protected SpawnPoint currentSpawnPoint = null;
     protected Animator anim;
     protected Rigidbody2D rb;
 
@@ -28,9 +25,6 @@ public class Enemy : MonoBehaviour, IDamageable
     }
     protected State enemyState = State.Normal;
 
-    protected const float HURT_TIME = 0.5f;
-    
-    
     protected virtual void Start()
     {
         hp = defaultHP;
@@ -66,23 +60,7 @@ public class Enemy : MonoBehaviour, IDamageable
         }
     }
 
-    public virtual void SetSpawnPoint(SpawnPoint newSpawnPoint)
-    {
-        currentSpawnPoint = newSpawnPoint;
-        transform.position = newSpawnPoint.GetComponent<Transform>().position;
-        gameObject.SetActive(true);
-        isMoveable = true;
-    }
-
-    public void Despawn()
-    {
-        hp = defaultHP;
-        gameObject.SetActive(false);
-        currentSpawnPoint.BackEnemyToPool();
-        currentSpawnPoint = null;
-    }
-
-    public virtual void TakeDmg(int _dmg, GameObject attacker)
+    public override void TakeDmg(int _dmg, GameObject attacker)
     {
         if(enemyState != State.Hurting)
         {
@@ -93,26 +71,6 @@ public class Enemy : MonoBehaviour, IDamageable
             EffectPool.Instance.GetHitEffectInPool(transform.position);
             //Debug.Log("[Enemy] take dmg");
         }
-    }
-    
-    protected virtual void GetHitBehaviour(int _dmg)
-    {
-        DecreaseHP(_dmg);
-    }
-
-    protected virtual void DecreaseHP(int _dmg)
-    {
-        hp -= _dmg;
-        hp = Mathf.Clamp(hp, 0, defaultHP);
-        if(hp <= 0)
-        {
-            Die();
-        }
-    }
-
-    protected virtual void Die()
-    {
-        Despawn();
     }
 
     public virtual void CreateAttackPrefab()
@@ -136,7 +94,7 @@ public class Enemy : MonoBehaviour, IDamageable
         isMoveable = true;
     }
 
-    protected virtual void BackToNormal()
+    protected override void BackToNormal()
     {
         enemyState = State.Normal;
     }
