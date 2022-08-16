@@ -48,11 +48,11 @@ public class PlayerMover : MonoBehaviour
     {
         rb.velocity = new Vector2(horizonMove * speed, rb.velocity.y);
     }
-    private bool HorizontalMoveCheck()
+    private void HorizontalMoveCheck()
     {
         horizonMove = Input.GetAxisRaw("Horizontal");
     }
-    private bool GroundCheck()
+    private void GroundCheck()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
         if(isGrounded)
