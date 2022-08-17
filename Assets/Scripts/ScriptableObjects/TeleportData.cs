@@ -10,14 +10,15 @@ public class TeleportData : ScriptableObject
     [SerializeField] protected Vector3 targetTeleportPosition;
     [SerializeField] protected MapName targetMap;
 
-    public void Trigger()
+    public IEnumerator Trigger()
     {
         if(targetMap == MapName.Null)
         {
-            return;
+            yield return null;
         }
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(1));
         SceneManager.LoadSceneAsync(targetMap.ToString(), LoadSceneMode.Additive);
         WorldManager.Instance.player.transform.position = targetTeleportPosition;
+        yield return null;
     }
 }
