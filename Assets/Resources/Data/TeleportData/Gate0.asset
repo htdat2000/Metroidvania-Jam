@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Gate0
   m_EditorClassIdentifier: 
   gateID: 0
-  targetTeleportPosition: {x: 120.2966, y: 15.91358, z: 0}
+  targetTeleportPosition: {x: 0.3700027, y: -0.6199999, z: 0}
   targetMap: 1
