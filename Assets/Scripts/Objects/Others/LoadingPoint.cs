@@ -6,15 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class LoadingPoint : MonoBehaviour
 {   
-    enum MapName{
-        Null,
-        TestScene,
-        DogArea1,
-        DogArea2,
-        DogArea3,
-        DogArea4,
-        DogArea5,
-    }
     [SerializeField] MapName loadMap;
     [SerializeField] MapName unloadMap;
     [SerializeField] Vector3 posToGo;
@@ -32,7 +23,7 @@ public class LoadingPoint : MonoBehaviour
 
     IEnumerator LoadTargetScene()
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(loadMap.ToString(), LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(loadMap.ToString(), LoadSceneMode.Additive);
         SceneManager.UnloadSceneAsync(unloadMap.ToString());
         yield return null;
     }

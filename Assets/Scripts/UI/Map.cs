@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System;
 
 public class Map : MonoBehaviour
 {
+    [SerializeField] public TeleportData[] teleportData;
     [SerializeField] public GameObject[] gate;
     void Init()
     {
@@ -29,12 +32,13 @@ public class Map : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-    public void TeleTo(int gateID)
+    public void TeleTo(int _gateID)
     {
         string gateData = PlayerPrefs.GetString("AllGates", "0000000000");
-        if(gateData[gateID] == '1')
+        if(gateData[_gateID] == '1')
         {
-            WorldManager.Instance.player.transform.position = gate[gateID].transform.position;
+            TeleportData targetTeleport = Array.Find(teleportData, teleport => teleport.gateID == _gateID);
+            StartCoroutine(targetTeleport.Trigger());
             CloseMap();
         }
     }
