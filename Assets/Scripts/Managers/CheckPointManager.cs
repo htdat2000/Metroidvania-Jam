@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CheckPointManager : MonoBehaviour
 {
     [SerializeField] private Map map;
-    private int gateID;
+    private int gateID = 0;
     private GameObject player;
 
     void Awake()
@@ -38,6 +39,7 @@ public class CheckPointManager : MonoBehaviour
 
     void MovePlayerPosition()
     {
-        player.transform.position = map.gate[gateID].transform.position;
+        TeleportData targetTeleport = Array.Find(map.teleportData, teleport => teleport.gateID == gateID);
+        StartCoroutine(targetTeleport.Trigger());
     }
 }
