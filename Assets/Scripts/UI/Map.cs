@@ -7,7 +7,7 @@ using System;
 public class Map : MonoBehaviour
 {
     [SerializeField] public TeleportData[] teleportData;
-    
+
     void Init()
     {
     }
