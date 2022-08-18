@@ -7,7 +7,7 @@ public class WorldManager : MonoBehaviour
     public static WorldManager Instance;
     public GameObject player;
     public GameObject map;
-    public MapName currentMap;
+
     void Init()
     {
         CustomEvents.OnTelepanelTrigger += OpenMap;

@@ -7,7 +7,7 @@ using System;
 public class Map : MonoBehaviour
 {
     [SerializeField] public TeleportData[] teleportData;
-    [SerializeField] public GameObject[] gate;
+
     void Init()
     {
     }
