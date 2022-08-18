@@ -16,12 +16,12 @@ namespace Player
 
         private MoveSet MoveControl;
         
-        public MoveController(Rigidbody2D _rb, float _jumpForce)
+        public MoveController(GameObject _go, float _jumpForce)
         {
-            NormalForm = new NormalForm(_rb, _jumpForce);
-            RedForm = new RedForm(_rb, _jumpForce);
-            BlueForm = new BlueForm(_rb, _jumpForce);
-            YellowForm = new YellowForm(_rb, _jumpForce);
+            NormalForm = new NormalForm(_go, _jumpForce);
+            RedForm = new RedForm(_go, _jumpForce);
+            BlueForm = new BlueForm(_go, _jumpForce);
+            YellowForm = new YellowForm(_go, _jumpForce);
         }
         public void Jump(PlayerMover.Form currentForm)
         {
@@ -61,21 +61,21 @@ namespace Player
                 break;
             }
         }
-        public void Dash(PlayerMover.Form currentForm)
+        public void Dash(PlayerMover.Form currentForm, int dir)
         {
             switch(currentForm)
             {
                 case PlayerMover.Form.Normal:
-                    NormalForm.Dash();
+                    NormalForm.Dash(dir);
                 break;
                 case PlayerMover.Form.Red:
-                    RedForm.Dash();
+                    RedForm.Dash(dir);
                 break;
                 case PlayerMover.Form.Blue:
-                    BlueForm.Dash();
+                    BlueForm.Dash(dir);
                 break;
                 case PlayerMover.Form.Yellow:
-                    YellowForm.Dash();
+                    YellowForm.Dash(dir);
                 break;
             }
         }

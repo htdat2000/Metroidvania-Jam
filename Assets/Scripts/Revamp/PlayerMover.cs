@@ -20,6 +20,16 @@ public class PlayerMover : MonoBehaviour
 
     private MoveSet MoveControl;
 
+    private enum HorizontalMoveDir
+    {
+        Left = -1,
+        Stand = 0,
+        Right = 1
+    }
+    private HorizontalMoveDir lastHorizontalDir;
+    private float lastHorizontalInputTime = 0f;
+    [SerializeField] private float timeIntervalDashInput = 0.5f;
+
     public enum Form
     {
         Normal,
@@ -28,6 +38,13 @@ public class PlayerMover : MonoBehaviour
         Yellow
     }
     [SerializeField] private Form currentForm;
+
+    public enum PlayerState
+    {
+        Normal,
+        Dashing
+    }
+    private PlayerState state = PlayerState.Normal;
     private void Start()
     {
         Init();
@@ -35,7 +52,7 @@ public class PlayerMover : MonoBehaviour
     private void Init()
     {
         rb = GetComponent<Rigidbody2D>();
-        moveController = new MoveController(rb, jumpForce);
+        moveController = new MoveController(gameObject, jumpForce);
         currentForm = Form.Normal;
     }
     private void Update()
@@ -46,7 +63,14 @@ public class PlayerMover : MonoBehaviour
     }
     private void FixedUpdate() 
     {
-        rb.velocity = new Vector2(horizonMove * speed, rb.velocity.y);
+        Move();
+    }
+    private void Move()
+    {
+        if(state == PlayerState.Normal)
+        {
+            rb.velocity = new Vector2(horizonMove * speed, rb.velocity.y);
+        }
     }
     private void HorizontalMoveCheck()
     {
@@ -54,9 +78,13 @@ public class PlayerMover : MonoBehaviour
     }
     private void GroundCheck()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        UpdateIsGrounded();
         if(isGrounded)
             moveController.ExtraJumpRecover();
+    }
+    private void UpdateIsGrounded()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
     }
     private void InputCheck()
     {
@@ -64,5 +92,65 @@ public class PlayerMover : MonoBehaviour
         {
             moveController.Jump(currentForm);
         }
+
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            moveController.Attack(currentForm);
+        }
+
+        if(Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            moveController.Charge(currentForm);
+        }
+
+        if(Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            if(CheckLastHorizontalDirIs(HorizontalMoveDir.Left) && CanDash())
+            {
+                Dash((int)HorizontalMoveDir.Left);
+            }
+            lastHorizontalDir = HorizontalMoveDir.Left;
+        }
+
+        if(Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            if(CheckLastHorizontalDirIs(HorizontalMoveDir.Right) && CanDash())
+            {
+                Dash((int)HorizontalMoveDir.Right);
+            }
+            lastHorizontalDir = HorizontalMoveDir.Right;
+        }
+
+        if(Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow))
+        {
+            UpdateLastHorizontalInput();
+        }
+    }
+    private void Dash(int dir)
+    {
+        moveController.Dash(currentForm, dir);
+        SetPlayerState(PlayerState.Dashing);
+    }
+    public void BackToNormal()
+    {
+        SetPlayerState(PlayerState.Normal);
+    }
+    private void SetPlayerState(PlayerState newState)
+    {
+        state = newState;
+    }
+    private void UpdateLastHorizontalInput()
+    {
+        lastHorizontalInputTime = Time.time;
+    }
+    private bool CheckLastHorizontalDirIs(HorizontalMoveDir checkVal)
+    {
+        return lastHorizontalDir == checkVal;
+    }
+    private bool CanDash()
+    {
+        bool passTimeCondition = (Time.time - lastHorizontalInputTime) <= timeIntervalDashInput;
+        bool passStateCondition = (state == PlayerState.Normal);
+        return passTimeCondition && passStateCondition;
     }
 }
