@@ -6,8 +6,11 @@ namespace Player
 {
     public class NormalForm : MoveSet
     {
+        //these val will config by Scriptable Object
+        private float dashAmount = 20f;
+        private float dashTime = 0.5f;
         // Start is called before the first frame update
-        public NormalForm(Rigidbody2D _playerRb, float _jumpForce) : base(_playerRb, _jumpForce)
+        public NormalForm(GameObject _playerRb, float _jumpForce) : base(_playerRb, _jumpForce)
         {
 
         }
@@ -19,6 +22,20 @@ namespace Player
         void Update()
         {
             
+        }
+        public override void Dash(int dir)
+        {
+            playerRb.velocity = Vector2.right * dashAmount * dir;
+            // Invoke("BackToNormalIV", dashTime);
+        }
+        protected override IEnumerator BackToNormal(float delayTime)
+        {
+            yield return new WaitForSeconds(delayTime);
+            playerMover.BackToNormal();
+        }
+        protected void BackToNormalIV()
+        {
+            // playerMover.BackToNormal();
         }
     }
 }

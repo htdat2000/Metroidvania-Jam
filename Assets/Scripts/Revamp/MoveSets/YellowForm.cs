@@ -7,7 +7,7 @@ namespace Player
     public class YellowForm : MoveSet
     {
         // Start is called before the first frame update
-        public YellowForm(Rigidbody2D _playerRb, float _jumpForce) : base(_playerRb, _jumpForce)
+        public YellowForm(GameObject _playerGO, float _jumpForce) : base(_playerGO, _jumpForce)
         {
 
         }

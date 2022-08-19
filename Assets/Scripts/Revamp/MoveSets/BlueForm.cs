@@ -7,7 +7,7 @@ namespace Player
     public class BlueForm : MoveSet
     {
         // Start is called before the first frame update
-        public BlueForm(Rigidbody2D _playerRb, float _jumpForce) : base(_playerRb, _jumpForce)
+        public BlueForm(GameObject _playerGo, float _jumpForce) : base(_playerGo, _jumpForce)
         {
 
         }

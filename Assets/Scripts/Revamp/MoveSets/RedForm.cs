@@ -7,7 +7,7 @@ namespace Player
     public class RedForm : MoveSet
     {
         // Start is called before the first frame update
-        public RedForm(Rigidbody2D _playerRb, float _jumpForce) : base(_playerRb, _jumpForce)
+        public RedForm(GameObject _playerGO, float _jumpForce) : base(_playerGO, _jumpForce)
         {
 
         }
