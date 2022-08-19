@@ -5,13 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    [SerializeField] private GameObject loadingCanvas;
+    
     void Update()
     {
         if (Input.GetKey("escape"))
@@ -32,11 +27,20 @@ public class MenuManager : MonoBehaviour
 
     IEnumerator LoadYourAsyncScene()
     {
-        SceneManager.LoadSceneAsync("PlayerScene");
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("TestScene", LoadSceneMode.Additive);
+        loadingCanvas.SetActive(true);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("PlayerScene");
+        asyncLoad.allowSceneActivation = false;
+        AsyncOperation asyncLoad_2 = SceneManager.LoadSceneAsync("TestScene", LoadSceneMode.Additive);
         while (!asyncLoad.isDone)
         {
+            if(asyncLoad.progress == 0.9f)
+            {
+                asyncLoad.allowSceneActivation = true;
+                loadingCanvas.SetActive(false);
+            }
             yield return null;
         }
     }
+
+
 }
