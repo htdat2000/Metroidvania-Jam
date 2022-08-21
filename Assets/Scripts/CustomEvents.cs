@@ -13,4 +13,5 @@ public class CustomEvents : MonoBehaviour
     static public Action<int> OnHPChange; //final value
     static public Action<int> OnMaxHPChange; //final value 
     static public Action OnPlayerDied; 
+    static public Action OnLoadingScreenActive;
 }

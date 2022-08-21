@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-    [SerializeField] private GameObject loadingCanvas;
+    private AsyncOperation asyncLoad;
     
     void Update()
     {
@@ -27,20 +27,10 @@ public class MenuManager : MonoBehaviour
 
     IEnumerator LoadYourAsyncScene()
     {
-        loadingCanvas.SetActive(true);
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("PlayerScene");
-        asyncLoad.allowSceneActivation = false;
-        AsyncOperation asyncLoad_2 = SceneManager.LoadSceneAsync("TestScene", LoadSceneMode.Additive);
-        while (!asyncLoad.isDone)
-        {
-            if(asyncLoad.progress == 0.9f)
-            {
-                asyncLoad.allowSceneActivation = true;
-                loadingCanvas.SetActive(false);
-            }
-            yield return null;
-        }
+        CustomEvents.OnLoadingScreenActive();
+        SceneManager.LoadSceneAsync("PlayerScene");
+        //asyncLoad.allowSceneActivation = false;
+        asyncLoad = SceneManager.LoadSceneAsync("TestScene", LoadSceneMode.Additive);
+        yield return null;      
     }
-
-
 }

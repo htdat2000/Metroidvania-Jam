@@ -16,6 +16,7 @@ public class TeleportData : ScriptableObject
         {
             yield return null;
         }
+        CustomEvents.OnLoadingScreenActive();
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(1));
         SceneManager.LoadSceneAsync(targetMap.ToString(), LoadSceneMode.Additive);
         WorldManager.Instance.player.transform.position = targetTeleportPosition;

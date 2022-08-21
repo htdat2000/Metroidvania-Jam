@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class LoadingPoint : MonoBehaviour
 {   
     [SerializeField] MapName loadMap;
-    [SerializeField] MapName unloadMap;
     [SerializeField] Vector3 posToGo;
     bool isLoaded = false;
 
@@ -23,8 +22,9 @@ public class LoadingPoint : MonoBehaviour
 
     IEnumerator LoadTargetScene()
     {
+        CustomEvents.OnLoadingScreenActive();
+        SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(1));
         SceneManager.LoadSceneAsync(loadMap.ToString(), LoadSceneMode.Additive);
-        SceneManager.UnloadSceneAsync(unloadMap.ToString());
         yield return null;
     }
 }
