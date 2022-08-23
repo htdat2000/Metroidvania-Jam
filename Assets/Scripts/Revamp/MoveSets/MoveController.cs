@@ -22,7 +22,7 @@ namespace Player
             RedForm = new RedForm(_go, _jumpForce);
             BlueForm = new BlueForm(_go, _jumpForce);
             YellowForm = new YellowForm(_go, _jumpForce);
-            MoveControl = NormalForm;
+            MoveControl = RedForm;
         }
         public void InitParam(GameObject _go, float _jumpForce)
         {
@@ -36,7 +36,7 @@ namespace Player
             BlueForm.InitParam(_go, _jumpForce);
             YellowForm.InitParam(_go, _jumpForce);
 
-            MoveControl = NormalForm;
+            MoveControl = RedForm;
         }
         public void Jump()
         {
@@ -65,6 +65,14 @@ namespace Player
         public void PlayerVelocityToZero()
         {
             MoveControl.VelocityToZero();
+        }
+        public void Slide()
+        {
+            MoveControl.Slide();
+        }
+        public void QuitSlide()
+        {
+            MoveControl.QuitSlide();
         }
     }
 }

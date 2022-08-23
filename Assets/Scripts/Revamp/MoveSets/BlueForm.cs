@@ -11,15 +11,6 @@ namespace Player
         {
 
         }
-        // void Start()
-        // {
-            
-        // }
-        // // Update is called once per frame
-        // void Update()
-        // {
-            
-        // }
         public override void Jump()
         {
             playerRb.velocity = Vector2.up * jumpForce/2f;

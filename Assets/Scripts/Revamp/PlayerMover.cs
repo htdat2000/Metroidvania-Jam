@@ -17,10 +17,15 @@ public class PlayerMover : MonoBehaviour
     public LayerMask whatIsGround;
 
     private bool isNextToWall;
+    private bool lastFrameNextToWall;
     private bool IsNextToWall
     {
         get {return isNextToWall;}
         set {
+            if(isNextToWall != value && value)
+            {
+                moveController.PlayerVelocityToZero();
+            }
             isNextToWall = value;
             if(!isNextToWall)
             {
@@ -178,7 +183,7 @@ public class PlayerMover : MonoBehaviour
         Debug.Log("Alo");
         SetPlayerState(PlayerState.Normal);
     }
-    private void SetPlayerState(PlayerState newState)
+    public void SetPlayerState(PlayerState newState)
     {
         state = newState;
     }
@@ -213,14 +218,11 @@ public class PlayerMover : MonoBehaviour
     }
     private void ChangeToSlideState()
     {
-        moveController.PlayerVelocityToZero();
-        SetPlayerState(PlayerState.Sliding);
-        rb.gravityScale = 0f;
+        moveController.Slide();
     }
     private void NotNextToWall()
     {
-        SetPlayerState(PlayerState.Normal);
-        rb.gravityScale = 1f;
+        moveController.QuitSlide();
     }
     private void FacingCheck()
     {

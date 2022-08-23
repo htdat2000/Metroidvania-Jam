@@ -68,5 +68,13 @@ namespace Player
             yield return new WaitForSeconds(delayTime);
             playerMover.BackToNormal();
         }
+        public virtual void Slide()
+        {
+            return;
+        }
+        public virtual void QuitSlide()
+        {
+            playerRb.gravityScale = 1f;
+        }
     }
 }

@@ -13,7 +13,18 @@ namespace Player
         }
         public override void Jump()
         {
-            playerRb.velocity = Vector2.up * jumpForce/2f;
+            playerRb.velocity = Vector2.up * jumpForce;
+        }
+        public override void Slide()
+        {
+            // VelocityToZero();
+            playerMover.SetPlayerState(PlayerMover.PlayerState.Sliding);
+            playerRb.gravityScale = 0.75f;
+        }
+        public override void QuitSlide()
+        {
+            playerMover.SetPlayerState(PlayerMover.PlayerState.Normal);
+            base.QuitSlide();
         }
     }
 }
