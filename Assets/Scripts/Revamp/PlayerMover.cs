@@ -16,6 +16,10 @@ public class PlayerMover : MonoBehaviour
     public float checkRadius;
     public LayerMask whatIsGround;
 
+    private bool isNextToWall;
+    public Transform wallCheck;
+    public float checkWallRadius;
+
     private MoveController moveController;
 
     private enum HorizontalMoveDir
@@ -60,6 +64,7 @@ public class PlayerMover : MonoBehaviour
         HorizontalMoveCheck();
         GroundCheck();
         InputCheck();
+        SlideCheck();
     }
     private void FixedUpdate() 
     {
@@ -85,6 +90,10 @@ public class PlayerMover : MonoBehaviour
     private void UpdateIsGrounded()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+    }
+    private void UpdateIsNextToWall()
+    {
+        isNextToWall = Physics2D.OverlapCircle(wallCheck.position, checkWallRadius, whatIsGround);
     }
     private void InputCheck()
     {
@@ -153,5 +162,9 @@ public class PlayerMover : MonoBehaviour
         bool passTimeCondition = (Time.time - lastHorizontalInputTime) <= timeIntervalDashInput;
         bool passStateCondition = (state == PlayerState.Normal);
         return passTimeCondition && passStateCondition;
+    }
+    private void SlideCheck()
+    {
+
     }
 }

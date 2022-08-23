@@ -15,11 +15,11 @@ namespace Player
         {
 
         }
-        public void InitFormParam(float _dashAmount, float _dashTime)
-        {
-            dashAmount = 50f;
-            dashTime = 0.5f;
-        }
+        // public override void InitFormParam()
+        // {
+        //     dashAmount = 50f;
+        //     dashTime = 0.5f;
+        // }
         public override void Dash(int dir)
         {
             playerRb.velocity = Vector2.right * dashAmount * dir;

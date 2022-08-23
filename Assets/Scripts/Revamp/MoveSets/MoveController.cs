@@ -31,12 +31,10 @@ namespace Player
             BlueForm = (new GameObject("BlueForm")).AddComponent<BlueForm>();
             YellowForm = (new GameObject("YellowForm")).AddComponent<YellowForm>();
 
-            NormalForm.InitParam(_go,_jumpForce);
-            NormalForm.InitFormParam();
-
-            RedForm.InitParam(_go,_jumpForce);
-            BlueForm.InitParam(_go,_jumpForce);
-            YellowForm.InitParam(_go,_jumpForce);
+            NormalForm.InitParam(_go, _jumpForce);
+            RedForm.InitParam(_go, _jumpForce);
+            BlueForm.InitParam(_go, _jumpForce);
+            YellowForm.InitParam(_go, _jumpForce);
 
             MoveControl = NormalForm;
         }

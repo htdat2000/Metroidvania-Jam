@@ -1039,8 +1039,9 @@ MonoBehaviour:
   speed: 10
   jumpForce: 10
   groundCheck: {fileID: 818441769}
-  checkRadius: 0.1
+  checkRadius: 0.005
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
-  extraJump: 0
+  timeIntervalDashInput: 0.5
+  currentForm: 0

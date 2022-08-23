@@ -11,6 +11,8 @@ namespace Player
         protected float jumpForce;
         protected GameObject playerGO;
         protected PlayerMover playerMover;
+        private float dashAmount = 50000f;
+        private float dashTime = 0.5f;
         public MoveSet(GameObject _playerGO, float _jumpForce)
         {
             this.playerGO = _playerGO;
@@ -24,6 +26,7 @@ namespace Player
             this.playerRb = _playerGO.GetComponent<Rigidbody2D>();
             this.playerMover = _playerGO.GetComponent<PlayerMover>();
             this.jumpForce = _jumpForce;
+            InitFormParam();
         }
         protected void Start()
         {
@@ -34,6 +37,11 @@ namespace Player
         protected void Update()
         {
             
+        }
+        public virtual void InitFormParam()
+        {
+            dashAmount = 50f;
+            dashTime = 0.5f;
         }
         public virtual void Jump()
         {
