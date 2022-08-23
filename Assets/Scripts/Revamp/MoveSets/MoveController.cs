@@ -22,80 +22,43 @@ namespace Player
             RedForm = new RedForm(_go, _jumpForce);
             BlueForm = new BlueForm(_go, _jumpForce);
             YellowForm = new YellowForm(_go, _jumpForce);
+            MoveControl = NormalForm;
         }
-        public void Jump(PlayerMover.Form currentForm)
+        public void InitParam(GameObject _go, float _jumpForce)
+        {
+            NormalForm = (new GameObject("NormalForm")).AddComponent<NormalForm>();
+            RedForm = (new GameObject("RedForm")).AddComponent<RedForm>();
+            BlueForm = (new GameObject("BlueForm")).AddComponent<BlueForm>();
+            YellowForm = (new GameObject("YellowForm")).AddComponent<YellowForm>();
+
+            NormalForm.InitParam(_go,_jumpForce);
+            NormalForm.InitFormParam();
+
+            RedForm.InitParam(_go,_jumpForce);
+            BlueForm.InitParam(_go,_jumpForce);
+            YellowForm.InitParam(_go,_jumpForce);
+
+            MoveControl = NormalForm;
+        }
+        public void Jump()
         {
             if(extraJump > 0)
-            switch(currentForm)
             {
-                case PlayerMover.Form.Normal:
-                    NormalForm.Jump();
-                break;
-                case PlayerMover.Form.Red:
-                    RedForm.Jump();
-                break;
-                case PlayerMover.Form.Blue:
-                    BlueForm.Jump();
-                break;
-                case PlayerMover.Form.Yellow:
-                    YellowForm.Jump();
-                break;
-            }
-            extraJump--;
-        }
-        public void Attack(PlayerMover.Form currentForm)
-        {
-            switch(currentForm)
-            {
-                case PlayerMover.Form.Normal:
-                    NormalForm.Attack();
-                break;
-                case PlayerMover.Form.Red:
-                    RedForm.Attack();
-                break;
-                case PlayerMover.Form.Blue:
-                    BlueForm.Attack();
-                break;
-                case PlayerMover.Form.Yellow:
-                    YellowForm.Attack();
-                break;
+                MoveControl.Jump();
+                extraJump--;
             }
         }
-        public void Dash(PlayerMover.Form currentForm, int dir)
+        public void Attack()
         {
-            switch(currentForm)
-            {
-                case PlayerMover.Form.Normal:
-                    NormalForm.Dash(dir);
-                break;
-                case PlayerMover.Form.Red:
-                    RedForm.Dash(dir);
-                break;
-                case PlayerMover.Form.Blue:
-                    BlueForm.Dash(dir);
-                break;
-                case PlayerMover.Form.Yellow:
-                    YellowForm.Dash(dir);
-                break;
-            }
+            MoveControl.Attack();
         }
-        public void Charge(PlayerMover.Form currentForm)
+        public void Dash(int dir)
         {
-            switch(currentForm)
-            {
-                case PlayerMover.Form.Normal:
-                    NormalForm.Charge();
-                break;
-                case PlayerMover.Form.Red:
-                    RedForm.Charge();
-                break;
-                case PlayerMover.Form.Blue:
-                    BlueForm.Charge();
-                break;
-                case PlayerMover.Form.Yellow:
-                    YellowForm.Charge();
-                break;
-            }
+            MoveControl.Dash(dir);
+        }
+        public void Charge()
+        {
+            MoveControl.Charge();
         }
         public void ExtraJumpRecover()
         {

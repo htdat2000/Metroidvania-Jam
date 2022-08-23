@@ -18,6 +18,13 @@ namespace Player
             this.playerMover = _playerGO.GetComponent<PlayerMover>();
             this.jumpForce = _jumpForce;
         }
+        public void InitParam(GameObject _playerGO, float _jumpForce)
+        {
+            this.playerGO = _playerGO;
+            this.playerRb = _playerGO.GetComponent<Rigidbody2D>();
+            this.playerMover = _playerGO.GetComponent<PlayerMover>();
+            this.jumpForce = _jumpForce;
+        }
         protected void Start()
         {
             
@@ -46,7 +53,7 @@ namespace Player
         }
         protected virtual IEnumerator BackToNormal(float delayTime)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(delayTime);
             playerMover.BackToNormal();
         }
     }

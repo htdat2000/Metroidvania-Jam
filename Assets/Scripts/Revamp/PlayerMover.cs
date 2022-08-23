@@ -18,8 +18,6 @@ public class PlayerMover : MonoBehaviour
 
     private MoveController moveController;
 
-    private MoveSet MoveControl;
-
     private enum HorizontalMoveDir
     {
         Left = -1,
@@ -52,7 +50,9 @@ public class PlayerMover : MonoBehaviour
     private void Init()
     {
         rb = GetComponent<Rigidbody2D>();
-        moveController = new MoveController(gameObject, jumpForce);
+        // moveController = new MoveController(gameObject, jumpForce);
+        moveController = (new GameObject("MoveController")).AddComponent<MoveController>();
+        moveController.InitParam(gameObject, jumpForce);
         currentForm = Form.Normal;
     }
     private void Update()
@@ -90,17 +90,17 @@ public class PlayerMover : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
-            moveController.Jump(currentForm);
+            moveController.Jump();
         }
 
         if(Input.GetKeyDown(KeyCode.C))
         {
-            moveController.Attack(currentForm);
+            moveController.Attack();
         }
 
         if(Input.GetKeyDown(KeyCode.DownArrow))
         {
-            moveController.Charge(currentForm);
+            moveController.Charge();
         }
 
         if(Input.GetKeyDown(KeyCode.LeftArrow))
@@ -128,11 +128,12 @@ public class PlayerMover : MonoBehaviour
     }
     private void Dash(int dir)
     {
-        moveController.Dash(currentForm, dir);
+        moveController.Dash(dir);
         SetPlayerState(PlayerState.Dashing);
     }
     public void BackToNormal()
     {
+        Debug.Log("Alo");
         SetPlayerState(PlayerState.Normal);
     }
     private void SetPlayerState(PlayerState newState)
