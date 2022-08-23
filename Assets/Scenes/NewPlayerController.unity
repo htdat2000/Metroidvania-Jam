@@ -1077,6 +1077,7 @@ MonoBehaviour:
     m_Bits: 256
   wallCheck: {fileID: 1628928405}
   checkWallRadius: 0.005
+  model: {fileID: 343342112}
   timeIntervalDashInput: 0.5
   currentForm: 0
 --- !u!1 &1628928404
