@@ -59,6 +59,10 @@ namespace Player
         {
             playerRb.velocity = Vector2.up * jumpForce;
         }
+        public virtual void VelocityToZero()
+        {
+            playerRb.velocity = Vector2.zero;
+        }
         protected virtual IEnumerator BackToNormal(float delayTime)
         {
             yield return new WaitForSeconds(delayTime);

@@ -17,8 +17,31 @@ public class PlayerMover : MonoBehaviour
     public LayerMask whatIsGround;
 
     private bool isNextToWall;
+    private bool IsNextToWall
+    {
+        get {return isNextToWall;}
+        set {
+            isNextToWall = value;
+            if(!isNextToWall)
+            {
+                NotNextToWall();
+            };
+        }
+    }
     public Transform wallCheck;
     public float checkWallRadius;
+
+    private bool isFacingRight;
+    
+    private bool IsFacingRight
+    {
+        get {return isFacingRight;}
+        set {
+            isFacingRight = value;
+            Flip();
+        }
+    }
+    [SerializeField] private Transform model;
 
     private MoveController moveController;
 
@@ -44,7 +67,8 @@ public class PlayerMover : MonoBehaviour
     public enum PlayerState
     {
         Normal,
-        Dashing
+        Dashing,
+        Sliding
     }
     private PlayerState state = PlayerState.Normal;
     private void Start()
@@ -63,8 +87,8 @@ public class PlayerMover : MonoBehaviour
     {
         HorizontalMoveCheck();
         GroundCheck();
+        NextToWallCheck();
         InputCheck();
-        SlideCheck();
     }
     private void FixedUpdate() 
     {
@@ -93,7 +117,7 @@ public class PlayerMover : MonoBehaviour
     }
     private void UpdateIsNextToWall()
     {
-        isNextToWall = Physics2D.OverlapCircle(wallCheck.position, checkWallRadius, whatIsGround);
+        IsNextToWall = Physics2D.OverlapCircle(wallCheck.position, checkWallRadius, whatIsGround);
     }
     private void InputCheck()
     {
@@ -114,6 +138,10 @@ public class PlayerMover : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.LeftArrow))
         {
+            if(lastHorizontalDir != HorizontalMoveDir.Left)
+            {
+                IsFacingRight = false;
+            }
             if(CheckLastHorizontalDirIs(HorizontalMoveDir.Left) && CanDash())
             {
                 Dash((int)HorizontalMoveDir.Left);
@@ -123,6 +151,11 @@ public class PlayerMover : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.RightArrow))
         {
+            if(lastHorizontalDir != HorizontalMoveDir.Right)
+            {
+                // Flip();
+                IsFacingRight = true;
+            }
             if(CheckLastHorizontalDirIs(HorizontalMoveDir.Right) && CanDash())
             {
                 Dash((int)HorizontalMoveDir.Right);
@@ -163,8 +196,34 @@ public class PlayerMover : MonoBehaviour
         bool passStateCondition = (state == PlayerState.Normal);
         return passTimeCondition && passStateCondition;
     }
-    private void SlideCheck()
+    private void Flip()
     {
+        float currentXScale = model.localScale.x;
+        float flipXScale = currentXScale * (-1);
 
+        Vector3 result = new Vector3(flipXScale, model.localScale.y, model.localScale.z);
+
+        model.localScale = result;
+    }
+    private void NextToWallCheck()
+    {
+        UpdateIsNextToWall();
+        if(isNextToWall && !isGrounded)
+            ChangeToSlideState();
+    }
+    private void ChangeToSlideState()
+    {
+        moveController.PlayerVelocityToZero();
+        SetPlayerState(PlayerState.Sliding);
+        rb.gravityScale = 0f;
+    }
+    private void NotNextToWall()
+    {
+        SetPlayerState(PlayerState.Normal);
+        rb.gravityScale = 1f;
+    }
+    private void FacingCheck()
+    {
+        
     }
 }

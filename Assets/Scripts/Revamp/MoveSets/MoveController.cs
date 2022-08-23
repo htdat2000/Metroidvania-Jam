@@ -62,5 +62,9 @@ namespace Player
         {
             extraJump = 1; //will change base on player form
         }
+        public void PlayerVelocityToZero()
+        {
+            MoveControl.VelocityToZero();
+        }
     }
 }
