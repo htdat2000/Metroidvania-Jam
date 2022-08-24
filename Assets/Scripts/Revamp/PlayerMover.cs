@@ -12,20 +12,28 @@ public class PlayerMover : MonoBehaviour
 
     [SerializeField] private float jumpForce;
     private bool isGrounded;
+    private bool IsGrounded
+    {
+        get {return isGrounded;}
+        set {
+            isGrounded = value;
+            if(state == PlayerState.Sliding && isGrounded)
+            {
+                SetPlayerState(PlayerState.Normal);
+            }
+        }
+    }
     public Transform groundCheck;
     public float checkRadius;
     public LayerMask whatIsGround;
 
-    private bool isNextToWall;
     private bool lastFrameNextToWall;
+    private bool isNextToWall;
     private bool IsNextToWall
     {
         get {return isNextToWall;}
         set {
-            if(isNextToWall != value && value)
-            {
-                moveController.PlayerVelocityToZero();
-            }
+            lastFrameNextToWall = isNextToWall;
             isNextToWall = value;
             if(!isNextToWall)
             {
@@ -36,19 +44,20 @@ public class PlayerMover : MonoBehaviour
     public Transform wallCheck;
     public float checkWallRadius;
 
-    private bool isFacingRight;
+    private bool isFacingRight = true;
     
     private bool IsFacingRight
     {
         get {return isFacingRight;}
         set {
+            if(isFacingRight != value)
+                Flip();
             isFacingRight = value;
-            Flip();
         }
     }
     [SerializeField] private Transform model;
 
-    private MoveController moveController;
+    // private MoveController moveController;
 
     private enum HorizontalMoveDir
     {
@@ -76,17 +85,26 @@ public class PlayerMover : MonoBehaviour
         Sliding
     }
     private PlayerState state = PlayerState.Normal;
+    private MoveSet moveControl;
+    [SerializeField] private MoveSet[] Forms;
     private void Start()
     {
         Init();
     }
     private void Init()
     {
+        InitForms();
         rb = GetComponent<Rigidbody2D>();
-        // moveController = new MoveController(gameObject, jumpForce);
-        moveController = (new GameObject("MoveController")).AddComponent<MoveController>();
-        moveController.InitParam(gameObject, jumpForce);
+        moveControl = GetComponent<MoveSet>();
+        moveControl = Forms[1];
         currentForm = Form.Normal;
+    }
+    private void InitForms()
+    {
+        foreach (MoveSet Form in Forms)
+        {
+            Form.InitParam(this.gameObject);
+        }
     }
     private void Update()
     {
@@ -95,16 +113,26 @@ public class PlayerMover : MonoBehaviour
         NextToWallCheck();
         InputCheck();
     }
+    void OnDrawGizmosSelected()
+    {
+        // Display the explosion radius when selected
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(wallCheck.position, checkWallRadius);
+    }
     private void FixedUpdate() 
     {
         Move();
     }
-    private void Move()
+    private void Move() //Will move to MoveSet
     {
-        if(state == PlayerState.Normal)
+        if(state == PlayerState.Normal && IsReadHorizonInput())
         {
-            rb.velocity = new Vector2(horizonMove * speed, rb.velocity.y);
+            rb.AddForce(new Vector2(horizonMove * speed * Time.deltaTime, 0f)); // can optimize
         }
+    }
+    private bool IsReadHorizonInput()
+    {
+        return true;
     }
     private void HorizontalMoveCheck()
     {
@@ -112,33 +140,36 @@ public class PlayerMover : MonoBehaviour
     }
     private void GroundCheck()
     {
+        bool lastFrameIsGrounded = isGrounded;
         UpdateIsGrounded();
-        if(isGrounded)
-            moveController.ExtraJumpRecover();
+        if(IsGrounded && !lastFrameIsGrounded)
+            moveControl.ExtraJumpRecover();
     }
     private void UpdateIsGrounded()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        IsGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
     }
     private void UpdateIsNextToWall()
     {
         IsNextToWall = Physics2D.OverlapCircle(wallCheck.position, checkWallRadius, whatIsGround);
+        if(!IsNextToWall)
+            Debug.Log("aBV");
     }
     private void InputCheck()
     {
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
-            moveController.Jump();
+            moveControl.Jump();
         }
 
         if(Input.GetKeyDown(KeyCode.C))
         {
-            moveController.Attack();
+            moveControl.Attack();
         }
 
         if(Input.GetKeyDown(KeyCode.DownArrow))
         {
-            moveController.Charge();
+            moveControl.Charge();
         }
 
         if(Input.GetKeyDown(KeyCode.LeftArrow))
@@ -158,7 +189,6 @@ public class PlayerMover : MonoBehaviour
         {
             if(lastHorizontalDir != HorizontalMoveDir.Right)
             {
-                // Flip();
                 IsFacingRight = true;
             }
             if(CheckLastHorizontalDirIs(HorizontalMoveDir.Right) && CanDash())
@@ -175,12 +205,11 @@ public class PlayerMover : MonoBehaviour
     }
     private void Dash(int dir)
     {
-        moveController.Dash(dir);
+        moveControl.Dash(dir);
         SetPlayerState(PlayerState.Dashing);
     }
     public void BackToNormal()
     {
-        Debug.Log("Alo");
         SetPlayerState(PlayerState.Normal);
     }
     public void SetPlayerState(PlayerState newState)
@@ -199,6 +228,7 @@ public class PlayerMover : MonoBehaviour
     {
         bool passTimeCondition = (Time.time - lastHorizontalInputTime) <= timeIntervalDashInput;
         bool passStateCondition = (state == PlayerState.Normal);
+
         return passTimeCondition && passStateCondition;
     }
     private void Flip()
@@ -213,19 +243,16 @@ public class PlayerMover : MonoBehaviour
     private void NextToWallCheck()
     {
         UpdateIsNextToWall();
-        if(isNextToWall && !isGrounded)
+
+        if(IsNextToWall && !IsGrounded && rb.velocity.y <= 0)
             ChangeToSlideState();
     }
     private void ChangeToSlideState()
     {
-        moveController.Slide();
+        moveControl.Slide();
     }
     private void NotNextToWall()
     {
-        moveController.QuitSlide();
-    }
-    private void FacingCheck()
-    {
-        
+        moveControl.QuitSlide();
     }
 }

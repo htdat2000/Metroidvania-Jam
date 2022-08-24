@@ -8,44 +8,26 @@ namespace Player
     //This class is a base of all Color Move Set.
     {
         protected Rigidbody2D playerRb;
-        protected float jumpForce;
+        [SerializeField] protected float jumpForce = 5f;
         protected GameObject playerGO;
         protected PlayerMover playerMover;
-        private float dashAmount = 50000f;
-        private float dashTime = 0.5f;
-        public MoveSet(GameObject _playerGO, float _jumpForce)
+        protected float dashAmount = 50f;
+        protected float dashTime = 0.5f;
+        protected float extraJump = 1;
+        protected float defaultExtraJump = 1;
+        public void InitParam(GameObject _playerGO)
         {
             this.playerGO = _playerGO;
             this.playerRb = _playerGO.GetComponent<Rigidbody2D>();
             this.playerMover = _playerGO.GetComponent<PlayerMover>();
-            this.jumpForce = _jumpForce;
-        }
-        public void InitParam(GameObject _playerGO, float _jumpForce)
-        {
-            this.playerGO = _playerGO;
-            this.playerRb = _playerGO.GetComponent<Rigidbody2D>();
-            this.playerMover = _playerGO.GetComponent<PlayerMover>();
-            this.jumpForce = _jumpForce;
-            InitFormParam();
-        }
-        protected void Start()
-        {
-            
-        }
-
-        // Update is called once per frame
-        protected void Update()
-        {
-            
-        }
-        public virtual void InitFormParam()
-        {
-            dashAmount = 50f;
-            dashTime = 0.5f;
         }
         public virtual void Jump()
         {
-            playerRb.velocity = Vector2.up * jumpForce;
+            if(extraJump > 0)
+            {
+                playerRb.AddForce(new Vector2(0f, jumpForce));
+            }
+            extraJump-=1;
         }
         public virtual void Dash(int dir)
         {
@@ -75,6 +57,10 @@ namespace Player
         public virtual void QuitSlide()
         {
             playerRb.gravityScale = 1f;
+        }
+        public virtual void ExtraJumpRecover()
+        {
+            extraJump = defaultExtraJump;
         }
     }
 }
