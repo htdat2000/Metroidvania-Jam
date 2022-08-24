@@ -7,7 +7,7 @@ public class PlayerMover : MonoBehaviour
 //This class catch player input and call method from MoveController.cs.
 {
     [SerializeField] private float MAX_SPEED = 50f;
-    [SerializeField] private float ACCELEBRATION = 50f;
+    [SerializeField] private float ACCELERATION = 0.05f;
     private Rigidbody2D rb;
     private float horizonMove;
     [SerializeField] private float speed;
@@ -48,7 +48,7 @@ public class PlayerMover : MonoBehaviour
 
     private bool isFacingRight = true;
     
-    private bool IsFacingRight
+    public bool IsFacingRight
     {
         get {return isFacingRight;}
         set {
@@ -86,7 +86,7 @@ public class PlayerMover : MonoBehaviour
         Dashing,
         Sliding
     }
-    private PlayerState state = PlayerState.Normal;
+    public PlayerState state = PlayerState.Normal;
     private MoveSet moveControl;
     [SerializeField] private MoveSet[] Forms;
     private void Start()
@@ -135,7 +135,7 @@ public class PlayerMover : MonoBehaviour
     }
     private void AddAcceleration()
     {
-        float newX = Mathf.Lerp(rb.velocity.x, 0f, ACCELEBRATION);
+        float newX = Mathf.Lerp(rb.velocity.x, 0f, ACCELERATION);
         rb.velocity = new Vector2(newX, rb.velocity.y);
     }
     private bool IsReadHorizonInput()

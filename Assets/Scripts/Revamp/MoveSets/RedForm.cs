@@ -17,7 +17,12 @@ namespace Player
         }
         public override void Jump()
         {
-            if(playerMover.IsGrounded || extraJump > 0)
+            if(playerMover.state == PlayerMover.PlayerState.Sliding)
+            {
+                int jumpDir = playerMover.IsFacingRight ? -1 : 1;
+                playerRb.AddForce(new Vector2(jumpDir * jumpForce/2f, jumpForce));
+            }
+            else if(playerMover.IsGrounded || extraJump > 0)
             {
                 playerRb.AddForce(new Vector2(0f, jumpForce));
                 if(!playerMover.IsGrounded)
