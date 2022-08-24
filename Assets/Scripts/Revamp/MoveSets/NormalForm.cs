@@ -9,7 +9,7 @@ namespace Player
     {
         public override void Dash(int dir)
         {
-            playerRb.velocity = Vector2.right * dashAmount * dir;
+            playerRb.AddForce(Vector2.right * dashAmount * dir * Time.deltaTime);
             StartCoroutine(BackToNormal(dashTime));
         }
     }

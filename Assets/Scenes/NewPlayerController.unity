@@ -165,6 +165,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 5
+  dashAmount: 5
+  dashTime: 0.5
 --- !u!1 &149703402
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,6 +413,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 5
+  dashAmount: 5
+  dashTime: 0.5
 --- !u!1 &235529956
 GameObject:
   m_ObjectHideFlags: 0
@@ -1142,6 +1146,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 100
+  dashAmount: 50
+  dashTime: 0.5
 --- !u!4 &918325874
 Transform:
   m_ObjectHideFlags: 0
@@ -1171,7 +1177,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f046300368920eb489081b53a5e5b845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 200
+  MAX_SPEED: 10
+  ACCELEBRATION: 0.05
+  speed: 500
   jumpForce: 10
   groundCheck: {fileID: 818441769}
   checkRadius: 0.1
@@ -1179,7 +1187,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   wallCheck: {fileID: 1628928405}
-  checkWallRadius: 1
+  checkWallRadius: 0.1
   model: {fileID: 343342112}
   timeIntervalDashInput: 0.5
   currentForm: 0
@@ -1252,6 +1260,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 5
+  dashAmount: 5
+  dashTime: 0.5
 --- !u!4 &1245639866
 Transform:
   m_ObjectHideFlags: 0
@@ -1309,7 +1319,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b24148344fe246e4fb6951e9f54b3202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpForce: 100
+  jumpForce: 300
+  dashAmount: 35
+  dashTime: 0.5
+  attackPrefabs: []
 --- !u!1 &1628928404
 GameObject:
   m_ObjectHideFlags: 0

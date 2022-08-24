@@ -6,13 +6,15 @@ using Player;
 public class PlayerMover : MonoBehaviour
 //This class catch player input and call method from MoveController.cs.
 {
+    [SerializeField] private float MAX_SPEED = 50f;
+    [SerializeField] private float ACCELEBRATION = 50f;
     private Rigidbody2D rb;
     private float horizonMove;
     [SerializeField] private float speed;
 
     [SerializeField] private float jumpForce;
     private bool isGrounded;
-    private bool IsGrounded
+    public bool IsGrounded
     {
         get {return isGrounded;}
         set {
@@ -112,6 +114,8 @@ public class PlayerMover : MonoBehaviour
         GroundCheck();
         NextToWallCheck();
         InputCheck();
+        Move();
+        AddAcceleration();
     }
     void OnDrawGizmosSelected()
     {
@@ -121,7 +125,6 @@ public class PlayerMover : MonoBehaviour
     }
     private void FixedUpdate() 
     {
-        Move();
     }
     private void Move() //Will move to MoveSet
     {
@@ -130,9 +133,18 @@ public class PlayerMover : MonoBehaviour
             rb.AddForce(new Vector2(horizonMove * speed * Time.deltaTime, 0f)); // can optimize
         }
     }
+    private void AddAcceleration()
+    {
+        float newX = Mathf.Lerp(rb.velocity.x, 0f, ACCELEBRATION);
+        rb.velocity = new Vector2(newX, rb.velocity.y);
+    }
     private bool IsReadHorizonInput()
     {
-        return true;
+        if(rb.velocity.x * horizonMove < 0 || Mathf.Abs(rb.velocity.x) < MAX_SPEED)
+        {
+            return true;
+        }
+        return false;
     }
     private void HorizontalMoveCheck()
     {
@@ -140,9 +152,8 @@ public class PlayerMover : MonoBehaviour
     }
     private void GroundCheck()
     {
-        bool lastFrameIsGrounded = isGrounded;
         UpdateIsGrounded();
-        if(IsGrounded && !lastFrameIsGrounded)
+        if(IsGrounded)
             moveControl.ExtraJumpRecover();
     }
     private void UpdateIsGrounded()
@@ -152,8 +163,6 @@ public class PlayerMover : MonoBehaviour
     private void UpdateIsNextToWall()
     {
         IsNextToWall = Physics2D.OverlapCircle(wallCheck.position, checkWallRadius, whatIsGround);
-        if(!IsNextToWall)
-            Debug.Log("aBV");
     }
     private void InputCheck()
     {

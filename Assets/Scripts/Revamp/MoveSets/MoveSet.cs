@@ -11,11 +11,13 @@ namespace Player
         [SerializeField] protected float jumpForce = 5f;
         protected GameObject playerGO;
         protected PlayerMover playerMover;
-        protected float dashAmount = 50f;
-        protected float dashTime = 0.5f;
+        [SerializeField] protected float dashAmount = 5f;
+        [SerializeField] protected float dashTime = 0.5f;
         protected float extraJump = 1;
         protected float defaultExtraJump = 1;
-        public void InitParam(GameObject _playerGO)
+        protected int attackComboIndex;
+        protected int maxCombo;
+        public virtual void InitParam(GameObject _playerGO)
         {
             this.playerGO = _playerGO;
             this.playerRb = _playerGO.GetComponent<Rigidbody2D>();
@@ -23,19 +25,19 @@ namespace Player
         }
         public virtual void Jump()
         {
-            if(extraJump > 0)
+            if(playerMover.IsGrounded)
             {
                 playerRb.AddForce(new Vector2(0f, jumpForce));
             }
-            extraJump-=1;
         }
         public virtual void Dash(int dir)
         {
-
+            return;
         }
         public virtual void Attack()
         {
-            playerRb.velocity = Vector2.up * jumpForce;
+            Debug.Log("Attack hit: " + attackComboIndex);
+            attackComboIndex = (++attackComboIndex)%(maxCombo);
         }
         public virtual void Charge()
         {
