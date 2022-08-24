@@ -8,20 +8,24 @@ namespace Player
     //This class is a base of all Color Move Set.
     {
         protected Rigidbody2D playerRb;
-        [SerializeField] protected float jumpForce = 5f;
         protected GameObject playerGO;
         protected PlayerMover playerMover;
+        protected Animator playerAnim;
+        [SerializeField] protected float jumpForce = 5f;
         [SerializeField] protected float dashAmount = 5f;
         [SerializeField] protected float dashTime = 0.5f;
+        [SerializeField] protected float attackTimeCombo = 0.5f;
         protected float extraJump = 1;
         protected float defaultExtraJump = 1;
         protected int attackComboIndex;
         protected int maxCombo;
+        protected float lastAttackInput;
         public virtual void InitParam(GameObject _playerGO)
         {
             this.playerGO = _playerGO;
             this.playerRb = _playerGO.GetComponent<Rigidbody2D>();
             this.playerMover = _playerGO.GetComponent<PlayerMover>();
+            this.playerAnim = _playerGO.GetComponent<Animator>();
         }
         public virtual void Jump()
         {
@@ -36,8 +40,12 @@ namespace Player
         }
         public virtual void Attack()
         {
-            Debug.Log("Attack hit: " + attackComboIndex);
             attackComboIndex = (++attackComboIndex)%(maxCombo);
+            UpdateLastAttackInput();
+        }
+        protected void UpdateLastAttackInput()
+        {
+            lastAttackInput = Time.time;
         }
         public virtual void Charge()
         {

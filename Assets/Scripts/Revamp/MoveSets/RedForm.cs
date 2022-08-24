@@ -36,6 +36,13 @@ namespace Player
             playerRb.velocity = Vector2.right * dashAmount * dir;
             StartCoroutine(BackToNormal(dashTime));
         }
+        public override void Attack()
+        {
+            if(lastAttackInput + attackTimeCombo <= Time.time)
+                attackComboIndex = 0;
+            playerAnim.Play("Attack" + (attackComboIndex + 1));
+            base.Attack();
+        }
         public override void Slide()
         {
             playerMover.SetPlayerState(PlayerMover.PlayerState.Sliding);
