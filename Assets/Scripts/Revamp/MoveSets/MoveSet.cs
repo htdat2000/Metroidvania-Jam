@@ -20,12 +20,18 @@ namespace Player
         protected int attackComboIndex;
         protected int maxCombo;
         protected float lastAttackInput;
+        protected bool wasInit = false;
         public virtual void InitParam(GameObject _playerGO)
         {
             this.playerGO = _playerGO;
             this.playerRb = _playerGO.GetComponent<Rigidbody2D>();
             this.playerMover = _playerGO.GetComponent<PlayerMover>();
             this.playerAnim = _playerGO.GetComponent<Animator>();
+            wasInit = true;
+        }
+        public virtual void Update()
+        {
+
         }
         public virtual void Jump()
         {
@@ -40,12 +46,20 @@ namespace Player
         }
         public virtual void Attack()
         {
+            playerMover.SetPlayerState(PlayerMover.PlayerState.Attacking);
             attackComboIndex = (++attackComboIndex)%(maxCombo);
+            StartCoroutine(StopLockAttack(0.2f));
             UpdateLastAttackInput();
+        }
+        public virtual IEnumerator StopLockAttack(float blockTime)
+        {
+            yield return new WaitForSeconds(blockTime);
+            playerMover.SetPlayerState(PlayerMover.PlayerState.Normal);
         }
         protected void UpdateLastAttackInput()
         {
             lastAttackInput = Time.time;
+            Debug.Log(lastAttackInput);
         }
         public virtual void Charge()
         {

@@ -15,9 +15,13 @@ namespace Player
             attackComboIndex = 0;
             maxCombo = 3;
         }
+        public override void Update()
+        {
+            base.Update();
+        }
         public override void Jump()
         {
-            if(playerMover.state == PlayerMover.PlayerState.Sliding)
+            if(playerMover.State == PlayerMover.PlayerState.Sliding)
             {
                 int jumpDir = playerMover.IsFacingRight ? -1 : 1;
                 playerRb.AddForce(new Vector2(jumpDir * jumpForce/2f, jumpForce));
@@ -39,7 +43,9 @@ namespace Player
         public override void Attack()
         {
             if(lastAttackInput + attackTimeCombo <= Time.time)
+            {
                 attackComboIndex = 0;
+            }
             playerAnim.Play("Attack" + (attackComboIndex + 1));
             base.Attack();
         }

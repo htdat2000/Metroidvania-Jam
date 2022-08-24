@@ -19,9 +19,10 @@ public class PlayerMover : MonoBehaviour
         get {return isGrounded;}
         set {
             isGrounded = value;
-            if(state == PlayerState.Sliding && isGrounded)
+            if(State == PlayerState.Sliding && isGrounded)
             {
                 SetPlayerState(PlayerState.Normal);
+                State = PlayerState.Normal;
             }
         }
     }
@@ -37,7 +38,7 @@ public class PlayerMover : MonoBehaviour
         set {
             lastFrameNextToWall = isNextToWall;
             isNextToWall = value;
-            if(!isNextToWall)
+            if(isNextToWall != lastFrameNextToWall)
             {
                 NotNextToWall();
             };
@@ -52,9 +53,12 @@ public class PlayerMover : MonoBehaviour
     {
         get {return isFacingRight;}
         set {
-            if(isFacingRight != value)
-                Flip();
-            isFacingRight = value;
+            if(State == PlayerState.Normal)
+            {
+                if(isFacingRight != value)
+                    Flip();
+                isFacingRight = value;
+            }
         }
     }
     [SerializeField] private Transform model;
@@ -83,10 +87,18 @@ public class PlayerMover : MonoBehaviour
     public enum PlayerState
     {
         Normal,
+        Attacking,
         Dashing,
         Sliding
     }
-    public PlayerState state = PlayerState.Normal;
+    private PlayerState state = PlayerState.Normal;
+    public PlayerState State
+    {
+        get => state;
+        set {
+            state = value;
+        }
+    }
     private MoveSet moveControl;
     [SerializeField] private MoveSet[] Forms;
     private void Start()
@@ -119,7 +131,6 @@ public class PlayerMover : MonoBehaviour
     }
     void OnDrawGizmosSelected()
     {
-        // Display the explosion radius when selected
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(wallCheck.position, checkWallRadius);
     }
@@ -128,7 +139,7 @@ public class PlayerMover : MonoBehaviour
     }
     private void Move() //Will move to MoveSet
     {
-        if(state == PlayerState.Normal && IsReadHorizonInput())
+        if(State == PlayerState.Normal && IsReadHorizonInput())
         {
             rb.AddForce(new Vector2(horizonMove * speed * Time.deltaTime, 0f)); // can optimize
         }
@@ -223,7 +234,7 @@ public class PlayerMover : MonoBehaviour
     }
     public void SetPlayerState(PlayerState newState)
     {
-        state = newState;
+        State = newState;
     }
     private void UpdateLastHorizontalInput()
     {
@@ -236,7 +247,7 @@ public class PlayerMover : MonoBehaviour
     private bool CanDash()
     {
         bool passTimeCondition = (Time.time - lastHorizontalInputTime) <= timeIntervalDashInput;
-        bool passStateCondition = (state == PlayerState.Normal);
+        bool passStateCondition = (State == PlayerState.Normal);
 
         return passTimeCondition && passStateCondition;
     }
