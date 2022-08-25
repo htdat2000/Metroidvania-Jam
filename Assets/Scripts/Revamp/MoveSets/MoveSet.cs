@@ -35,8 +35,6 @@ namespace Player
         {
             if(wasInit)
             {
-                Debug.Log("attack cooldown: " + attackInputCooldown);
-
                 if(attackInputCooldown <= 0)
                 {
                     if(playerMover.State == PlayerMover.PlayerState.Attacking)
@@ -64,7 +62,6 @@ namespace Player
         public virtual void Attack()
         {
             attackInputCooldown = defaultAttackInputCooldown;
-            Debug.Log("Set attack cooldown: " + attackInputCooldown);
 
             playerMover.SetPlayerState(PlayerMover.PlayerState.Attacking);
             attackComboIndex = (++attackComboIndex)%(maxCombo);
@@ -72,7 +69,6 @@ namespace Player
         protected void UpdateLastAttackInput()
         {
             lastAttackInput = Time.time;
-            Debug.Log(lastAttackInput);
         }
         public virtual void Charge()
         {
