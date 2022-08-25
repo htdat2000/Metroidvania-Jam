@@ -46,8 +46,10 @@ namespace Player
             {
                 attackComboIndex = 0;
             }
+            UpdateLastAttackInput();
             playerAnim.Play("Attack" + (attackComboIndex + 1));
-            base.Attack();
+            Debug.Log("Attack index" + attackComboIndex);
+            base.Attack(); 
         }
         public override void Slide()
         {

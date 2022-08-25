@@ -14,7 +14,9 @@ namespace Player
         [SerializeField] protected float jumpForce = 5f;
         [SerializeField] protected float dashAmount = 5f;
         [SerializeField] protected float dashTime = 0.5f;
-        [SerializeField] protected float attackTimeCombo = 0.5f;
+        [SerializeField] protected float attackTimeCombo = 0.7f;
+        [SerializeField] protected float defaultAttackInputCooldown = 0.5f;
+        private float attackInputCooldown;
         protected float extraJump = 1;
         protected float defaultExtraJump = 1;
         protected int attackComboIndex;
@@ -31,7 +33,22 @@ namespace Player
         }
         public virtual void Update()
         {
+            if(wasInit)
+            {
+                Debug.Log("attack cooldown: " + attackInputCooldown);
 
+                if(attackInputCooldown <= 0)
+                {
+                    if(playerMover.State == PlayerMover.PlayerState.Attacking)
+                    {
+                        playerMover.SetPlayerState(PlayerMover.PlayerState.Normal);
+                    }
+                }
+                else
+                {
+                    attackInputCooldown -= Time.deltaTime;
+                }
+            }
         }
         public virtual void Jump()
         {
@@ -46,15 +63,11 @@ namespace Player
         }
         public virtual void Attack()
         {
+            attackInputCooldown = defaultAttackInputCooldown;
+            Debug.Log("Set attack cooldown: " + attackInputCooldown);
+
             playerMover.SetPlayerState(PlayerMover.PlayerState.Attacking);
             attackComboIndex = (++attackComboIndex)%(maxCombo);
-            StartCoroutine(StopLockAttack(0.2f));
-            UpdateLastAttackInput();
-        }
-        public virtual IEnumerator StopLockAttack(float blockTime)
-        {
-            yield return new WaitForSeconds(blockTime);
-            playerMover.SetPlayerState(PlayerMover.PlayerState.Normal);
         }
         protected void UpdateLastAttackInput()
         {

@@ -22,7 +22,6 @@ public class PlayerMover : MonoBehaviour
             if(State == PlayerState.Sliding && isGrounded)
             {
                 SetPlayerState(PlayerState.Normal);
-                State = PlayerState.Normal;
             }
         }
     }
@@ -47,20 +46,8 @@ public class PlayerMover : MonoBehaviour
     public Transform wallCheck;
     public float checkWallRadius;
 
-    private bool isFacingRight = true;
+    public bool IsFacingRight = true;
     
-    public bool IsFacingRight
-    {
-        get {return isFacingRight;}
-        set {
-            if(State == PlayerState.Normal)
-            {
-                if(isFacingRight != value)
-                    Flip();
-                isFacingRight = value;
-            }
-        }
-    }
     [SerializeField] private Transform model;
 
     // private MoveController moveController;
@@ -77,10 +64,10 @@ public class PlayerMover : MonoBehaviour
 
     public enum Form
     {
-        Normal,
-        Red,
-        Blue,
-        Yellow
+        Normal = 0,
+        Red = 1,
+        Blue = 2,
+        Yellow = 3
     }
     [SerializeField] private Form currentForm;
 
@@ -91,14 +78,7 @@ public class PlayerMover : MonoBehaviour
         Dashing,
         Sliding
     }
-    private PlayerState state = PlayerState.Normal;
-    public PlayerState State
-    {
-        get => state;
-        set {
-            state = value;
-        }
-    }
+    public PlayerState State = PlayerState.Normal;
     private MoveSet moveControl;
     [SerializeField] private MoveSet[] Forms;
     private void Start()
@@ -110,8 +90,7 @@ public class PlayerMover : MonoBehaviour
         InitForms();
         rb = GetComponent<Rigidbody2D>();
         moveControl = GetComponent<MoveSet>();
-        moveControl = Forms[1];
-        currentForm = Form.Normal;
+        SetCombatForm(Form.Red); // for debug
     }
     private void InitForms()
     {
@@ -128,6 +107,11 @@ public class PlayerMover : MonoBehaviour
         InputCheck();
         Move();
         AddAcceleration();
+        FacingCheck();
+    }
+    private void FacingCheck()
+    {
+        SetIsFacingRight((int)lastHorizontalDir == 1);
     }
     void OnDrawGizmosSelected()
     {
@@ -194,10 +178,10 @@ public class PlayerMover : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            if(lastHorizontalDir != HorizontalMoveDir.Left)
-            {
-                IsFacingRight = false;
-            }
+            // if(lastHorizontalDir != HorizontalMoveDir.Left)
+            // {
+            //     SetIsFacingRight(false);
+            // }
             if(CheckLastHorizontalDirIs(HorizontalMoveDir.Left) && CanDash())
             {
                 Dash((int)HorizontalMoveDir.Left);
@@ -207,10 +191,10 @@ public class PlayerMover : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.RightArrow))
         {
-            if(lastHorizontalDir != HorizontalMoveDir.Right)
-            {
-                IsFacingRight = true;
-            }
+            // if(lastHorizontalDir != HorizontalMoveDir.Right)
+            // {
+            //     SetIsFacingRight(true);
+            // }
             if(CheckLastHorizontalDirIs(HorizontalMoveDir.Right) && CanDash())
             {
                 Dash((int)HorizontalMoveDir.Right);
@@ -274,5 +258,24 @@ public class PlayerMover : MonoBehaviour
     private void NotNextToWall()
     {
         moveControl.QuitSlide();
+    }
+    public void SetIsFacingRight(bool value)
+    {
+        if(State == PlayerState.Normal)
+        {
+            if(IsFacingRight != value)
+                Flip();
+            IsFacingRight = value;
+        }
+    }
+    private void SetCombatForm(Form form)
+    {
+        moveControl = Forms[(int)form];
+        currentForm = form;
+        for (int i = 0; i < Forms.Length; i ++)
+        {
+            if(i != (int)form)
+                Forms[i].enabled = false;
+        }
     }
 }
