@@ -76,11 +76,15 @@ public class PlayerMover : MonoBehaviour
         Normal,
         Attacking,
         Dashing,
-        Sliding
+        Sliding,
+        Hooking
     }
     public PlayerState State = PlayerState.Normal;
     private MoveSet moveControl;
     [SerializeField] private MoveSet[] Forms;
+
+    [SerializeField] Transform target; //Should move to another class
+    
     private void Start()
     {
         Init();
@@ -108,6 +112,8 @@ public class PlayerMover : MonoBehaviour
         Move();
         AddAcceleration();
         FacingCheck();
+
+        // transform.Translate(Vector3.up * Time.deltaTime, Space.World);
     }
     private void FacingCheck()
     {
@@ -126,6 +132,17 @@ public class PlayerMover : MonoBehaviour
         if(State == PlayerState.Normal && IsReadHorizonInput())
         {
             rb.AddForce(new Vector2(horizonMove * speed * Time.deltaTime, 0f)); // can optimize
+        }
+        if(State == PlayerState.Hooking) //Should move to another class
+        {
+            rb.velocity = Vector2.zero;
+            rb.gravityScale = 0f;
+            transform.Translate(Vector3.Normalize(target.position - transform.position) * Time.deltaTime * 50f, Space.World);
+            if(Vector3.Distance(target.position,transform.position) <= 0.1f)
+            {
+                SetPlayerState(PlayerState.Normal);
+                rb.gravityScale = 1f;
+            }
         }
     }
     private void AddAcceleration()
@@ -205,6 +222,11 @@ public class PlayerMover : MonoBehaviour
         if(Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow))
         {
             UpdateLastHorizontalInput();
+        }
+
+        if(Input.GetKeyDown(KeyCode.Z)) //Should move to another class
+        {
+            SetPlayerState(PlayerState.Hooking);
         }
     }
     private void Dash(int dir)
