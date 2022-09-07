@@ -226,7 +226,9 @@ public class PlayerMover : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Z)) //Should move to another class
         {
-            SetPlayerState(PlayerState.Hooking);
+            int faceDir = IsFacingRight?1:-1;
+            if((target.position.x - transform.position.x)*faceDir > 0)
+                SetPlayerState(PlayerState.Hooking);
         }
     }
     private void Dash(int dir)
@@ -283,7 +285,7 @@ public class PlayerMover : MonoBehaviour
     }
     public void SetIsFacingRight(bool value)
     {
-        if(State == PlayerState.Normal)
+        if(State == PlayerState.Normal || State == PlayerState.Hooking)
         {
             if(IsFacingRight != value)
                 Flip();

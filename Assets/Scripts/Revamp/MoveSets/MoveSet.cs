@@ -61,10 +61,13 @@ namespace Player
         }
         public virtual void Attack()
         {
-            attackInputCooldown = defaultAttackInputCooldown;
+            if(playerMover.State != PlayerMover.PlayerState.Hooking)
+            {
+                attackInputCooldown = defaultAttackInputCooldown;
 
-            playerMover.SetPlayerState(PlayerMover.PlayerState.Attacking);
-            attackComboIndex = (++attackComboIndex)%(maxCombo);
+                playerMover.SetPlayerState(PlayerMover.PlayerState.Attacking);
+                attackComboIndex = (++attackComboIndex)%(maxCombo);
+            }
         }
         protected void UpdateLastAttackInput()
         {

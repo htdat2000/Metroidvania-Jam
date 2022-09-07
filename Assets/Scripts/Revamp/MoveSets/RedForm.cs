@@ -7,6 +7,8 @@ namespace Player
     public class RedForm : MoveSet
     {
         [SerializeField] private GameObject[] attackPrefabs;
+        [SerializeField] private float alterComboTime;
+        private bool wasAlterCombo = false;
         public override void InitParam(GameObject _playerGO)
         {
             base.InitParam(_playerGO);
@@ -46,9 +48,18 @@ namespace Player
             {
                 attackComboIndex = 0;
             }
-            UpdateLastAttackInput();
+            else if((lastAttackInput + alterComboTime <= Time.time))
+            {
+                wasAlterCombo = true;
+                attackComboIndex = 3;
+            }
             playerAnim.Play("Attack" + (attackComboIndex + 1));
-            base.Attack(); 
+            UpdateLastAttackInput();
+            base.Attack();
+            if(attackComboIndex == 0)
+            {
+                wasAlterCombo = false;
+            } 
         }
         public override void Slide()
         {
