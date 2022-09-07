@@ -6,49 +6,28 @@ using Player;
 public class PlayerMover : MonoBehaviour
 //This class catch player input and call method from MoveController.cs.
 {
-    [SerializeField] private float MAX_SPEED = 50f;
-    [SerializeField] private float ACCELERATION = 0.05f;
     private Rigidbody2D rb;
     private float horizonMove;
-    [SerializeField] private float speed;
 
-    [SerializeField] private float jumpForce;
-    private bool isGrounded;
-    public bool IsGrounded
-    {
-        get {return isGrounded;}
-        set {
-            isGrounded = value;
-            if(State == PlayerState.Sliding && isGrounded)
-            {
-                SetPlayerState(PlayerState.Normal);
-            }
-        }
-    }
+    public bool IsGrounded;
     public Transform groundCheck;
     public float checkRadius;
     public LayerMask whatIsGround;
 
     private bool lastFrameNextToWall;
-    private bool isNextToWall;
-    private bool IsNextToWall
-    {
-        get {return isNextToWall;}
-        set {
-            lastFrameNextToWall = isNextToWall;
-            isNextToWall = value;
-            if(isNextToWall != lastFrameNextToWall)
-            {
-                NotNextToWall();
-            };
-        }
-    }
+    private bool IsNextToWall;
     public Transform wallCheck;
     public float checkWallRadius;
-
     public bool IsFacingRight = true;
     
+    [SerializeField] private float MAX_SPEED = 50f;
+    [SerializeField] private float ACCELERATION = 0.05f;
+    [SerializeField] private float speed;
+    [SerializeField] private float jumpForce;
     [SerializeField] private Transform model;
+    [SerializeField] private Form currentForm;
+    [SerializeField] private MoveSet[] Forms;
+    [SerializeField] Transform target; //Should move to another class
 
     // private MoveController moveController;
 
@@ -69,8 +48,6 @@ public class PlayerMover : MonoBehaviour
         Blue = 2,
         Yellow = 3
     }
-    [SerializeField] private Form currentForm;
-
     public enum PlayerState
     {
         Normal,
@@ -81,9 +58,6 @@ public class PlayerMover : MonoBehaviour
     }
     public PlayerState State = PlayerState.Normal;
     private MoveSet moveControl;
-    [SerializeField] private MoveSet[] Forms;
-
-    [SerializeField] Transform target; //Should move to another class
     
     private void Start()
     {
@@ -170,7 +144,7 @@ public class PlayerMover : MonoBehaviour
     }
     private void UpdateIsGrounded()
     {
-        IsGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        SetIsGrounded(Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround));
     }
     private void UpdateIsNextToWall()
     {
@@ -301,5 +275,23 @@ public class PlayerMover : MonoBehaviour
             if(i != (int)form)
                 Forms[i].enabled = false;
         }
+    }
+
+    private void SetIsGrounded(bool value)
+    {
+        IsGrounded = value;
+        if(State == PlayerState.Sliding && IsGrounded)
+        {
+            SetPlayerState(PlayerState.Normal);
+        }
+    }
+    private void SetIsNextToWall(bool value)
+    {
+        lastFrameNextToWall = IsNextToWall;
+        IsNextToWall = value;
+        if(IsNextToWall != lastFrameNextToWall)
+        {
+            NotNextToWall();
+        };
     }
 }
