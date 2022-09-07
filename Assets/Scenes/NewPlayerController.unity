@@ -1207,6 +1207,7 @@ MonoBehaviour:
   - {fileID: 1528238655}
   - {fileID: 34207533}
   - {fileID: 1245639865}
+  target: {fileID: 1796451756}
 --- !u!95 &918325876
 Animator:
   serializedVersion: 3
@@ -1532,6 +1533,7 @@ MonoBehaviour:
   attackTimeCombo: 0.7
   defaultAttackInputCooldown: 0.5
   attackPrefabs: []
+  alterComboTime: 0.3
 --- !u!1 &1628928404
 GameObject:
   m_ObjectHideFlags: 0
@@ -1736,7 +1738,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8322ccf6a45a514aa3ff2fbe6007f1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knockUpForce: 10
+  knockUpForce: 100
 --- !u!1 &1864078178
 GameObject:
   m_ObjectHideFlags: 0
