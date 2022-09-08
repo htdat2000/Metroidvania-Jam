@@ -21,6 +21,21 @@ namespace Player
         {
             base.Update();
         }
+        public override void Move()
+        {
+            base.Move();
+            if(playerMover.State == PlayerMover.PlayerState.Hooking) //Should move to another class
+            {
+                playerRb.velocity = Vector2.zero;
+                playerRb.gravityScale = 0f;
+                playerTransform.Translate(Vector3.Normalize(target.position - playerTransform.position) * Time.deltaTime * 50f, Space.World);
+                if(Vector3.Distance(target.position,playerTransform.position) <= 1f)
+                {
+                    playerMover.SetPlayerState(PlayerMover.PlayerState.Normal);
+                    playerRb.gravityScale = 1f;
+                }
+            }
+        }
         public override void Jump()
         {
             if(playerMover.State == PlayerMover.PlayerState.Sliding)

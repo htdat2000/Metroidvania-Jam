@@ -9,6 +9,7 @@ namespace Player
     {
         protected Rigidbody2D playerRb;
         protected GameObject playerGO;
+        protected Transform playerTransform;
         protected PlayerMover playerMover;
         protected Animator playerAnim;
         [SerializeField] protected float jumpForce = 5f;
@@ -16,6 +17,7 @@ namespace Player
         [SerializeField] protected float dashTime = 0.5f;
         [SerializeField] protected float attackTimeCombo = 0.7f;
         [SerializeField] protected float defaultAttackInputCooldown = 0.5f;
+        private float speed;
         private float attackInputCooldown;
         protected float extraJump = 1;
         protected float defaultExtraJump = 1;
@@ -23,18 +25,25 @@ namespace Player
         protected int maxCombo;
         protected float lastAttackInput;
         protected bool wasInit = false;
+
+        [SerializeField] protected Transform target;
+        [SerializeField] private float MAX_SPEED = 50f;
+        private float horizonMove;
         public virtual void InitParam(GameObject _playerGO)
         {
             this.playerGO = _playerGO;
             this.playerRb = _playerGO.GetComponent<Rigidbody2D>();
             this.playerMover = _playerGO.GetComponent<PlayerMover>();
             this.playerAnim = _playerGO.GetComponent<Animator>();
+            this.speed = playerMover.speed;
+            this.playerTransform = playerGO.transform;
             wasInit = true;
         }
         public virtual void Update()
         {
             if(wasInit)
             {
+                HorizontalMoveCheck();
                 if(attackInputCooldown <= 0)
                 {
                     if(playerMover.State == PlayerMover.PlayerState.Attacking)
@@ -47,6 +56,25 @@ namespace Player
                     attackInputCooldown -= Time.deltaTime;
                 }
             }
+        }
+        public virtual void Move()
+        {
+            if(playerMover.State == PlayerMover.PlayerState.Normal && IsReadHorizonInput())
+            {
+                playerRb.AddForce(new Vector2(horizonMove * speed * Time.deltaTime, 0f)); // can optimize
+            }
+        } 
+        protected virtual bool IsReadHorizonInput()
+        {
+            if(playerRb.velocity.x * horizonMove < 0 || Mathf.Abs(playerRb.velocity.x) < MAX_SPEED)
+            {
+                return true;
+            }
+            return false;
+        }
+        protected virtual void HorizontalMoveCheck()
+        {
+            horizonMove = Input.GetAxisRaw("Horizontal");
         }
         public virtual void Jump()
         {

@@ -19,10 +19,8 @@ public class PlayerMover : MonoBehaviour
     public Transform wallCheck;
     public float checkWallRadius;
     public bool IsFacingRight = true;
-    
-    [SerializeField] private float MAX_SPEED = 50f;
+    public float speed;
     [SerializeField] private float ACCELERATION = 0.05f;
-    [SerializeField] private float speed;
     [SerializeField] private float jumpForce;
     [SerializeField] private Transform model;
     [SerializeField] private Form currentForm;
@@ -86,8 +84,6 @@ public class PlayerMover : MonoBehaviour
         Move();
         AddAcceleration();
         FacingCheck();
-
-        // transform.Translate(Vector3.up * Time.deltaTime, Space.World);
     }
     private void FacingCheck()
     {
@@ -103,34 +99,12 @@ public class PlayerMover : MonoBehaviour
     }
     private void Move() //Will move to MoveSet
     {
-        if(State == PlayerState.Normal && IsReadHorizonInput())
-        {
-            rb.AddForce(new Vector2(horizonMove * speed * Time.deltaTime, 0f)); // can optimize
-        }
-        if(State == PlayerState.Hooking) //Should move to another class
-        {
-            rb.velocity = Vector2.zero;
-            rb.gravityScale = 0f;
-            transform.Translate(Vector3.Normalize(target.position - transform.position) * Time.deltaTime * 50f, Space.World);
-            if(Vector3.Distance(target.position,transform.position) <= 0.1f)
-            {
-                SetPlayerState(PlayerState.Normal);
-                rb.gravityScale = 1f;
-            }
-        }
+        moveControl.Move();
     }
     private void AddAcceleration()
     {
         float newX = Mathf.Lerp(rb.velocity.x, 0f, ACCELERATION);
         rb.velocity = new Vector2(newX, rb.velocity.y);
-    }
-    private bool IsReadHorizonInput()
-    {
-        if(rb.velocity.x * horizonMove < 0 || Mathf.Abs(rb.velocity.x) < MAX_SPEED)
-        {
-            return true;
-        }
-        return false;
     }
     private void HorizontalMoveCheck()
     {
@@ -169,10 +143,6 @@ public class PlayerMover : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            // if(lastHorizontalDir != HorizontalMoveDir.Left)
-            // {
-            //     SetIsFacingRight(false);
-            // }
             if(CheckLastHorizontalDirIs(HorizontalMoveDir.Left) && CanDash())
             {
                 Dash((int)HorizontalMoveDir.Left);
@@ -182,10 +152,6 @@ public class PlayerMover : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.RightArrow))
         {
-            // if(lastHorizontalDir != HorizontalMoveDir.Right)
-            // {
-            //     SetIsFacingRight(true);
-            // }
             if(CheckLastHorizontalDirIs(HorizontalMoveDir.Right) && CanDash())
             {
                 Dash((int)HorizontalMoveDir.Right);
@@ -248,6 +214,8 @@ public class PlayerMover : MonoBehaviour
 
         if(IsNextToWall && !IsGrounded && rb.velocity.y <= 0)
             ChangeToSlideState();
+        if(!IsNextToWall && State == PlayerState.Sliding)
+            NotNextToWall();
     }
     private void ChangeToSlideState()
     {
@@ -287,9 +255,9 @@ public class PlayerMover : MonoBehaviour
     }
     private void SetIsNextToWall(bool value)
     {
-        lastFrameNextToWall = IsNextToWall;
-        IsNextToWall = value;
-        if(IsNextToWall != lastFrameNextToWall)
+        // lastFrameNextToWall = IsNextToWall;
+        // IsNextToWall = value;
+        if(!IsNextToWall)
         {
             NotNextToWall();
         };

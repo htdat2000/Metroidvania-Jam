@@ -169,6 +169,8 @@ MonoBehaviour:
   dashTime: 0.5
   attackTimeCombo: 0.15
   defaultAttackInputCooldown: 0.5
+  target: {fileID: 0}
+  MAX_SPEED: 50
 --- !u!1 &149703402
 GameObject:
   m_ObjectHideFlags: 0
@@ -419,6 +421,8 @@ MonoBehaviour:
   dashTime: 0.5
   attackTimeCombo: 0.15
   defaultAttackInputCooldown: 0.5
+  target: {fileID: 0}
+  MAX_SPEED: 50
 --- !u!1 &235529956
 GameObject:
   m_ObjectHideFlags: 0
@@ -1157,6 +1161,8 @@ MonoBehaviour:
   dashTime: 0.5
   attackTimeCombo: 0.7
   defaultAttackInputCooldown: 0.5
+  target: {fileID: 0}
+  MAX_SPEED: 50
 --- !u!4 &918325874
 Transform:
   m_ObjectHideFlags: 0
@@ -1186,10 +1192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f046300368920eb489081b53a5e5b845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MAX_SPEED: 50
-  ACCELERATION: 0.05
-  speed: 2000
-  jumpForce: 10
+  IsGrounded: 0
   groundCheck: {fileID: 818441769}
   checkRadius: 0.1
   whatIsGround:
@@ -1198,16 +1201,19 @@ MonoBehaviour:
   wallCheck: {fileID: 1628928405}
   checkWallRadius: 0.1
   IsFacingRight: 1
+  speed: 2000
+  ACCELERATION: 0.05
+  jumpForce: 10
   model: {fileID: 343342112}
-  timeIntervalDashInput: 0.5
   currentForm: 0
-  State: 0
   Forms:
   - {fileID: 182480145}
   - {fileID: 1528238655}
   - {fileID: 34207533}
   - {fileID: 1245639865}
   target: {fileID: 1796451756}
+  timeIntervalDashInput: 0.5
+  State: 0
 --- !u!95 &918325876
 Animator:
   serializedVersion: 3
@@ -1295,6 +1301,8 @@ MonoBehaviour:
   dashTime: 0.5
   attackTimeCombo: 0.15
   defaultAttackInputCooldown: 0.5
+  target: {fileID: 0}
+  MAX_SPEED: 50
 --- !u!4 &1245639866
 Transform:
   m_ObjectHideFlags: 0
@@ -1532,6 +1540,8 @@ MonoBehaviour:
   dashTime: 0.5
   attackTimeCombo: 0.7
   defaultAttackInputCooldown: 0.5
+  target: {fileID: 1796451756}
+  MAX_SPEED: 50
   attackPrefabs: []
   alterComboTime: 0.3
 --- !u!1 &1628928404
