@@ -8,7 +8,6 @@ namespace Player
     {
         [SerializeField] private GameObject[] attackPrefabs;
         [SerializeField] private float alterComboTime;
-        private bool wasAlterCombo = false;
         public override void InitParam(GameObject _playerGO)
         {
             base.InitParam(_playerGO);
@@ -63,7 +62,7 @@ namespace Player
             {
                 attackComboIndex = 0;
             }
-            else if((lastAttackInput + alterComboTime <= Time.time))
+            else if((lastAttackInput + alterComboTime <= Time.time) && attackComboIndex == 2)
             {
                 wasAlterCombo = true;
                 attackComboIndex = 3;
@@ -85,6 +84,13 @@ namespace Player
         {
             playerMover.SetPlayerState(PlayerMover.PlayerState.Normal);
             base.QuitSlide();
+        }
+        public override void SpecialMove()
+        {
+            base.SpecialMove();
+            int faceDir = playerMover.IsFacingRight?1:-1;
+            if((target.position.x - transform.position.x)*faceDir > 0)
+                playerMover.SetPlayerState(PlayerMover.PlayerState.Hooking);
         }
     }
 }

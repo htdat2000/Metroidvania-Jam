@@ -29,6 +29,7 @@ namespace Player
         [SerializeField] protected Transform target;
         [SerializeField] private float MAX_SPEED = 50f;
         private float horizonMove;
+        protected bool wasAlterCombo = false;
         public virtual void InitParam(GameObject _playerGO)
         {
             this.playerGO = _playerGO;
@@ -63,6 +64,10 @@ namespace Player
             {
                 playerRb.AddForce(new Vector2(horizonMove * speed * Time.deltaTime, 0f)); // can optimize
             }
+            if(playerMover.State == PlayerMover.PlayerState.Attacking && IsReadHorizonInput() && IsKeepDir())
+            {
+                playerRb.AddForce(new Vector2(horizonMove * speed * Time.deltaTime, 0f)); // can optimize
+            }
         } 
         protected virtual bool IsReadHorizonInput()
         {
@@ -71,6 +76,11 @@ namespace Player
                 return true;
             }
             return false;
+        }
+        protected virtual bool IsKeepDir()
+        {
+            int faceDir = playerMover.IsFacingRight?1:-1;
+            return horizonMove == faceDir;
         }
         protected virtual void HorizontalMoveCheck()
         {
@@ -94,7 +104,10 @@ namespace Player
                 attackInputCooldown = defaultAttackInputCooldown;
 
                 playerMover.SetPlayerState(PlayerMover.PlayerState.Attacking);
-                attackComboIndex = (++attackComboIndex)%(maxCombo);
+                if(!wasAlterCombo)
+                    attackComboIndex = (++attackComboIndex)%(maxCombo);
+                else
+                    attackComboIndex = 0;
             }
         }
         protected void UpdateLastAttackInput()
@@ -125,6 +138,10 @@ namespace Player
         public virtual void ExtraJumpRecover()
         {
             extraJump = defaultExtraJump;
+        }
+        public virtual void SpecialMove()
+        {
+            return;
         }
     }
 }

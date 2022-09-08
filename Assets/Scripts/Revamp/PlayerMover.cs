@@ -166,9 +166,7 @@ public class PlayerMover : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Z)) //Should move to another class
         {
-            int faceDir = IsFacingRight?1:-1;
-            if((target.position.x - transform.position.x)*faceDir > 0)
-                SetPlayerState(PlayerState.Hooking);
+            moveControl.SpecialMove();
         }
     }
     private void Dash(int dir)
