@@ -16,6 +16,8 @@ public class DamageableObjects : SpawnableObjects, IDamageable
 
     private State objectState = State.Normal;
 
+    [SerializeField] protected SFX sfx; //A scriptableobject file which hold a list of sound of object
+
     public override void Despawn()
     {
         base.Despawn();
@@ -48,15 +50,28 @@ public class DamageableObjects : SpawnableObjects, IDamageable
         {
             Die();
         }
+        else
+        {
+            PlaySFX(SFX.SFXState.HurtSFX);
+        }
     }
 
     protected virtual void Die()
     {
+        PlaySFX(SFX.SFXState.DieSFX)
         Despawn();
     }
 
     protected virtual void BackToNormal()
     {
         objectState = State.Normal;
+    }
+
+    protected void PlaySFX(SFX.SFXState state)
+    {
+        if(sfx != null)
+        {
+            sfx.PlaySFX(state);
+        }
     }
 }

@@ -75,6 +75,7 @@ public class Enemy : DamageableObjects, IDamageable, ISpawnObject
 
     public virtual void CreateAttackPrefab()
     {
+        PlaySFX(SFX.SFXState.AttackSFX);
         anim.ResetTrigger("Attack");
         enemyState = State.Normal;
         attackCountdown = attackRate;
