@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : DamageableObjects, IDamageable, ISpawnObject
+public class Enemy : DamageableObjects
 { 
     [SerializeField] protected int dmg;
     public bool isMoveable = true; 

@@ -58,7 +58,7 @@ public class DamageableObjects : SpawnableObjects, IDamageable
 
     protected virtual void Die()
     {
-        PlaySFX(SFX.SFXState.DieSFX)
+        PlaySFX(SFX.SFXState.DieSFX);
         Despawn();
     }
 
