@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : DamageableObjects, IDamageable, ISpawnObject
+public class Enemy : DamageableObjects
 { 
     [SerializeField] protected int dmg;
     public bool isMoveable = true; 
@@ -75,6 +75,7 @@ public class Enemy : DamageableObjects, IDamageable, ISpawnObject
 
     public virtual void CreateAttackPrefab()
     {
+        PlaySFX(SFX.SFXState.AttackSFX);
         anim.ResetTrigger("Attack");
         enemyState = State.Normal;
         attackCountdown = attackRate;
