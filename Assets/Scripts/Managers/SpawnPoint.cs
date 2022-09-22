@@ -24,31 +24,33 @@ public class SpawnPoint : MonoBehaviour
     private GameObject currentEnemies = null;
     private bool spawnTrigger = false;
     private bool hasBeenTriggerOnce = false;
+    private bool isActive = false;
+    public void Init()
+    {
+        isActive = true;
+    }
     
     void Update()
     {
-        //Debug.Log("SpawnPoint said: distance with player is: " + Vector3.Distance(WorldManager.Instance.player.transform.position, transform.position));
-        // if(Vector3.Distance(WorldManager.Instance.player.transform.position, transform.position) < spawnDistance && currentEnemies == null)
-        // {
-        //     currentEnemies = Instantiate(enemyType,transform.position,Quaternion.identity);
-        //     currentEnemies.GetComponent<Enemy>().SetSpawnPoint(this);
-        // }
-        if(spawnTrigger == false)
+        if(isActive)
         {
-            if(isRespawnable != true && hasBeenTriggerOnce == true)
+            if(spawnTrigger == false)
             {
-                return;
+                if(isRespawnable != true && hasBeenTriggerOnce == true)
+                {
+                    return;
+                }
+                else
+                {
+                    CheckToSpawn();
+                }
             }
             else
             {
-                CheckToSpawn();
-            }
-        }
-        else
-        {
-            if(isRespawnable)
-            {
-                CheckToDespawn();
+                if(isRespawnable)
+                {
+                    CheckToDespawn();
+                }
             }
         }
     }
