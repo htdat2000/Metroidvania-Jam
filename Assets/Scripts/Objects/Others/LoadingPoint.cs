@@ -22,7 +22,7 @@ public class LoadingPoint : MonoBehaviour
 
     IEnumerator LoadTargetScene()
     {
-        CustomEvents.OnLoadingScreenActive();
+        CustomEvents.OnLoadingScreenActive?.Invoke();
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(1));
         SceneManager.LoadSceneAsync(loadMap.ToString(), LoadSceneMode.Additive);
         yield return null;
