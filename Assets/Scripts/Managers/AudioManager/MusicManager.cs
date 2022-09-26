@@ -4,7 +4,9 @@ using UnityEngine.Audio;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(AudioSource))]
 public class MusicManager : MonoBehaviour
 {
     public Music[] musics;
@@ -16,28 +18,35 @@ public class MusicManager : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         audioSource.loop = true;
+        SceneManager.sceneLoaded += PlayMusic;
     }
     
     void Start() 
     {
-        if(musics.Length != 0)
-        {
-            Play(musics[0].name);
-        }
         audioManager = GetComponentInParent<AudioManager>();
     }
 
-    public void Play(string name)
+    void OnDisable()
     {
-        Music m = Array.Find(musics, music => music.name == name);
-        if(m == null)
+        SceneManager.sceneLoaded -= PlayMusic;
+    }
+
+    public void PlayMusic(Scene scene, LoadSceneMode mode)
+    {
+        if(musics.Length <= 0)
         {
-            Debug.Log("Music: " + name + "Not Found");
             return;
         }
-        audioSource.clip = m.audioClip;
-        audioSource.volume = musicVolume.value;
-        audioSource.Play();
+        if(scene.name != "PlayerScene")
+        {   
+            Music targetMusic = FindMusicToPlay(scene);
+            if(targetMusic != null)
+            {
+                audioSource.clip = targetMusic.audioClip;
+                audioSource.volume = musicVolume.value;
+                audioSource.Play();
+            }
+        }
     }
 
     public void Stop(string name)
@@ -62,5 +71,20 @@ public class MusicManager : MonoBehaviour
             audioManager.MusicSwitch();
         }
         audioSource.volume = musicVolume.value;
+    }
+
+    Music FindMusicToPlay(Scene scene)
+    {
+        int sceneIndex = scene.buildIndex;
+        Music m = Array.Find(musics, music => music.musicIndex == sceneIndex);
+        if(m == null)
+        {
+            Debug.Log("Music: " + name + "Not Found");
+            return null;
+        }
+        else
+        {
+            return m;
+        }
     }
 }
