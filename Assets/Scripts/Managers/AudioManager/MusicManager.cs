@@ -43,7 +43,7 @@ public class MusicManager : MonoBehaviour
             if(targetMusic != null)
             {
                 audioSource.clip = targetMusic.audioClip;
-                audioSource.volume = musicVolume.value;
+                audioSource.volume = 1;//musicVolume.value;
                 audioSource.Play();
             }
         }
