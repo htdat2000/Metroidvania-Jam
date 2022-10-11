@@ -33,19 +33,15 @@ public class MusicManager : MonoBehaviour
 
     public void PlayMusic(Scene scene, LoadSceneMode mode)
     {
-        if(musics.Length <= 0)
-        {
-            return;
-        }
         if(scene.name != "PlayerScene")
         {   
-            Music targetMusic = FindMusicToPlay(scene);
-            if(targetMusic != null)
-            {
-                audioSource.clip = targetMusic.audioClip;
-                audioSource.volume = 1;//musicVolume.value;
-                audioSource.Play();
-            }
+        Music targetMusic = GameObject.FindGameObjectWithTag("MusicCarrier").GetComponent<MusicCarrier>().musicHolding;
+        if(targetMusic != null)
+        {
+            audioSource.clip = targetMusic.audioClip;
+            audioSource.volume = 1;//musicVolume.value;
+            audioSource.Play();
+        }
         }
     }
 
@@ -71,20 +67,5 @@ public class MusicManager : MonoBehaviour
             audioManager.MusicSwitch();
         }
         audioSource.volume = musicVolume.value;
-    }
-
-    Music FindMusicToPlay(Scene scene)
-    {
-        int sceneIndex = scene.buildIndex;
-        Music m = Array.Find(musics, music => music.musicIndex == sceneIndex);
-        if(m == null)
-        {
-            Debug.Log("Music: " + name + "Not Found");
-            return null;
-        }
-        else
-        {
-            return m;
-        }
     }
 }
