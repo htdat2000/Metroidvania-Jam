@@ -9,6 +9,7 @@ TagManager:
   - Enemies
   - Teleport
   - Attack
+  - MusicCarrier
   layers:
   - Default
   - TransparentFX
