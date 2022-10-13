@@ -34,13 +34,21 @@ public class MusicManager : MonoBehaviour
     public void PlayMusic(Scene scene, LoadSceneMode mode)
     {
         if(scene.name != "PlayerScene")
-        {   
-        Music targetMusic = GameObject.FindGameObjectWithTag("MusicCarrier").GetComponent<MusicCarrier>().musicHolding;
+        {
+        GameObject target = GameObject.FindGameObjectWithTag("MusicCarrier");
+        if(target != null)
+        {
+        Music targetMusic = target.GetComponent<MusicCarrier>().musicHolding;
         if(targetMusic != null)
         {
             audioSource.clip = targetMusic.audioClip;
             audioSource.volume = 1;//musicVolume.value;
             audioSource.Play();
+        }
+        }
+        else
+        {
+            Debug.LogWarning("This Scene Don't Have Music Carrier");
         }
         }
     }
