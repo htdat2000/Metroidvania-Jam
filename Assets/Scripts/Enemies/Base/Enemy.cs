@@ -60,20 +60,19 @@ public class Enemy : DamageableObjects
         }
     }
 
-    public override void TakeDmg(int _dmg, GameObject attacker)
+    protected override bool TakeDmgCondition()
     {
         if(enemyState != State.Hurting)
         {
-            Invoke("BackToNormal", HURT_TIME);
-            enemyState = State.Hurting;
-            GetHitBehaviour(_dmg);
-            CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
-            EffectPool.Instance.GetHitEffectInPool(transform.position);
-            //Debug.Log("[Enemy] take dmg");
+           return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
-    public virtual void CreateAttackPrefab()
+    public virtual void CreateAttackPrefab() //This method is called by anim of the enemy 
     {
         PlaySFX(SFX.SFXState.AttackSFX);
         anim.ResetTrigger("Attack");
@@ -106,8 +105,6 @@ public class Enemy : DamageableObjects
         {
             IDamageable player = col.gameObject.GetComponent<IDamageable>();
             player.TakeDmg(dmg, this.gameObject);
-            CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_DANGER_AMOUNT, GameConst.SHAKE_DANGER_TIME);
-            EffectPool.Instance.GetHitEffectInPool(col.gameObject.transform.position);
         }
     }
 }

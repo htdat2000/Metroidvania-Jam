@@ -57,7 +57,6 @@ public class PlayerData : MonoBehaviour, IDamageable
             playerState = State.Attacked;
             KnockbackEffect(attacker);
             DecreaseHp(_dmg);
-
             CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
             EffectPool.Instance.GetHitEffectInPool(transform.position);
         }

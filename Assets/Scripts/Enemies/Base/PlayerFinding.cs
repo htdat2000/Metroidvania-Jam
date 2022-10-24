@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Enemy))]
 public class PlayerFinding : MonoBehaviour
 {
     bool hasTarget = false;

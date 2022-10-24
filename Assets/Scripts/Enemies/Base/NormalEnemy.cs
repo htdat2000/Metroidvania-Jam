@@ -18,11 +18,6 @@ public class NormalEnemy : Enemy
     [SerializeField] protected float pivotCheckDistanceX = 0.2f;
     // Start is called before the first frame update
 
-    public override void SetSpawnPoint(SpawnPoint newSpawnPoint)
-    {
-        base.SetSpawnPoint(newSpawnPoint);
-    }
-
     protected override void Update()
     {
         base.Update();
