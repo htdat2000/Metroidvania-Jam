@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: Scene1Music
   musicIndex: 1
-  audioClip: {fileID: 8300000, guid: f226f3f69f5904b4bb0b5d4516b82774, type: 3}
+  audioClip: {fileID: 0}

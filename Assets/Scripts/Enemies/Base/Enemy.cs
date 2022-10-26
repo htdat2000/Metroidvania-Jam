@@ -24,6 +24,7 @@ public class Enemy : DamageableObjects
         Hurting
     }
     protected State enemyState = State.Normal;
+    [SerializeField] protected bool isHarmless; //if true it will deactive the AttackAction method which means this type of enemy cant attack player.
 
     protected virtual void Start()
     {
@@ -44,6 +45,10 @@ public class Enemy : DamageableObjects
 
     public virtual void AttackAction()
     {
+        if(isHarmless)
+        {
+            return;
+        }
         if ((attackCountdown <= 0) && (enemyState == State.Normal))
         {
             // attackCountdown = attackRate;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaseEnemy : Enemy
+public class ChaseEnemy : Enemy //this type of enemies will chase player when player within their active range.
 {
     [SerializeField] protected float moveSpeed;
     protected bool isFacingRight = false;
