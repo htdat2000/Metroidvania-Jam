@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1176643198335824004}
   - component: {fileID: 1176643198335824005}
   - component: {fileID: 1176643198335824011}
-  - component: {fileID: 7510697760446028327}
   - component: {fileID: 8823269436523142133}
   - component: {fileID: 3669368673666424828}
+  - component: {fileID: 1621228750016254739}
   m_Layer: 0
   m_Name: Striker
   m_TagString: Enemies
@@ -109,33 +109,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &7510697760446028327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1176643198335824007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e566e59fd9df2954cb6eaa6dacbc6516, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultHP: 5
-  dmg: 2
-  isMoveable: 1
-  attackRate: 2
-  attackPrefab: {fileID: 4486400034012647460, guid: 090b38bef55d1824fba3b23336c5b313,
-    type: 3}
-  attackSpawnPos: {fileID: 2905132597981155584}
-  attackRange: 1.5
-  platformLayerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  moveSpeed: 5
-  TURN_RESET_TIME: 2
-  CHECK_DISTANCE: 0.45
-  pivotCheckDistanceX: 0.7
 --- !u!95 &8823269436523142133
 Animator:
   serializedVersion: 3
@@ -171,6 +144,35 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &1621228750016254739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176643198335824007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fadc103d6cbbddd4db639d978f6eed4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultHP: 5
+  sfx: {fileID: 0}
+  dmg: 2
+  isMoveable: 1
+  attackRate: 2
+  attackPrefab: {fileID: 4486400034012647460, guid: 090b38bef55d1824fba3b23336c5b313,
+    type: 3}
+  attackSpawnPos: {fileID: 2905132597981155584}
+  attackRange: 1.5
+  isHarmless: 0
+  platformLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  moveSpeed: 5
+  TURN_RESET_TIME: 2
+  CHECK_DISTANCE: 0.45
+  pivotCheckDistanceX: 0.7
 --- !u!1 &2905132597981155584
 GameObject:
   m_ObjectHideFlags: 0

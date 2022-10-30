@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1176643198335824004}
   - component: {fileID: 1176643198335824005}
   - component: {fileID: 1176643198335824011}
-  - component: {fileID: 1176643198335824010}
   - component: {fileID: 1176643198335824009}
   - component: {fileID: 8897303754897270812}
+  - component: {fileID: 8509588979511587736}
   m_Layer: 0
   m_Name: Dummy
   m_TagString: Enemies
@@ -107,32 +107,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &1176643198335824010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1176643198335824007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f61bae2638dfdac4fbdb1286e2dd7ca6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultHP: 3
-  dmg: 1
-  isMoveable: 1
-  attackRate: 1
-  attackPrefab: {fileID: 0}
-  attackSpawnPos: {fileID: 0}
-  attackRange: 2
-  platformLayerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  moveSpeed: 5
-  TURN_RESET_TIME: 2
-  CHECK_DISTANCE: 0.6
-  pivotCheckDistanceX: 0.3
 --- !u!95 &1176643198335824009
 Animator:
   serializedVersion: 3
@@ -168,3 +142,31 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.1}
   m_Size: {x: 1, y: 0.8}
   m_Direction: 1
+--- !u!114 &8509588979511587736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176643198335824007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fadc103d6cbbddd4db639d978f6eed4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultHP: 3
+  sfx: {fileID: 0}
+  dmg: 1
+  isMoveable: 1
+  attackRate: 1
+  attackPrefab: {fileID: 0}
+  attackSpawnPos: {fileID: 0}
+  attackRange: 2
+  isHarmless: 1
+  platformLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  moveSpeed: 5
+  TURN_RESET_TIME: 2
+  CHECK_DISTANCE: 0.6
+  pivotCheckDistanceX: 0.3
