@@ -83,7 +83,7 @@ public class NormalEnemy : Enemy   //this type of enemies will move back and for
         }
         else
         {
-            base.AttackAction();
+            TriggerAttackAnim();
         }
     }
 }

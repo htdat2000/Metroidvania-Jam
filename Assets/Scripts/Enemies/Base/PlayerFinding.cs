@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//It takes responsibility for triggering attack action method of enemy and check whether player enters attack range
+
 [RequireComponent(typeof(Enemy))]
-public class PlayerFinding : MonoBehaviour
+public class PlayerFinding : MonoBehaviour 
 {
     bool hasTarget = false;
     Enemy enemy;

@@ -84,4 +84,9 @@ public class ChaseEnemy : Enemy //this type of enemies will chase player when pl
     {
         target = null;
     }
+
+    public override void AttackAction()
+    {
+        return;
+    }
 }

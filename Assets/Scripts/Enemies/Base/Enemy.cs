@@ -49,12 +49,7 @@ public class Enemy : DamageableObjects
         {
             return;
         }
-        if ((attackCountdown <= 0) && (enemyState == State.Normal))
-        {
-            // attackCountdown = attackRate;
-            enemyState = State.Attacking;
-            anim.SetTrigger("Attack");
-        }
+        TriggerAttackAnim();
     }
 
     protected void AttackCountdown()
@@ -74,6 +69,16 @@ public class Enemy : DamageableObjects
         else
         {
             return false;
+        }
+    }
+
+    protected virtual void TriggerAttackAnim()
+    {
+        if ((attackCountdown <= 0) && (enemyState == State.Normal))
+        {
+            // attackCountdown = attackRate;
+            enemyState = State.Attacking;
+            anim.SetTrigger("Attack");
         }
     }
 

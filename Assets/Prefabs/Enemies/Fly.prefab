@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 1176643198335824004}
   - component: {fileID: 1176643198335824005}
   - component: {fileID: 1176643198335824011}
-  - component: {fileID: 5462725396429533152}
   - component: {fileID: 7423120476071973279}
   - component: {fileID: 6013926371993088991}
+  - component: {fileID: 5571760837428596788}
   m_Layer: 0
   m_Name: Fly
   m_TagString: Enemies
@@ -108,26 +108,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &5462725396429533152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1176643198335824007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f5fea7db16b25e4bad3662b08417c0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultHP: 5
-  dmg: 1
-  isMoveable: 1
-  attackRate: 1
-  attackPrefab: {fileID: 0}
-  attackSpawnPos: {fileID: 0}
-  attackRange: 7
-  moveSpeed: 2
 --- !u!58 &7423120476071973279
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -163,6 +143,28 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5571760837428596788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176643198335824007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d909f4fef3e893d4b831dd2bfb4e7b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultHP: 5
+  sfx: {fileID: 0}
+  dmg: 1
+  isMoveable: 1
+  attackRate: 1
+  attackPrefab: {fileID: 0}
+  attackSpawnPos: {fileID: 0}
+  attackRange: 7
+  isHarmless: 1
+  moveSpeed: 2
 --- !u!1 &3465259922289772808
 GameObject:
   m_ObjectHideFlags: 0
