@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalEnemy : Enemy
+public class NormalEnemy : Enemy   //this type of enemies will move back and forth within an area.
 {
     [SerializeField] protected LayerMask platformLayerMask;
     protected bool isFacingRight = false;
@@ -17,11 +17,6 @@ public class NormalEnemy : Enemy
     protected float lastTurn;
     [SerializeField] protected float pivotCheckDistanceX = 0.2f;
     // Start is called before the first frame update
-
-    public override void SetSpawnPoint(SpawnPoint newSpawnPoint)
-    {
-        base.SetSpawnPoint(newSpawnPoint);
-    }
 
     protected override void Update()
     {
@@ -66,6 +61,10 @@ public class NormalEnemy : Enemy
 
     public override void AttackAction()
     {
+        if(isHarmless)
+        {
+            return;
+        }
         RaycastHit2D hit = Physics2D.Raycast(this.gameObject.transform.position, new Vector2(moveDir, 0), attackRange, LayerMask.GetMask("Player"));
         if(hit.collider == null)
         {
@@ -84,7 +83,7 @@ public class NormalEnemy : Enemy
         }
         else
         {
-            base.AttackAction();
+            TriggerAttackAnim();
         }
     }
 }

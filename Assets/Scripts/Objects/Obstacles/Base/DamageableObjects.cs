@@ -26,17 +26,26 @@ public class DamageableObjects : SpawnableObjects, IDamageable
 
     public virtual void TakeDmg(int _dmg, GameObject attacker)
     {
-        if(objectState != State.Hurting)
+        if(TakeDmgCondition())
         {
             Invoke("BackToNormal", HURT_TIME);
             objectState = State.Hurting;
-            GetHitBehaviour(_dmg);
-            CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
-            EffectPool.Instance.GetHitEffectInPool(transform.position);
+            GetHitBehaviour(_dmg);    
             //Debug.Log("[Enemy] take dmg");
         }
     }
 
+    protected virtual bool TakeDmgCondition() //condition which allows game object take dmg
+    {
+     if(objectState != State.Hurting)
+     {
+        return true;
+     }   
+     else
+     {
+        return false;
+     }
+    }
     protected virtual void GetHitBehaviour(int _dmg)
     {
         DecreaseHP(_dmg);

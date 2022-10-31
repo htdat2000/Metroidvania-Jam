@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 1176643198335824005}
   - component: {fileID: 1176643198335824011}
   - component: {fileID: 1833680110079348620}
-  - component: {fileID: -474066374379167988}
   - component: {fileID: 3049492691051091132}
+  - component: {fileID: 1822084502917847848}
   m_Layer: 0
   m_Name: Black
   m_TagString: Enemies
@@ -128,33 +128,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &-474066374379167988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1176643198335824007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7489f0b4c50b6ee4f85413b2f544b078, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultHP: 8
-  dmg: 3
-  isMoveable: 1
-  attackRate: 2
-  attackPrefab: {fileID: 4486400034012647460, guid: 1e96d9c78c9cae74888bc4a9f596d809,
-    type: 3}
-  attackSpawnPos: {fileID: 1631232834294396027}
-  attackRange: 2
-  platformLayerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  moveSpeed: 5
-  TURN_RESET_TIME: 2
-  CHECK_DISTANCE: 0.6
-  pivotCheckDistanceX: 0.3
 --- !u!70 &3049492691051091132
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -171,6 +144,35 @@ CapsuleCollider2D:
   m_Offset: {x: -0.05, y: 0.2}
   m_Size: {x: 0.8, y: 1.3}
   m_Direction: 0
+--- !u!114 &1822084502917847848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176643198335824007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fadc103d6cbbddd4db639d978f6eed4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultHP: 8
+  sfx: {fileID: 0}
+  dmg: 3
+  isMoveable: 1
+  attackRate: 2
+  attackPrefab: {fileID: 4486400034012647460, guid: 1e96d9c78c9cae74888bc4a9f596d809,
+    type: 3}
+  attackSpawnPos: {fileID: 1631232834294396027}
+  attackRange: 2
+  isHarmless: 0
+  platformLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  moveSpeed: 5
+  TURN_RESET_TIME: 2
+  CHECK_DISTANCE: 0.6
+  pivotCheckDistanceX: 0.3
 --- !u!1 &1631232834294396027
 GameObject:
   m_ObjectHideFlags: 0

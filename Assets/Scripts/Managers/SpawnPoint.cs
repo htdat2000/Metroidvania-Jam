@@ -30,6 +30,10 @@ public class SpawnPoint : MonoBehaviour
         isActive = true;
     }
     
+    void Start()
+    {
+        Init();
+    }
     void Update()
     {
         if(isActive)
@@ -58,7 +62,7 @@ public class SpawnPoint : MonoBehaviour
     void CheckToSpawn()
     {
         if(Vector3.Distance(WorldManager.Instance.player.transform.position, transform.position) < spawnDistance && currentEnemies == null)
-        {
+        {            
             GameObject enemies = GameObject.Find(enemyType);
             for(int i = 0; i < enemies.transform.childCount; i ++)
             {

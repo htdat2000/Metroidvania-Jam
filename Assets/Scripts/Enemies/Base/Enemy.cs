@@ -24,6 +24,7 @@ public class Enemy : DamageableObjects
         Hurting
     }
     protected State enemyState = State.Normal;
+    [SerializeField] protected bool isHarmless; //if true it will deactive the AttackAction method which means this type of enemy cant attack player.
 
     protected virtual void Start()
     {
@@ -44,12 +45,11 @@ public class Enemy : DamageableObjects
 
     public virtual void AttackAction()
     {
-        if ((attackCountdown <= 0) && (enemyState == State.Normal))
+        if(isHarmless)
         {
-            // attackCountdown = attackRate;
-            enemyState = State.Attacking;
-            anim.SetTrigger("Attack");
+            return;
         }
+        TriggerAttackAnim();
     }
 
     protected void AttackCountdown()
@@ -60,20 +60,29 @@ public class Enemy : DamageableObjects
         }
     }
 
-    public override void TakeDmg(int _dmg, GameObject attacker)
+    protected override bool TakeDmgCondition()
     {
         if(enemyState != State.Hurting)
         {
-            Invoke("BackToNormal", HURT_TIME);
-            enemyState = State.Hurting;
-            GetHitBehaviour(_dmg);
-            CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_ATTACK_AMOUNT, GameConst.SHAKE_ATTACK_TIME);
-            EffectPool.Instance.GetHitEffectInPool(transform.position);
-            //Debug.Log("[Enemy] take dmg");
+           return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
-    public virtual void CreateAttackPrefab()
+    protected virtual void TriggerAttackAnim()
+    {
+        if ((attackCountdown <= 0) && (enemyState == State.Normal))
+        {
+            // attackCountdown = attackRate;
+            enemyState = State.Attacking;
+            anim.SetTrigger("Attack");
+        }
+    }
+
+    public virtual void CreateAttackPrefab() //This method is called by anim of the enemy 
     {
         PlaySFX(SFX.SFXState.AttackSFX);
         anim.ResetTrigger("Attack");
@@ -106,8 +115,6 @@ public class Enemy : DamageableObjects
         {
             IDamageable player = col.gameObject.GetComponent<IDamageable>();
             player.TakeDmg(dmg, this.gameObject);
-            CustomEvents.OnScreenShakeDanger?.Invoke(GameConst.SHAKE_DANGER_AMOUNT, GameConst.SHAKE_DANGER_TIME);
-            EffectPool.Instance.GetHitEffectInPool(col.gameObject.transform.position);
         }
     }
 }
