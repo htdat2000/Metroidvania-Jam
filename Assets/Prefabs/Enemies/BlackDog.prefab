@@ -155,7 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14bcb0c145abf78438817e2bb4e2d897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultHP: 200
+  defaultHP: 20
+  sfx: {fileID: 0}
   dmg: 3
   isMoveable: 1
   attackRate: 10
@@ -163,6 +164,7 @@ MonoBehaviour:
     type: 3}
   attackSpawnPos: {fileID: 2465114675748560141}
   attackRange: 3
+  isHarmless: 0
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 256

@@ -38,6 +38,11 @@ public class Map : MonoBehaviour
         if(gateData[_gateID] == '1')
         {
             TeleportData targetTeleport = Array.Find(teleportData, teleport => teleport.gateID == _gateID);
+            if(targetTeleport == null)
+            {
+                Debug.Log("No gate data to tele");
+                return;
+            }
             StartCoroutine(targetTeleport.Trigger());
             CloseMap();
         }
