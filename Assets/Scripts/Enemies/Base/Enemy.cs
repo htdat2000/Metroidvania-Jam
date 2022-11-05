@@ -36,7 +36,7 @@ public class Enemy : DamageableObjects
     protected virtual void Update()
     {
         AttackCountdown();
-        if(enemyState != State.Normal)
+        if(enemyState != State.Normal || enemyState != State.Walking)
         {
             rb.velocity = Vector2.zero;
             return;
