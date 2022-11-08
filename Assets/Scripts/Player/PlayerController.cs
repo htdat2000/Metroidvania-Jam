@@ -1,531 +1,369 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
+using DG.Tweening;
+using Cinemachine;
+using UnityStandardAssets.CrossPlatformInput;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Movable
 {
-    [SerializeField] private LayerMask platformLayerMask;
-    [Header("Attributes")]
-    [SerializeField] private float moveSpeed = 30;
-    [SerializeField] private float jumpForce = 8.5f;
-    [SerializeField] private float rollForce = 12;
-    [SerializeField] private float fastDashSpeed = 20;
-    [SerializeField] private float slowDashSpeed = 12;
-    [SerializeField] private float slideSpeed = 1;
+    public static PlayerController Instance;
 
-    [Header("Counting")]
-    private int comboCount = 0;
-    private float comboResetTime = 1;
-    private float comboCountdown = 1;
+    [SerializeField] float ATTACK_MAX_SPEED = 3f;
+    [SerializeField] float COYOTE_TIME = 0.2f;
+    [SerializeField] int MAX_EXTRA_JUMP = 1;
+    [SerializeField] float DASH_INPUT_TIME = 0.25f;
+    [SerializeField] float DASH_FORCE = 0.25f;
+    [SerializeField] float DASH_TIME = 0.25f;
+    [SerializeField] float TELE_COOLDOWN = 0.5f;
 
-    private float jumpResetTime = 0.1f;
-    private float jumpCountdown = 0;
-    private int jumpCount = 0;
+    [SerializeField] private LayerMask whatIsGround;
 
-    private float attackResetTime = 0.25f;
-    private float attackCountdown = 0;
+    [SerializeField] private int extraJump = 0;
 
-    private float movement;
+    private float coyoteTimer = 0f;
 
-    [Header("Component")]
-    private Rigidbody2D rb;
-    private Animator anim;
-    [SerializeField] private Wisp wisp;
+    //private RaycastHit hit;
 
-    [Header("Bool Check Environment")]
-    public bool isLastFrameOnGround = false;
-    public bool isOnGround = false;
-    public bool isNextToWall = false;
-    private bool isFacingRight = true;
+    private float moveLeft = 0f;
+    private float moveRight = 0f;
 
-    [Header("Const")]
-    private Vector3 DISTANCE_CENTER_TO_FEET = new Vector3(0f,-0.25f,0f);
-    private const float ANTI_SLIDE_ON_FLOOR = 0.05f;
-    private const float MAX_FLOOR_SPEED = 4f;
-    private const float MAX_JUMP_HIGH = 7;
-    private const float DASH_TIME = 0.15f;
+    private bool isOnWall = false;
 
-    private enum State
+    private float lastMoveInputPress = 0f;
+    private Tween dashDelay;
+
+    [SerializeField] private PlayerTargetChecker targetChecker;
+    private float teleTimer;
+
+    [SerializeField] private PlayerAttackController attackController;
+
+    [SerializeField] private PlayerChargeController chargeController;
+    public bool IsCharging = false;
+
+    private bool isHavingAtkFeedback = false;
+    public CameraShake mainVCam;
+    private void Awake() 
     {
-        Normal,
-        Sliding,
-        Rolling,
-        Dashing,
-        Attacking,
-        Hooking,
-        Dead
+        Instance = this;    
+    }
+    protected override void Start()
+    {
+        base.Start();
     }
 
-    private State currentState = State.Normal;
-    // Start is called before the first frame update
-
-    [Header("Player Color Form")]
-    ColorForm currentColorForm = ColorForm.White;
-    enum ColorForm { White, Red, Blue, Yellow, Violet, Orange, Green};
-
-    [Header("Other items")]
-    [SerializeField] private GameObject singleAttackHit;
-    [SerializeField] private GameObject[] comboAttackHits;
-    [SerializeField] private GameObject aoeAttackHit;
-    [SerializeField] private Hook hook;
-    private TrailRenderer trail;
-    // [Header("Debug")]
-    
-    void Awake()
-    {
-        CustomEvents.OnPlayerDied += PlayerDieBehaviour;
-    }
-
-    void Start()
-    {
-        trail = GetComponent<TrailRenderer>();
-        trail.widthMultiplier = 0f;
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();    
-    }
-
-    // Update is called once per frame
-    void Update() 
-    {
-        Countdown();
-        AutoFixXVelocity();
-        if(currentState == State.Dead || currentState == State.Hooking)
+    void Update () {
+        switch (state)
         {
-            return;
-        }
-        HorizontalMove();
-        GroundCheck();
-        JumpCheck();
-        ZButtonFunction();
-        AttackCheck();
-        SlideCheck(); 
-        SwitchForm();
-        AnimationUpdate();
-        VerYCheck();
-    }
-    void OnDestroy()
-    {
-        CustomEvents.OnPlayerDied -= PlayerDieBehaviour;
-    }
-
-    public void Attack()
-    {
-        attackCountdown = attackResetTime;
-        BackToNormal();
-        switch (currentColorForm)
-        {
-            case ColorForm.White:
-                Instantiate(singleAttackHit, this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);      
-                break;
-            case ColorForm.Blue:
-                Instantiate(aoeAttackHit, this.gameObject.transform.position, Quaternion.identity, this.gameObject.transform);
-                break;
-            case ColorForm.Red:
-                switch(comboCount)
+            case State.Normal:
+                CoyoteTimeCount();
+                DashTimeCount();
+                TeleCooldownCounter();
+                horizontalVector = GetInputVectorOnKey();
+                ApplyHorizontalForce();
+                ApplyFriction();
+                DashCheck();
+                JumpCheck();
+                HookCheck();
+                ApplyGravity();
+                WallSlideCheck();
+                SetFacing();
+            break;
+            case State.Dashing:
+                BreakDash();
+            break;
+            case State.Sliding:
+                WallSlideJumpCheck();
+                WallSlideDropCheck();
+                WallSlide();
+            break;
+            case State.Hurting:
+                stunCounter -= Time.deltaTime;
+                if (stunCounter <= 0)
                 {
-                    case 0:
-                        comboCount++;
-                        comboCountdown = comboResetTime;
-                        Instantiate(comboAttackHits[0], this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);
-                        break;
-                    case 1:
-                        comboCount++;
-                        comboCountdown = comboResetTime;
-                        Instantiate(comboAttackHits[1], this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);
-                        break;
-                    case 2:
-                        comboCount++;
-                        Instantiate(comboAttackHits[2], this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);
-                        break;
-                    default:
-                        comboCount = 0;
-                        comboCountdown = comboResetTime;
-                        break;
+                    state = State.Normal;
                 }
-                break;
-            case ColorForm.Yellow:
-                switch(comboCount)
-                {
-                    case 0:
-                        comboCount++;
-                        comboCountdown = comboResetTime;
-                        Instantiate(comboAttackHits[0], this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);
-                        break;
-                    case 1:
-                        comboCount++;
-                        comboCountdown = comboResetTime;
-                        Instantiate(comboAttackHits[1], this.gameObject.transform.position, this.gameObject.transform.rotation, this.gameObject.transform);
-                        break;
-                    default:
-                        comboCount = 0;
-                        comboCountdown = comboResetTime;
-                        break;
-                }
-                break;
+            break;
         }
-    }
-
-    void ComboCountdown()
-    {   
-        if(comboCount > 0)
-        {
-            if(comboCountdown > 0)
-            {
-                comboCountdown -= Time.deltaTime;
-            }
-            else 
-            {
-                comboCount = 0;
-            }
-        }
-    }
-
-    void HorizontalMove()
+        chargeController.ChargeCheck();
+        attackController.AttackCheck();
+        Move();
+	}
+    private void CoyoteTimeCount()
     {
-        if ((currentState != State.Normal) && (currentState != State.Sliding) && (currentState != State.Attacking))  
-        {
+        if(coyoteTimer >= 0)
+            coyoteTimer -= Time.deltaTime;
+    }
+    private Vector2 GetInputVectorOnKey()
+    {
+        moveLeft = 0f;
+        moveRight = 0f;
+        if((Input.GetKey(KeyCode.LeftArrow) || CrossPlatformInputManager.GetButton("Left")) && !IsCharging)
+            moveLeft = -1f;
+        if((Input.GetKey(KeyCode.RightArrow) || CrossPlatformInputManager.GetButton("Right")) && !IsCharging)
+            moveRight = 1f;
+        return Vector2.right * (moveRight + moveLeft);
+    }
+    public void OnLeftPress()
+    {
+
+    }
+    public Vector2 GetInputVector()
+    {
+        return horizontalVector;
+    }
+    private void DashTimeCount()
+    {
+        if(lastMoveInputPress >= 0)
+            lastMoveInputPress -= Time.deltaTime;
+    }
+    private void DashCheck()
+    {
+        if(IsCharging)
             return;
-        }
-        if (Input.GetKey("right"))
+        if((Input.GetKeyDown(KeyCode.RightArrow) || CrossPlatformInputManager.GetButtonDown("Right")) && isGrounded)
         {
-            isFacingRight = true;
-            rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * moveSpeed, -MAX_FLOOR_SPEED, MAX_FLOOR_SPEED), rb.velocity.y);
+            if(lastMoveInputPress > 0 && IsFacingRight)
+            {
+                Dash(true);
+            }
+            lastMoveInputPress = DASH_INPUT_TIME;
         }
-        else if (Input.GetKey("left"))
-        {
-            isFacingRight = false;
-            rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x + Time.deltaTime * moveSpeed * -1, -MAX_FLOOR_SPEED, MAX_FLOOR_SPEED), rb.velocity.y);
-        }
-        AutoFlip();
-    }
-
-    void AutoFlip()
-    {
-        transform.rotation = isFacingRight ? Quaternion.identity : Quaternion.Euler(0, 180, 0);
-    }
-
-    void GroundCheck()
-    {
-        isLastFrameOnGround = isOnGround;
-        RaycastHit2D raycastHitR = Physics2D.Raycast(new Vector3(transform.position.x + 0.1f, transform.position.y, transform.position.z), Vector2.down, 0.6f, platformLayerMask);
-        RaycastHit2D raycastHitL = Physics2D.Raycast(new Vector3(transform.position.x - 0.1f, transform.position.y, transform.position.z), Vector2.down, 0.6f, platformLayerMask);
-        //Color rayColor;
-        isOnGround = (raycastHitR.collider != null && raycastHitL.collider != null);
-        if(isOnGround)
-        {
-            ResetJumpCount();
-            if(!isLastFrameOnGround)
-                EffectPool.Instance.GetLandingEffectInPool(transform.position + DISTANCE_CENTER_TO_FEET);
+        else if((Input.GetKeyDown(KeyCode.LeftArrow) || CrossPlatformInputManager.GetButtonDown("Left")) && isGrounded)
+		{
+            if(lastMoveInputPress > 0 && !IsFacingRight)
+            {
+                Dash(false);
+            }
+            lastMoveInputPress = DASH_INPUT_TIME;
         }
     }
-
-    void JumpCheck()
+    public bool IsDashing()
     {
-        if (Input.GetKeyDown("x"))
+        return (state == State.Dashing);
+    }
+    private void BreakDash()
+    {
+        if(!isGrounded)
         {
-            switch (currentColorForm)
-            {   
-                case ColorForm.Red:
-                    if(jumpCount < 1 && isOnGround)
-                    {
-                        Jump();
-                    }
-                    else if(!isOnGround && isNextToWall)
-                    {
-                        ResetJumpCount();
-                        WallJump();
-                    }
-                    break;
-                case ColorForm.Yellow:
-                    if(jumpCount < 1 && isOnGround)
-                    {
-                        Jump();
-                    }
-                    else if(!isOnGround && isNextToWall)
-                    {
-                        ResetJumpCount();
-                        WallJump();
-                    }
-                    break;
-                case ColorForm.Blue:
-                    if((jumpCount < 1) && isOnGround && (currentState != State.Hooking))
-                    {
-                        Jump();   
-                    }
-                    else if((jumpCount == 1) && (currentState != State.Hooking))
-                    {
-                        Jump();
-                    }
-                    break;
-                default:
-                    if(jumpCount < 1 && isOnGround)
-                    {
-                        Jump();
-                    }
-                    break;
+            dashDelay?.Kill();
+            state = State.Normal;
+            lastMoveInputPress = 0;
+        }
+    }
+    private void Dash(bool isInputRight)
+    {
+        Debug.Log("Dash");
+        if (IsFacingRight == isInputRight)
+        {
+            Debug.Log("Dash Inside");
+            state = State.Dashing;
+            int dashDir = IsFacingRight? 1: -1;
+            motionVector.x = DASH_FORCE * dashDir;
+            dashDelay = DOVirtual.DelayedCall(DASH_TIME, ()=> EndDashing());
+        }
+    }
+    private void EndDashing()
+    {
+        state = State.Normal;
+        lastMoveInputPress = 0;
+    }
+
+    private void SetFacing()
+    {
+        if(horizontalVector.x > 0 && !IsFacingRight && !IsAttacking)
+        {
+            Flip(true);
+        }
+        if(horizontalVector.x < 0 && IsFacingRight && !IsAttacking)
+        {
+            Flip(false);
+        }
+    }
+
+    private void ApplyHorizontalForce()
+    {
+        if(horizontalVector != Vector2.zero)
+        {
+            motionVector.x += horizontalVector.x * acceleration * Time.deltaTime;
+            if(!IsAttacking)
+                motionVector.x = Mathf.Clamp(motionVector.x, -1 * maxSpeed, maxSpeed);
+            else
+                motionVector.x = Mathf.Clamp(motionVector.x, -1 * ATTACK_MAX_SPEED, ATTACK_MAX_SPEED);
+        }
+    }
+
+    private void ApplyFriction()
+    {
+        if(horizontalVector == Vector2.zero)
+        {
+            if(isGrounded)
+                motionVector.x = Mathf.Lerp(motionVector.x, 0, friction);
+            else
+                motionVector.x = Mathf.Lerp(motionVector.x, 0, friction /100f);
+        }
+    }
+    private void JumpCheck()
+    {
+        if(isGrounded || coyoteTimer > 0f)
+        {
+            if(Input.GetKeyDown(KeyCode.X) || CrossPlatformInputManager.GetButtonDown("Jump"))
+            {
+                motionVector.y = jumpForce;
+            }
+        }
+        if(!isGrounded)
+        {
+            if((Input.GetKeyUp(KeyCode.X)|| CrossPlatformInputManager.GetButtonUp("Jump")) && motionVector.y > jumpForce/2f)
+            {
+                Debug.Log("Berak Jump");
+                motionVector.y = jumpForce/2f;
+            }
+        }
+        if(extraJump > 0 && !isGrounded)
+        {
+            if(Input.GetKeyDown(KeyCode.X)|| CrossPlatformInputManager.GetButtonDown("Jump"))
+            {
+                motionVector.y = jumpForce;
+                extraJump --;
             }
         }
     }
 
-    void Countdown()
+    protected override void ApplyGravity()
     {
-        ComboCountdown();
-        JumpCountdown();
-        AttackCountdown();
+        base.ApplyGravity();
     }
 
-    void AttackCountdown()
+    public override void SetGrounded(bool isGrounded)
     {
-        if(attackCountdown > 0)
+        if(this.isGrounded && !isGrounded)
         {
-            attackCountdown -= Time.deltaTime;
+            coyoteTimer = COYOTE_TIME;
+            attackController.SetLastInAir(false);
+        }
+        else if(!this.isGrounded && isGrounded)
+        {
+            extraJump = MAX_EXTRA_JUMP;
+            motionVector.y = 0f;
+            attackController.SetLastInAir(true);
+        }
+        this.isGrounded = isGrounded;
+    }
+    public bool GetGrounded()
+    {
+        return isGrounded;
+    }
+    public void SetOnWall(bool isOnWall)
+    {
+        if(!isOnWall)
+        {
+            state = State.Normal;
+        }
+        this.isOnWall = isOnWall;
+    }
+    private void WallSlideJumpCheck()
+    {
+        int isOnWallRight = IsFacingRight? 1: -1;
+        if(Input.GetKeyDown(KeyCode.X) || CrossPlatformInputManager.GetButtonDown("Jump"))
+        {
+            motionVector.x = isOnWallRight * maxSpeed * -0.5f;
+            motionVector.y = jumpForce;
+            state = State.Normal;
+        }
+    }
+    private void WallSlideDropCheck()
+    {
+        if((Input.GetKeyDown(KeyCode.RightArrow) || CrossPlatformInputManager.GetButtonDown("Right")) && !IsFacingRight && !IsCharging)
+        {
+            motionVector.x = acceleration * Time.deltaTime;
+            state = State.Normal;
+        }
+        if((Input.GetKeyDown(KeyCode.LeftArrow) || CrossPlatformInputManager.GetButtonDown("Left")) && IsFacingRight && !IsCharging)
+        {
+            motionVector.x = (-1 * acceleration) * Time.deltaTime;
+            state = State.Normal;
+        }   
+    }
+    private void WallSlide()
+    {
+        motionVector.y = Mathf.Max(motionVector.y - (gravity/2f) * Time.deltaTime, -1 * jumpForce/2f);
+    }
+
+    private void WallSlideCheck()
+    {
+        if(!isGrounded && isOnWall) 
+        {
+            Debug.Log("WTF");
+            state= State.Sliding;
+            extraJump = MAX_EXTRA_JUMP;
         }
     }
 
-    void JumpCountdown()
+    private void HookCheck()
     {
-        if(jumpCountdown > 0)
+        if(Input.GetKeyDown(KeyCode.Z) || CrossPlatformInputManager.GetButtonDown("Action"))
         {
-            jumpCountdown -= Time.deltaTime;
+            // state = State.Hooking;
+            if(targetChecker.GetNearestTarget() != null && teleTimer <= 0)
+            {
+                transform.position = targetChecker.GetNearestTarget().position;
+                motionVector.y = 0;
+                teleTimer = TELE_COOLDOWN;
+            }
         }
     }
-
-    void Jump()
+    private void TeleCooldownCounter()
     {
-        if(jumpCountdown > 0)
+        if(teleTimer >= 0)
         {
+            teleTimer -= Time.deltaTime;
+        }
+    }
+    public void ResetYMotion()
+    {
+        motionVector.y = 0;
+    }
+    public void SetYMotion(float value)
+    {
+        motionVector.y = value;
+    }
+    public void SetXMotion(float value)
+    {
+        motionVector.x = value;
+    }
+    public bool IsSliding()
+    {
+        return (state == State.Sliding);
+    }
+    public void HitEnemies()
+    {
+        if(isHavingAtkFeedback)
             return;
-        }
-        jumpCountdown = jumpResetTime;
-        jumpCount++; 
-        if(currentColorForm == ColorForm.Yellow)
-            rb.gravityScale = 1f;
-        else
-            rb.gravityScale = 1.5f;
-        rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);    
-        EffectPool.Instance.GetJumpEffectInPool(transform.position + DISTANCE_CENTER_TO_FEET);
+        isHavingAtkFeedback = true;
+        StartCoroutine(DoneAtkFeedback());
+        mainVCam.ShakeCamera(4, 0.1f);
+        if(!isGrounded)
+            motionVector.y = 2;
     }
-    void WallJump()
+    private IEnumerator DoneAtkFeedback()
     {
-        int dir = 1;
-        float backForce = jumpForce/2;
-        dir = isFacingRight?-1:1;
-        if(jumpCountdown > 0)
+        yield return new WaitForSeconds(0.2f);
+        isHavingAtkFeedback = false;
+    } 
+    public void DoHoldChargeBehavior()
+    {
+        if(IsSliding())
         {
-            return;
+            motionVector.y = 0;
         }
-        jumpCountdown = jumpResetTime;
-        jumpCount++; 
-        if(currentColorForm == ColorForm.Yellow)
-            rb.gravityScale = 1f;
-        else
-            rb.gravityScale = 1.5f;
-        rb.AddForce(new Vector2(dir * backForce, jumpForce), ForceMode2D.Impulse);    
-        EffectPool.Instance.GetJumpEffectInPool(transform.position + DISTANCE_CENTER_TO_FEET);
     }
-
-    void AttackCheck()
+    public override void GetHit(Vector2 forceVector, bool isRightOfPlayer, int dmg = 1)
     {
-        if(attackCountdown > 0)
+        if (state != State.Hurting)
         {
-            return;
+            base.GetHit(forceVector, isRightOfPlayer, dmg);
+            mainVCam.ShakeCamera(3f, 0.1f);
         }
-        if (Input.GetKeyDown("c") && currentState == State.Normal)
-        {
-            switch (currentColorForm)
-            {
-                case ColorForm.Blue:
-                    anim.Play("BParry");
-                    currentState = State.Attacking;
-                    break;
-                default:
-                    anim.Play("WAttack");
-                    currentState = State.Attacking;
-                    break;
-            }
-        }
-    }
-
-    void ZButtonFunction()
-    {   
-        if (Input.GetKeyDown("z") && currentState == State.Normal)
-        {
-            switch (currentColorForm)
-            {  
-                case ColorForm.Red:
-                    if(isOnGround == false) 
-                    {
-                        break;
-                    }
-                    DashCheck(fastDashSpeed);
-                    break;
-                case ColorForm.Yellow:
-                    DashCheck(slowDashSpeed);
-                    break;
-                case ColorForm.Blue:
-                    HookCheck();
-                    break;
-                default:
-                    if(isOnGround)
-                    {
-                        RollCheck();
-                    }
-                    break;
-            }
-        }
-    }
-
-    void HookCheck()
-    {
-        if(hook.gameObject.activeSelf == true)
-        {   
-            return;
-        }
-        else
-        {   
-            anim.Play("BHook");
-            currentState = State.Hooking;
-            hook.gameObject.SetActive(true);
-            hook.PushHook(isFacingRight);
-        }
-    }
-
-    void RollCheck()
-    {
-        //if (Input.GetKeyDown("z") && currentState == State.Normal && isOnGround)
-        //{
-        if (isFacingRight)
-            rb.AddForce(new Vector2(rollForce, 0), ForceMode2D.Impulse);
-        else
-            rb.AddForce(new Vector2(-rollForce, 0), ForceMode2D.Impulse);
-        anim.Play("WDash");
-        currentState = State.Rolling;
-        Invoke("BackToNormal", 0.5f);
-        //}
-    }
-
-    void DashCheck(float _speed)
-    {
-        if (isFacingRight)
-            rb.velocity = new Vector2(_speed, 0);
-        else
-            rb.velocity = new Vector2(-_speed, 0);
-
-        trail.widthMultiplier = 0.3f;
-        anim.Play("RDash");
-        currentState = State.Dashing;
-        Invoke("BackToNormal", DASH_TIME);
-    }
-    void DisableTrail()
-    {
-        trail.widthMultiplier = 0f;
-    }
-
-    void SlideCheck()
-    {
-
-        if(currentColorForm != ColorForm.Red)
-        {
-            return;
-        }
-        
-
-        if(isNextToWall && rb.velocity.y <0 && !isOnGround)
-
-        {
-            currentState = State.Sliding;
-            anim.Play("Slide");
-            rb.velocity = new Vector2(0, -slideSpeed);
-        }
-        else if(currentState == State.Sliding)
-        {
-            currentState = State.Normal;
-        }
-    }
-
-    public void BackToNormal()
-    {
-        currentState = State.Normal;
-        DisableTrail();
-    }
-
-    void ResetJumpCount()
-    {
-        jumpCount = 0;
-    }
-
-    void SwitchForm()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            currentState = State.Normal;
-            int numOfColor = PlayerData.isColorActive.Length;
-            if((int)currentColorForm == (numOfColor - 1))   //last color
-                {
-                    currentColorForm = ColorForm.White;
-                    wisp.ChangeWispColor((int)currentColorForm);
-                    return;
-                }
-            for (int i = 0; i < numOfColor; i++)
-            {
-                if (i <= (int)currentColorForm) //skip previous and current color
-                {
-                    continue;
-                }
-                
-                if (PlayerData.isColorActive[i])
-                {
-                    currentColorForm = (ColorForm)i;
-                    wisp.ChangeWispColor((int)currentColorForm);
-                    return;
-                }
-                else
-                {
-                    currentColorForm = ColorForm.White;
-                    wisp.ChangeWispColor((int)currentColorForm);
-                }
-            }
-            
-        }
-    }
-
-    void AnimationUpdate()
-    {
-        if (currentState == State.Normal)
-        {
-            if (Mathf.Abs(movement) > 0.01f && isOnGround)
-            {
-                anim.Play("Move");
-            }
-            if (Mathf.Abs(movement) <= 0.01f && isOnGround)
-            {
-                anim.Play("Idle");
-            }
-            if (rb.velocity.y < -0.001f && !isOnGround)
-            {
-                anim.Play("AirDown");
-            }
-            if (rb.velocity.y > 0.001f && !isOnGround)
-            {
-                anim.Play("AirUp");
-            }
-        }
-    }
-
-    void AutoFixXVelocity()
-    {
-        rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0f, ANTI_SLIDE_ON_FLOOR), rb.velocity.y);
-    }
-    void VerYCheck()
-    {
-        rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -MAX_JUMP_HIGH*1.5f, MAX_JUMP_HIGH*1.5f));
-    }
-
-    void PlayerDieBehaviour()
-    {
-        currentState = State.Dead;
-        anim.Play("Dead");
-        Invoke("BackToNormal", 2);
     }
 }
